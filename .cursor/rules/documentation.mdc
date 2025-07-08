@@ -1,0 +1,85 @@
+# Documentation Organization Rules
+
+## **Folder Structure Requirements**
+- All documentation MUST be placed in the `docs/` folder
+- Documentation MUST be organized into logical subfolders by topic/domain
+- Never place documentation files directly in the root `docs/` folder
+
+## **Standard Documentation Folders**
+- `docs/database/` - Database schema, ERD, data dictionary, migration guides
+- `docs/api/` - API documentation, endpoints, authentication
+- `docs/deployment/` - Deployment guides, environment setup, server configuration
+- `docs/development/` - Development setup, coding standards, contribution guidelines
+- `docs/user/` - User guides, tutorials, feature documentation
+- `docs/admin/` - Administrative guides, configuration, maintenance
+- `docs/architecture/` - System architecture, design decisions, technical specifications
+
+## **File Naming Conventions**
+- Use lowercase with hyphens for multi-word files: `user-guide.md`
+- Use descriptive names that clearly indicate content: `schema.md`, `erd.md`, `api-endpoints.md`
+- Prefer `.md` extension for markdown documentation
+- Use consistent naming within each folder
+
+## **Database Documentation Structure**
+```
+docs/database/
+├── schema.md          # Complete database schema documentation
+├── erd.md            # Entity Relationship Diagram
+├── data-dictionary.md # Field-by-field data dictionary
+├── migrations.md     # Migration guides and procedures
+└── performance.md    # Indexing and optimization guidelines
+```
+
+## **Content Organization**
+- **Start with Overview**: Each documentation file should begin with a clear overview
+- **Use Consistent Headers**: Follow markdown heading hierarchy (H1, H2, H3)
+- **Include Examples**: Provide code examples, screenshots, or diagrams where helpful
+- **Cross-Reference**: Link between related documentation files
+- **Keep Updated**: Documentation should be maintained alongside code changes
+
+## **Technology-Specific Notes**
+- **Database**: We use MySQL in production (not SQLite)
+- **Framework**: Laravel-specific documentation should reference Laravel conventions
+- **Environment**: Document both development and production configurations
+
+## **Quality Standards**
+- Documentation must be clear and actionable
+- Include troubleshooting sections where appropriate
+- Provide both quick reference and detailed explanations
+- Use proper markdown formatting for readability
+- Include table of contents for longer documents
+
+## **Examples**
+
+### ✅ Good Documentation Structure
+```
+docs/
+├── database/
+│   ├── schema.md
+│   ├── erd.md
+│   └── data-dictionary.md
+├── api/
+│   ├── authentication.md
+│   └── endpoints.md
+└── deployment/
+    ├── production.md
+    └── development.md
+```
+
+### ❌ Poor Documentation Structure
+```
+docs/
+├── database-schema.md  # Should be in docs/database/
+├── api-docs.md        # Should be in docs/api/
+└── readme.md          # Should be in appropriate subfolder
+```
+
+## **Maintenance**
+- Review documentation quarterly for accuracy
+- Update documentation with any schema or API changes
+- Ensure examples and code snippets remain current
+- Archive outdated documentation rather than deleting
+description:
+globs:
+alwaysApply: false
+---
