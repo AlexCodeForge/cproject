@@ -10,11 +10,12 @@ use Spatie\Permission\Traits\HasRoles;
 use App\Notifications\CustomResetPasswordNotification;
 use App\Notifications\WelcomeEmailNotification;
 use App\Notifications\CustomEmailVerificationNotification;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use Billable, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.

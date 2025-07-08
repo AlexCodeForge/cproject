@@ -33,6 +33,10 @@ new class extends Component
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('pricing')" :active="request()->routeIs('pricing')" wire:navigate>
+                        {{-- <ion-icon name="rocket-outline" class="mr-2"></ion-icon> --}}
+                        {{ __('Premium') }}
+                    </x-nav-link>
                     @if(auth()->user()->hasRole('admin'))
                         <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')" wire:navigate>
                             {{ __('Admin Panel') }}

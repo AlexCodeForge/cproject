@@ -455,7 +455,7 @@
           2,
           3
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -463,7 +463,7 @@
             "description": "Install the Laravel Cashier package, publish migrations and configuration, and run database migrations to prepare the application for Stripe integration.",
             "dependencies": [],
             "details": "Run 'composer require laravel/cashier', publish migrations with 'php artisan vendor:publish --tag=\"cashier-migrations\"', and run 'php artisan migrate'. Publish the Cashier config if needed.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -474,7 +474,7 @@
               1
             ],
             "details": "Add STRIPE_KEY, STRIPE_SECRET, and STRIPE_WEBHOOK_SECRET to the .env file. Verify that these are correctly referenced in config/services.php.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -485,7 +485,7 @@
               1
             ],
             "details": "Use 'use Laravel\\Cashier\\Billable;' in the User model and add 'use Billable;' inside the class.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -496,7 +496,7 @@
               2
             ],
             "details": "Log in to the Stripe dashboard, create products and pricing plans, and note the price IDs for integration with Cashier.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -507,7 +507,7 @@
               4
             ],
             "details": "Build a 'pricing' Blade view and add navigation. Implement a controller to handle checkout initiation.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -519,7 +519,7 @@
               5
             ],
             "details": "Create a CheckoutController to handle subscription requests, use Cashier's methods to create and manage subscriptions.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -531,7 +531,7 @@
               6
             ],
             "details": "Use 'php artisan cashier:webhook' to generate the endpoint, configure Stripe to send events, and handle relevant webhook events in the application.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -540,7 +540,7 @@
             "description": "Implement logic to generate, store, and send invoices and receipts for successful payments and subscriptions.",
             "dependencies": [],
             "details": "Use Cashier's invoice and receipt features to generate documents and email them to users after successful transactions.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -549,7 +549,7 @@
             "description": "Implement logic for handling failed payments, subscription cancellations, resumptions, and ensure compliance with Stripe and legal requirements.",
             "dependencies": [],
             "details": "Add logic to manage failed payments, retries, cancellations, and resumption. Ensure compliance with PCI and local regulations.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -561,7 +561,7 @@
               9
             ],
             "details": "Use Stripe test cards and the Stripe CLI to simulate all payment scenarios. Verify UI, backend logic, and webhook processing.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           }
         ]
@@ -587,7 +587,7 @@
             "description": "Design the overall dashboard layout, including grid structure, spacing, and placement of key sections such as navigation, metrics, and user profile.",
             "dependencies": [],
             "details": "Define wireframes or mockups for the dashboard. Ensure the layout supports modular Livewire components and allows for easy expansion. Consider best practices for organizing components for maintainability.[1][3]",
-            "status": "pending",
+            "status": "in-progress",
             "testStrategy": ""
           },
           {
@@ -2051,7 +2051,7 @@
     ],
     "metadata": {
       "created": "2025-07-07T23:52:19.591Z",
-      "updated": "2025-07-08T03:19:53.463Z",
+      "updated": "2025-07-08T04:54:41.065Z",
       "description": "Tasks for master context"
     }
   }
