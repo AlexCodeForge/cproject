@@ -13,20 +13,36 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seed reference data first
+        // Run the role seeder first
         $this->call([
+            RoleSeeder::class,
             SubscriptionPlansSeeder::class,
             PostCategoriesSeeder::class,
             ChatChannelsSeeder::class,
         ]);
 
-        // Create test user with profile
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Create a test admin user
+        $admin = User::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@optionrocket.com',
+            'email_verified_at' => now(),
         ]);
+        $admin->assignRole('admin');
 
-        // Create additional test users for development
-        User::factory(10)->create();
+        // Create a test premium user
+        $premium = User::factory()->create([
+            'name' => 'Premium User',
+            'email' => 'premium@optionrocket.com',
+            'email_verified_at' => now(),
+        ]);
+        $premium->assignRole('premium');
+
+        // Create a test free user
+        $free = User::factory()->create([
+            'name' => 'Free User',
+            'email' => 'free@optionrocket.com',
+            'email_verified_at' => now(),
+        ]);
+        $free->assignRole('free');
     }
 }
