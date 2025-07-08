@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\ChatMessage;
+use App\Models\TradingAlert;
 use Livewire\Volt\Component;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Auth;
@@ -8,8 +10,8 @@ new #[Layout('layouts.app')] class extends Component
 {
     public $openPositions = 4;
     public $dailyPnL = 1280.50;
-    public $newAlerts = 2;
-    public $unreadMessages = 17;
+    public $newAlerts = 0;
+    public $unreadMessages = 0;
 
     public function mount()
     {
@@ -22,8 +24,11 @@ new #[Layout('layouts.app')] class extends Component
         // Mock data for now - replace with real data later
         $this->openPositions = 4;
         $this->dailyPnL = 1280.50;
-        $this->newAlerts = 2;
-        $this->unreadMessages = 17;
+
+        // TODO: Implement a more robust way to count new/unread items.
+        // This is a temporary implementation for the dashboard view.
+        $this->newAlerts = TradingAlert::where('status', 'active')->count();
+        $this->unreadMessages = ChatMessage::whereDate('created_at', today())->count();
     }
 }; ?>
 

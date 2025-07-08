@@ -197,37 +197,39 @@
                         <ion-icon name="grid-outline" class="text-2xl flex-shrink-0"></ion-icon>
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Dashboard</span>
                     </a>
-                    <a href="#" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <a href="{{ route('feed') }}" class="nav-item {{ request()->routeIs('feed') ? 'active bg-stone-200 dark:bg-gray-700 text-slate-800 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200' }} flex items-center p-3 rounded-xl overflow-hidden transition-all" wire:navigate>
                         <ion-icon name="newspaper-outline" class="text-2xl flex-shrink-0"></ion-icon>
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Feed</span>
                     </a>
-                    <a href="#" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <a href="{{ route('pnl') }}" class="nav-item {{ request()->routeIs('pnl') ? 'active bg-stone-200 dark:bg-gray-700 text-slate-800 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200' }} flex items-center p-3 rounded-xl overflow-hidden transition-all" wire:navigate>
                         <ion-icon name="trending-up-outline" class="text-2xl flex-shrink-0"></ion-icon>
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">P&L</span>
                     </a>
-                    <a href="#" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <a href="{{ route('alerts') }}" class="nav-item {{ request()->routeIs('alerts') ? 'active bg-stone-200 dark:bg-gray-700 text-slate-800 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200' }} flex items-center p-3 rounded-xl overflow-hidden transition-all" wire:navigate>
                         <ion-icon name="alert-circle-outline" class="text-2xl flex-shrink-0"></ion-icon>
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Alertas</span>
                     </a>
-                    <a href="#" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <a href="{{ route('chat') }}" class="nav-item {{ request()->routeIs('chat') ? 'active bg-stone-200 dark:bg-gray-700 text-slate-800 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200' }} flex items-center p-3 rounded-xl overflow-hidden transition-all" wire:navigate>
                         <div class="relative">
                             <ion-icon name="chatbubbles-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                            @if(auth()->user()->unreadNotifications()->count() > 0)
                             <span class="absolute top-0 right-0 flex h-2.5 w-2.5">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
                             </span>
+                            @endif
                         </div>
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Chat</span>
                     </a>
-                    <a href="#" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <a href="{{ route('live') }}" class="nav-item {{ request()->routeIs('live') ? 'active bg-stone-200 dark:bg-gray-700 text-slate-800 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200' }} flex items-center p-3 rounded-xl overflow-hidden transition-all" wire:navigate>
                         <ion-icon name="videocam-outline" class="text-2xl flex-shrink-0"></ion-icon>
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">En Vivo</span>
                     </a>
-                    <a href="#" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <a href="{{ route('courses') }}" class="nav-item {{ request()->routeIs('courses') ? 'active bg-stone-200 dark:bg-gray-700 text-slate-800 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200' }} flex items-center p-3 rounded-xl overflow-hidden transition-all" wire:navigate>
                         <ion-icon name="school-outline" class="text-2xl flex-shrink-0"></ion-icon>
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Cursos</span>
                     </a>
-                    <a href="#" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <a href="{{ route('events') }}" class="nav-item {{ request()->routeIs('events') ? 'active bg-stone-200 dark:bg-gray-700 text-slate-800 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200' }} flex items-center p-3 rounded-xl overflow-hidden transition-all" wire:navigate>
                         <ion-icon name="calendar-outline" class="text-2xl flex-shrink-0"></ion-icon>
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Eventos</span>
                     </a>
@@ -256,10 +258,12 @@
                 <button id="notifications-toggle" title="Notificaciones" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden">
                     <div class="relative">
                         <ion-icon name="notifications-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                        @if(auth()->user()->unreadNotifications()->count() > 0)
                         <span class="absolute top-0 right-0 flex h-2.5 w-2.5">
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
                         </span>
+                        @endif
                     </div>
                     <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Notificaciones</span>
                 </button>
@@ -313,33 +317,41 @@
             </div>
         </aside>
 
-        <!-- MOBILE BOTTOM NAVIGATION -->
-        <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-stone-200 dark:border-gray-700 flex justify-around py-2 z-10">
-            <a href="{{ route('dashboard') }}" class="mobile-nav-item flex flex-col items-center {{ request()->routeIs('dashboard') ? 'text-slate-700 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400' }} p-2">
-                <ion-icon name="grid-outline" class="text-2xl"></ion-icon>
-                <span class="text-xs {{ request()->routeIs('dashboard') ? 'font-bold' : '' }}">Inicio</span>
+        <!-- =================================================================== -->
+        <!-- COMPONENT: MOBILE BOTTOM NAVIGATION                                 -->
+        <!-- =================================================================== -->
+        <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-stone-200 dark:border-gray-700 flex justify-around py-2 z-30">
+            <a href="{{ route('dashboard') }}" class="mobile-nav-item flex flex-col items-center justify-center w-16 text-xs gap-1 {{ request()->routeIs('dashboard') ? 'text-blue-600 dark:text-blue-400' : 'text-slate-500 dark:text-gray-400' }}">
+                <ion-icon name="grid" class="text-2xl"></ion-icon>
+                <span>Dashboard</span>
             </a>
-            <a href="#" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2">
+            <a href="{{ route('feed') }}" class="mobile-nav-item flex flex-col items-center justify-center w-16 text-xs gap-1 {{ request()->routeIs('feed') ? 'text-blue-600 dark:text-blue-400' : 'text-slate-500 dark:text-gray-400' }}">
                 <ion-icon name="newspaper-outline" class="text-2xl"></ion-icon>
-                <span class="text-xs">Feed</span>
+                <span>Feed</span>
             </a>
-            <a href="#" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2">
-                <ion-icon name="trending-up-outline" class="text-2xl"></ion-icon>
-                <span class="text-xs">P&L</span>
-            </a>
-            <a href="#" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2">
+            <a href="{{ route('alerts') }}" class="mobile-nav-item flex flex-col items-center justify-center w-16 text-xs gap-1 {{ request()->routeIs('alerts') ? 'text-blue-600 dark:text-blue-400' : 'text-slate-500 dark:text-gray-400' }}">
                 <ion-icon name="alert-circle-outline" class="text-2xl"></ion-icon>
-                <span class="text-xs">Alertas</span>
+                <span>Alertas</span>
             </a>
-            <a href="{{ route('profile') }}" class="mobile-nav-item flex flex-col items-center {{ request()->routeIs('profile') ? 'text-slate-700 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400' }} p-2">
+            <a href="{{ route('chat') }}" class="mobile-nav-item flex flex-col items-center justify-center w-16 text-xs gap-1 {{ request()->routeIs('chat') ? 'text-blue-600 dark:text-blue-400' : 'text-slate-500 dark:text-gray-400' }}">
+                <div class="relative">
+                    <ion-icon name="chatbubbles-outline" class="text-2xl"></ion-icon>
+                    {{-- This will be dynamic later --}}
+                    <span class="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                    </span>
+                </div>
+                <span>Chat</span>
+            </a>
+            <a href="{{ route('profile') }}" class="mobile-nav-item flex flex-col items-center justify-center w-16 text-xs gap-1 {{ request()->routeIs('profile') ? 'text-blue-600 dark:text-blue-400' : 'text-slate-500 dark:text-gray-400' }}">
                 <ion-icon name="person-outline" class="text-2xl"></ion-icon>
-                <span class="text-xs {{ request()->routeIs('profile') ? 'font-bold' : '' }}">Perfil</span>
+                <span>Perfil</span>
             </a>
         </nav>
-
-        <div id="overlay" class="fixed inset-0 bg-black/50 z-20 hidden lg:hidden"></div>
-
     </div>
+
+    @stack('scripts')
 
     <!-- Unified Layout JavaScript -->
     <script>
@@ -477,7 +489,5 @@
             }
         });
     </script>
-
-    @stack('scripts')
 </body>
 </html>

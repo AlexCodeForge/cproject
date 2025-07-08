@@ -11,7 +11,35 @@ Volt::route('dashboard', 'pages.dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::view('profile', 'profile')
+Volt::route('feed', 'pages.feed')
+    ->middleware(['auth', 'verified'])
+    ->name('feed');
+
+Volt::route('pnl', 'pages.pnl')
+    ->middleware(['auth', 'verified'])
+    ->name('pnl');
+
+Volt::route('alerts', 'pages.alerts')
+    ->middleware(['auth', 'verified'])
+    ->name('alerts');
+
+Volt::route('chat', 'pages.chat')
+    ->middleware(['auth', 'verified'])
+    ->name('chat');
+
+Volt::route('live', 'pages.live')
+    ->middleware(['auth', 'verified'])
+    ->name('live');
+
+Volt::route('courses', 'pages.courses')
+    ->middleware(['auth', 'verified'])
+    ->name('courses');
+
+Volt::route('events', 'pages.events')
+    ->middleware(['auth', 'verified'])
+    ->name('events');
+
+Volt::route('profile', 'pages.profile')
     ->middleware(['auth'])
     ->name('profile');
 
