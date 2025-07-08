@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Components - OptionRocket UI Components</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Ionicons via CDN -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+    
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .component-section {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .dark .component-section {
+            border-color: #374151;
+        }
+        
+        .component-preview {
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+        }
+        
+        .copy-button {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .component-section:hover .copy-button {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
+    
+    <!-- Header -->
+    <header class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-b border-stone-200 dark:border-gray-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="text-2xl font-bold gradient-text">OR</div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-900 dark:text-white">Premium Components</h1>
+                        <p class="text-sm text-slate-500 dark:text-gray-400">Special premium styling and elements</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 transition-colors">
+                        <ion-icon name="moon-outline" class="text-xl"></ion-icon>
+                    </button>
+                    <a href="index.html" class="flex items-center gap-2 bg-slate-700 hover:bg-slate-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        <ion-icon name="arrow-back-outline"></ion-icon>
+                        <span>Back to Components</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Introduction -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Premium Components</h2>
+            <p class="text-lg text-slate-600 dark:text-gray-400 mb-8">
+                Special components with premium styling, gradients, and enhanced visual effects for highlighting premium features and content.
+            </p>
+        </section>
+
+        <!-- Premium Badges -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Premium Badges</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Badges and labels for premium content and features</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('premium-badges')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="flex flex-wrap gap-4" id="premium-badges">
+                    <!-- Basic Premium Badge -->
+                    <span class="bg-amber-200 dark:bg-amber-800/50 text-amber-800 dark:text-amber-200 text-xs font-bold px-3 py-1 rounded-full">PREMIUM</span>
+                    
+                    <!-- Premium with Icon -->
+                    <span class="bg-amber-200 dark:bg-amber-800/50 text-amber-800 dark:text-amber-200 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                        <ion-icon name="diamond" class="text-xs"></ion-icon>
+                        PREMIUM
+                    </span>
+                    
+                    <!-- Gradient Premium Badge -->
+                    <span class="bg-gradient-to-r from-amber-400 to-orange-400 text-amber-900 text-xs font-bold px-3 py-1 rounded-full">PREMIUM</span>
+                    
+                    <!-- Premium Category Badge -->
+                    <span class="text-xs font-bold uppercase text-amber-700 dark:text-amber-400 bg-amber-200/50 dark:bg-amber-800/30 px-2 py-1 rounded-full">Análisis Premium</span>
+                    
+                    <!-- VIP Badge -->
+                    <span class="bg-gradient-to-r from-purple-400 to-pink-400 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                        <ion-icon name="star" class="text-xs"></ion-icon>
+                        VIP
+                    </span>
+                    
+                    <!-- Exclusive Badge -->
+                    <span class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full">EXCLUSIVO</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Cards -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Premium Cards</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Cards with premium styling and gradient backgrounds</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('premium-cards')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" id="premium-cards">
+                    <!-- Premium Feature Card -->
+                    <div class="relative bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 dark:from-amber-900/30 dark:via-amber-800/40 dark:to-orange-900/30 p-8 rounded-xl border-2 border-amber-300/40 dark:border-amber-700 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                        <!-- Decorative background elements -->
+                        <div class="absolute -top-20 -right-20 w-40 h-40 bg-amber-300/20 rounded-full blur-3xl"></div>
+                        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-300/20 rounded-full blur-2xl"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="bg-amber-400 dark:bg-amber-500 p-2 rounded-lg">
+                                    <ion-icon name="diamond" class="text-amber-900 dark:text-amber-100 text-xl"></ion-icon>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Acceso Premium</h3>
+                                    <p class="text-amber-700 dark:text-amber-300 text-sm font-semibold">Contenido Exclusivo</p>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center gap-2 text-slate-700 dark:text-gray-300">
+                                    <ion-icon name="checkmark-circle" class="text-green-600 dark:text-green-400"></ion-icon>
+                                    <span class="text-sm">Análisis avanzados de mercado</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-slate-700 dark:text-gray-300">
+                                    <ion-icon name="checkmark-circle" class="text-green-600 dark:text-green-400"></ion-icon>
+                                    <span class="text-sm">Alertas de trading en tiempo real</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-slate-700 dark:text-gray-300">
+                                    <ion-icon name="checkmark-circle" class="text-green-600 dark:text-green-400"></ion-icon>
+                                    <span class="text-sm">Webinars exclusivos</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-slate-700 dark:text-gray-300">
+                                    <ion-icon name="checkmark-circle" class="text-green-600 dark:text-green-400"></ion-icon>
+                                    <span class="text-sm">Soporte prioritario</span>
+                                </div>
+                            </div>
+                            
+                            <button class="w-full bg-amber-400 hover:bg-amber-300 dark:bg-amber-500 dark:hover:bg-amber-400 text-amber-900 dark:text-amber-100 font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 hover:scale-105 shadow-md">
+                                <ion-icon name="diamond" class="text-lg"></ion-icon>
+                                <span>Obtener Premium</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Premium Stats Card -->
+                    <div class="relative bg-gradient-to-br from-purple-50 via-indigo-50 to-purple-100 dark:from-purple-900/30 dark:via-indigo-800/40 dark:to-purple-900/30 p-8 rounded-xl border-2 border-purple-300/40 dark:border-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                        <!-- Decorative background elements -->
+                        <div class="absolute -top-20 -right-20 w-40 h-40 bg-purple-300/20 rounded-full blur-3xl"></div>
+                        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-indigo-300/20 rounded-full blur-2xl"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="bg-purple-400 dark:bg-purple-500 p-2 rounded-lg">
+                                    <ion-icon name="trending-up" class="text-white text-xl"></ion-icon>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Rendimiento Premium</h3>
+                                    <p class="text-purple-700 dark:text-purple-300 text-sm font-semibold">Últimos 30 días</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-slate-900 dark:text-white">+24.5%</div>
+                                    <div class="text-sm text-purple-700 dark:text-purple-300">Rentabilidad</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-slate-900 dark:text-white">89%</div>
+                                    <div class="text-sm text-purple-700 dark:text-purple-300">Precisión</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-slate-900 dark:text-white">156</div>
+                                    <div class="text-sm text-purple-700 dark:text-purple-300">Señales</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-slate-900 dark:text-white">4.8★</div>
+                                    <div class="text-sm text-purple-700 dark:text-purple-300">Rating</div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white/70 dark:bg-gray-900/30 p-4 rounded-lg border border-purple-200/50 dark:border-purple-700/50 backdrop-blur-sm">
+                                <p class="text-sm text-slate-700 dark:text-gray-300 text-center">
+                                    <span class="font-semibold">¡Resultados excepcionales!</span> Los miembros premium han superado el mercado en un 18% este mes.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Buttons -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Premium Buttons</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Special buttons with premium styling and effects</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('premium-buttons')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="flex flex-wrap gap-4" id="premium-buttons">
+                    <!-- Premium CTA Button -->
+                    <button class="bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-amber-900 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-3">
+                        <ion-icon name="diamond" class="text-xl"></ion-icon>
+                        <span>Upgrade to Premium</span>
+                    </button>
+                    
+                    <!-- Premium Access Button -->
+                    <button class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white px-6 py-3 rounded-lg font-bold transition-all duration-200 hover:scale-105 shadow-md flex items-center gap-2">
+                        <ion-icon name="star" class="text-lg"></ion-icon>
+                        <span>Acceso VIP</span>
+                    </button>
+                    
+                    <!-- Premium Outline Button -->
+                    <button class="border-2 border-amber-400 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 px-6 py-3 rounded-lg font-bold transition-colors flex items-center gap-2">
+                        <ion-icon name="diamond-outline"></ion-icon>
+                        <span>Ver Premium</span>
+                    </button>
+                    
+                    <!-- Exclusive Button -->
+                    <button class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-6 py-3 rounded-lg font-bold transition-all duration-200 hover:scale-105 shadow-md flex items-center gap-2">
+                        <ion-icon name="lock-closed" class="text-lg"></ion-icon>
+                        <span>Contenido Exclusivo</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Content Blocks -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Premium Content Blocks</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Content blocks with premium access controls</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('premium-content')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="space-y-8" id="premium-content">
+                    <!-- Locked Premium Content -->
+                    <div class="relative bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 dark:from-amber-900/30 dark:via-amber-800/40 dark:to-orange-900/30 p-8 rounded-xl border-2 border-amber-300/40 dark:border-amber-700 shadow-lg overflow-hidden">
+                        <!-- Decorative background -->
+                        <div class="absolute -top-20 -right-20 w-40 h-40 bg-amber-300/20 rounded-full blur-3xl"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="text-xs font-bold uppercase text-amber-700 dark:text-amber-400 bg-amber-200/50 dark:bg-amber-800/30 px-2 py-1 rounded-full">Análisis Premium</span>
+                                <ion-icon name="diamond" class="text-amber-600 dark:text-amber-400 text-sm"></ion-icon>
+                            </div>
+                            
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Estrategia de Cobertura para Mercados Volátiles</h3>
+                            <p class="text-slate-600 dark:text-gray-300 text-sm mb-6">Aprende cómo proteger tu portafolio durante períodos de alta volatilidad con técnicas avanzadas de hedging...</p>
+                            
+                            <!-- Blurred Content Preview -->
+                            <div class="relative mb-6">
+                                <div class="bg-white/70 dark:bg-gray-900/30 p-4 rounded-lg border border-amber-200/50 dark:border-amber-700/50 backdrop-blur-sm filter blur-sm">
+                                    <p class="text-sm text-slate-700 dark:text-gray-300">
+                                        En este análisis exclusivo, exploraremos las estrategias más efectivas para proteger tu capital durante los períodos de mayor incertidumbre del mercado. Cubriremos técnicas como spreads protectivos, collars sintéticos, y estrategias de volatilidad...
+                                    </p>
+                                </div>
+                                
+                                <!-- Unlock Overlay -->
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="bg-amber-400/90 dark:bg-amber-500/90 backdrop-blur-sm rounded-lg p-6 text-center">
+                                        <ion-icon name="lock-closed" class="text-3xl text-amber-900 dark:text-amber-100 mb-2"></ion-icon>
+                                        <p class="text-amber-900 dark:text-amber-100 font-semibold mb-3">Contenido Premium</p>
+                                        <button class="bg-amber-900 dark:bg-amber-100 text-amber-100 dark:text-amber-900 px-4 py-2 rounded-lg font-bold text-sm hover:bg-amber-800 dark:hover:bg-amber-200 transition-colors">
+                                            Desbloquear
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between text-sm text-amber-700 dark:text-amber-300">
+                                <span>Solo para miembros Premium</span>
+                                <span>•</span>
+                                <span>15 min de lectura</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Premium Feature Highlight -->
+                    <div class="bg-gradient-to-r from-purple-500 to-pink-500 p-1 rounded-xl">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="bg-gradient-to-r from-purple-500 to-pink-500 p-2 rounded-lg">
+                                    <ion-icon name="star" class="text-white text-xl"></ion-icon>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Funcionalidad Exclusiva</h3>
+                                    <p class="text-sm text-slate-600 dark:text-gray-400">Solo disponible para miembros VIP</p>
+                                </div>
+                            </div>
+                            
+                            <p class="text-slate-700 dark:text-gray-300 mb-4">
+                                Accede a herramientas avanzadas de análisis técnico, alertas personalizadas en tiempo real, y consultas directas con nuestros analistas expertos.
+                            </p>
+                            
+                            <div class="flex items-center gap-4">
+                                <button class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg font-semibold hover:from-purple-400 hover:to-pink-400 transition-all">
+                                    Explorar VIP
+                                </button>
+                                <a href="#" class="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium">
+                                    Más información →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Pricing -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Premium Pricing Cards</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Pricing plans with premium styling</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('premium-pricing')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="premium-pricing">
+                    <!-- Basic Plan -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Básico</h3>
+                        <div class="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+                            Gratis
+                        </div>
+                        <ul class="space-y-2 mb-6 text-sm text-slate-600 dark:text-gray-400">
+                            <li class="flex items-center gap-2">
+                                <ion-icon name="checkmark" class="text-green-600 dark:text-green-400"></ion-icon>
+                                Noticias básicas del mercado
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <ion-icon name="checkmark" class="text-green-600 dark:text-green-400"></ion-icon>
+                                5 alertas por mes
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <ion-icon name="checkmark" class="text-green-600 dark:text-green-400"></ion-icon>
+                                Acceso al chat general
+                            </li>
+                        </ul>
+                        <button class="w-full border border-stone-300 dark:border-gray-600 text-slate-700 dark:text-gray-300 py-2 rounded-lg hover:bg-stone-100 dark:hover:bg-gray-700 transition-colors">
+                            Plan Actual
+                        </button>
+                    </div>
+
+                    <!-- Premium Plan (Featured) -->
+                    <div class="relative bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 dark:from-amber-900/30 dark:via-amber-800/40 dark:to-orange-900/30 p-6 rounded-xl border-2 border-amber-300/40 dark:border-amber-700 shadow-lg transform scale-105">
+                        <!-- Popular Badge -->
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                            <span class="bg-amber-400 text-amber-900 text-xs font-bold px-3 py-1 rounded-full">MÁS POPULAR</span>
+                        </div>
+                        
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-2 mb-2">
+                                <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Premium</h3>
+                                <ion-icon name="diamond" class="text-amber-600 dark:text-amber-400"></ion-icon>
+                            </div>
+                            <div class="text-3xl font-bold text-slate-900 dark:text-white mb-1">
+                                $29<span class="text-lg font-normal text-slate-600 dark:text-gray-400">/mes</span>
+                            </div>
+                            <p class="text-amber-700 dark:text-amber-300 text-sm mb-4">Facturado anualmente</p>
+                            
+                            <ul class="space-y-2 mb-6 text-sm text-slate-700 dark:text-gray-300">
+                                <li class="flex items-center gap-2">
+                                    <ion-icon name="checkmark" class="text-green-600 dark:text-green-400"></ion-icon>
+                                    Todo lo del plan básico
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <ion-icon name="checkmark" class="text-green-600 dark:text-green-400"></ion-icon>
+                                    Análisis premium ilimitados
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <ion-icon name="checkmark" class="text-green-600 dark:text-green-400"></ion-icon>
+                                    Alertas personalizadas
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <ion-icon name="checkmark" class="text-green-600 dark:text-green-400"></ion-icon>
+                                    Webinars exclusivos
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <ion-icon name="checkmark" class="text-green-600 dark:text-green-400"></ion-icon>
+                                    Soporte prioritario
+                                </li>
+                            </ul>
+                            
+                            <button class="w-full bg-amber-400 hover:bg-amber-300 text-amber-900 py-3 rounded-lg font-bold transition-colors flex items-center justify-center gap-2">
+                                <ion-icon name="diamond"></ion-icon>
+                                Obtener Premium
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- VIP Plan -->
+                    <div class="bg-gradient-to-br from-purple-50 via-indigo-50 to-purple-100 dark:from-purple-900/30 dark:via-indigo-800/40 dark:to-purple-900/30 p-6 rounded-xl border-2 border-purple-300/40 dark:border-purple-700 shadow-lg">
+                        <div class="flex items-center gap-2 mb-2">
+                            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">VIP</h3>
+                            <ion-icon name="star" class="text-purple-600 dark:text-purple-400"></ion-icon>
+                        </div>
+                        <div class="text-3xl font-bold text-slate-900 dark:text-white mb-1">
+                            $99<span class="text-lg font-normal text-slate-600 dark:text-gray-400">/mes</span>
+                        </div>
+                        <p class="text-purple-700 dark:text-purple-300 text-sm mb-4">Acceso completo</p>
+                        
+                        <ul class="space-y-2 mb-6 text-sm text-slate-700 dark:text-gray-300">
+                            <li class="flex items-center gap-2">
+                                <ion-icon name="checkmark" class="text-green-600 dark:text-green-400"></ion-icon>
+                                Todo lo del plan premium
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <ion-icon name="checkmark" class="text-green-600 dark:text-green-400"></ion-icon>
+                                Consultas 1-a-1 con analistas
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <ion-icon name="checkmark" class="text-green-600 dark:text-green-400"></ion-icon>
+                                Portafolio personalizado
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <ion-icon name="checkmark" class="text-green-600 dark:text-green-400"></ion-icon>
+                                Acceso beta a nuevas funciones
+                            </li>
+                        </ul>
+                        
+                        <button class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2">
+                            <ion-icon name="star"></ion-icon>
+                            Obtener VIP
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Copy to Clipboard Script -->
+    <script>
+        async function copyCode(elementId) {
+            const element = document.getElementById(elementId);
+            const html = element.innerHTML;
+            
+            try {
+                await navigator.clipboard.writeText(html);
+                
+                // Show feedback
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('bg-green-100', 'dark:bg-green-900/50', 'text-green-600', 'dark:text-green-400');
+                button.classList.remove('bg-blue-100', 'dark:bg-blue-900/50', 'text-blue-600', 'dark:text-blue-400');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('bg-green-100', 'dark:bg-green-900/50', 'text-green-600', 'dark:text-green-400');
+                    button.classList.add('bg-blue-100', 'dark:bg-blue-900/50', 'text-blue-600', 'dark:text-blue-400');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+            }
+        }
+        
+        // Theme Toggle Script
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.classList.toggle('dark', currentTheme === 'dark');
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            const newTheme = html.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            
+            const icon = themeToggle.querySelector('ion-icon');
+            icon.name = newTheme === 'dark' ? 'sunny-outline' : 'moon-outline';
+        });
+        
+        const icon = themeToggle.querySelector('ion-icon');
+        icon.name = currentTheme === 'dark' ? 'sunny-outline' : 'moon-outline';
+    </script>
+</body>
+</html> 

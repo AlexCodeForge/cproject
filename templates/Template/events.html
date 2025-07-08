@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptionRocket - Eventos</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Ionicons via CDN -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-stone-100 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
+
+    <div class="flex app-container">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside id="sidebar" class="hidden lg:flex lg:flex-col w-20 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-r border-stone-200 dark:border-gray-700 py-4 transition-all duration-300 ease-in-out z-20">
+            
+            <div class="relative flex items-center justify-center px-4 mb-6 flex-shrink-0 h-8">
+                <div id="logo-collapsed" class="text-3xl font-bold gradient-text">OR</div>
+                <span id="logo-expanded" class="text-2xl font-bold gradient-text whitespace-nowrap">OptionRocket</span>
+            </div>
+            
+            <nav id="main-nav" class="flex flex-col space-y-2 flex-grow px-4">
+                <a href="dashboard.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="grid-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Dashboard</span>
+                </a>
+                <a href="feed.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="newspaper-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Feed</span>
+                </a>
+                <a href="pnl.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="trending-up-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">P&L</span>
+                </a>
+                <a href="alerts.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="alert-circle-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Alertas</span>
+                </a>
+                <a href="chat.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <div class="relative">
+                        <ion-icon name="chatbubbles-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                        <span class="absolute top-0 right-0 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                        </span>
+                    </div>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Chat</span>
+                </a>
+                <a href="video.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="videocam-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">En Vivo</span>
+                </a>
+                <a href="courses.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="school-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Cursos</span>
+                </a>
+                <a href="events.html" class="nav-item active flex items-center p-3 rounded-xl overflow-hidden text-slate-800 dark:text-gray-200 bg-stone-200 dark:bg-gray-700 transition-all">
+                    <ion-icon name="calendar-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Eventos</span>
+                </a>
+                <a href="premium.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="rocket-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Premium</span>
+                </a>
+                <a href="profile.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="person-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Perfil</span>
+                </a>
+            </nav>
+
+            <div class="flex flex-col space-y-2 px-4 flex-shrink-0 pt-4">
+                <button id="theme-toggle" title="Cambiar Tema" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden"><ion-icon name="moon-outline" class="text-2xl flex-shrink-0"></ion-icon><span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Tema</span></button>
+                <a href="index.html" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden"><ion-icon name="home-outline" class="text-2xl flex-shrink-0"></ion-icon><span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Inicio</span></a>
+                            <button id="notifications-toggle" title="Notificaciones" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden">
+                    <div class="relative">
+                        <ion-icon name="notifications-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                        <span class="absolute top-0 right-0 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                        </span>
+                    </div>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Notificaciones</span>
+                </button>
+                </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="flex-1 main-content-wrapper">
+            <main class="flex-1 p-4 sm:p-8 main-content-scrollable">
+                
+                <!-- SECTION CONTENT -->
+                <section id="events" class="section active">
+                    
+                    <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-8">Próximos Eventos</h1>
+                    
+                    <!-- Featured Premium Event - Smaller Card -->
+                    <div class="mb-8">
+                        <div class="bg-gradient-to-br from-amber-50 via-amber-100 to-orange-100 dark:from-amber-900/30 dark:via-amber-800/40 dark:to-orange-900/30 rounded-xl border-2 border-amber-300 dark:border-amber-700 shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                            <div class="relative">
+                                <!-- Background Pattern -->
+                                <div class="absolute inset-0 bg-gradient-to-r from-amber-600/10 to-orange-600/10 dark:from-amber-400/5 dark:to-orange-400/5"></div>
+                                <!-- Update decorative background circles -->
+                                <div class="absolute top-0 right-0 w-20 h-20 bg-amber-300/20 dark:bg-amber-600/10 rounded-full -translate-y-10 translate-x-10"></div>
+                                <div class="absolute bottom-0 left-0 w-16 h-16 bg-orange-300/20 dark:bg-orange-600/10 rounded-full translate-y-8 -translate-x-8"></div>
+                                
+                                <!-- Content -->
+                                <div class="relative p-6">
+                                    <div class="flex flex-col lg:flex-row items-start lg:items-center gap-6">
+                                        <!-- Date Badge -->
+                                        <div class="bg-gradient-to-br from-amber-500 to-orange-500 text-white rounded-xl p-4 text-center shadow-lg transform group-hover:scale-105 transition-transform duration-300">
+                                            <p class="text-2xl md:text-3xl font-black">15</p>
+                                            <p class="text-sm font-bold uppercase tracking-wider">JUL</p>
+                                            <p class="text-xs opacity-90 mt-1">2025</p>
+                                        </div>
+                                        
+                                        <!-- Event Info -->
+                                        <div class="flex-grow">
+                                            <div class="flex items-center gap-2 mb-3">
+                                                <span class="bg-gradient-to-r from-amber-600 to-orange-600 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+                                                    <ion-icon name="diamond" class="text-sm"></ion-icon>
+                                                    EVENTO PREMIUM EXCLUSIVO
+                                                </span>
+                                                <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse transform-gpu">
+                                                    CUPOS LIMITADOS
+                                                </span>
+                                            </div>
+                                            
+                                            <h2 class="text-xl md:text-2xl font-black text-slate-900 dark:text-white mb-3 leading-tight">
+                                                🚀 Masterclass: Análisis Macroeconómico Q3
+                                            </h2>
+                                            
+                                            <p class="text-sm text-slate-700 dark:text-gray-300 mb-4 leading-relaxed">
+                                                Una inmersión profunda con <strong>expertos de Wall Street</strong> en los factores que moverán el mercado en el tercer trimestre.
+                                            </p>
+                                            
+                                            <!-- Event Details -->
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                                                <div class="flex items-center gap-2 bg-white/70 dark:bg-gray-800/70 rounded-lg p-2">
+                                                    <ion-icon name="time-outline" class="text-lg text-amber-600"></ion-icon>
+                                                    <div>
+                                                        <p class="font-semibold text-slate-900 dark:text-white text-sm">7:00 PM EST</p>
+                                                        <p class="text-xs text-slate-600 dark:text-gray-400">2 horas</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-2 bg-white/70 dark:bg-gray-800/70 rounded-lg p-2">
+                                                    <ion-icon name="people-outline" class="text-lg text-amber-600"></ion-icon>
+                                                    <div>
+                                                        <p class="font-semibold text-slate-900 dark:text-white text-sm">Solo 50 plazas</p>
+                                                        <p class="text-xs text-slate-600 dark:text-gray-400">Interacción directa</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-2 bg-white/70 dark:bg-gray-800/70 rounded-lg p-2">
+                                                    <ion-icon name="gift-outline" class="text-lg text-amber-600"></ion-icon>
+                                                    <div>
+                                                        <p class="font-semibold text-slate-900 dark:text-white text-sm">Bonus incluido</p>
+                                                        <p class="text-xs text-slate-600 dark:text-gray-400">Reporte PDF</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Speakers -->
+                                            <div class="mb-4">
+                                                <p class="text-xs font-semibold text-slate-600 dark:text-gray-400 mb-2">PRESENTADO POR:</p>
+                                                <div class="flex items-center gap-3">
+                                                    <div class="flex items-center gap-2">
+                                                        <img src="https://randomuser.me/api/portraits/men/75.jpg" class="w-8 h-8 rounded-full border-2 border-amber-300" alt="David Rodriguez">
+                                                        <div>
+                                                            <p class="font-bold text-slate-900 dark:text-white text-sm">David Rodriguez</p>
+                                                            <p class="text-xs text-slate-600 dark:text-gray-400">Ex-Goldman Sachs</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center gap-2">
+                                                        <img src="https://randomuser.me/api/portraits/women/68.jpg" class="w-8 h-8 rounded-full border-2 border-amber-300" alt="Sarah Chen">
+                                                        <div>
+                                                            <p class="font-bold text-slate-900 dark:text-white text-sm">Sarah Chen</p>
+                                                            <p class="text-xs text-slate-600 dark:text-gray-400">Estratega de JP Morgan</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Action Button -->
+                                        <div class="flex-shrink-0">
+                                            <button class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2 text-sm">
+                                                <ion-icon name="calendar-outline" class="text-lg"></ion-icon>
+                                                <span>RESERVAR PLAZA</span>
+                                            </button>
+                                            <p class="text-center text-xs text-slate-500 dark:text-gray-400 mt-1">Solo miembros Premium</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Regular Events -->
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Otros Eventos Próximos</h2>
+                        <div class="space-y-4">
+                            <!-- Public Event 1 -->
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm flex items-center gap-6 hover:shadow-md hover:border-slate-300 dark:hover:border-gray-600 transition-all group">
+                                <div class="bg-slate-100 dark:bg-gray-700 text-slate-700 dark:text-gray-300 rounded-lg p-4 text-center w-20 flex-shrink-0 group-hover:bg-slate-200 dark:group-hover:bg-gray-600 transition-colors">
+                                    <p class="text-2xl font-bold">08</p>
+                                    <p class="text-sm font-semibold">JUL</p>
+                            </div>
+                            <div class="flex-grow">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">GRATIS</span>
+                                        <span class="text-xs text-slate-500 dark:text-gray-400">7:30 AM EST</span>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Sesión de Trading en Vivo: Apertura de Mercado</h3>
+                                    <p class="text-slate-600 dark:text-gray-400 text-sm">Opera junto a nuestros traders expertos durante la volátil apertura del mercado.</p>
+                                </div>
+                                <button class="bg-slate-100 dark:bg-gray-700 hover:bg-slate-700 dark:hover:bg-gray-600 hover:text-white dark:hover:text-white text-slate-700 dark:text-gray-300 font-semibold py-2 px-6 rounded-lg transition-all flex items-center gap-2">
+                                    <ion-icon name="notifications-outline"></ion-icon>
+                                    <span>Recordar</span>
+                                </button>
+                            </div>
+                            
+                            <!-- Public Event 2 -->
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm flex items-center gap-6 hover:shadow-md hover:border-slate-300 dark:hover:border-gray-600 transition-all group">
+                                <div class="bg-slate-100 dark:bg-gray-700 text-slate-700 dark:text-gray-300 rounded-lg p-4 text-center w-20 flex-shrink-0 group-hover:bg-slate-200 dark:group-hover:bg-gray-600 transition-colors">
+                                    <p class="text-2xl font-bold">12</p>
+                                    <p class="text-sm font-semibold">JUL</p>
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">GRATIS</span>
+                                        <span class="text-xs text-slate-500 dark:text-gray-400">6:00 PM EST</span>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Webinar: Fundamentos del Trading de Opciones</h3>
+                                    <p class="text-slate-600 dark:text-gray-400 text-sm">Aprende los conceptos básicos del trading de opciones desde cero con ejemplos prácticos.</p>
+                                </div>
+                                <button class="bg-slate-100 dark:bg-gray-700 hover:bg-slate-700 dark:hover:bg-gray-600 hover:text-white dark:hover:text-white text-slate-700 dark:text-gray-300 font-semibold py-2 px-6 rounded-lg transition-all flex items-center gap-2">
+                                    <ion-icon name="notifications-outline"></ion-icon>
+                                    <span>Recordar</span>
+                            </button>
+                        </div>
+                            
+                            <!-- Premium Event 2 -->
+                            <div class="bg-amber-50 dark:bg-amber-900/20 p-6 rounded-xl border-2 border-amber-200 dark:border-amber-800 shadow-sm flex items-center gap-6 hover:shadow-md hover:border-amber-300 dark:hover:border-amber-700 transition-all group">
+                                <div class="bg-gradient-to-br from-amber-400 to-orange-400 text-white rounded-lg p-4 text-center w-20 flex-shrink-0 group-hover:scale-105 transition-transform">
+                                    <p class="text-2xl font-bold">18</p>
+                                <p class="text-sm font-semibold">JUL</p>
+                            </div>
+                            <div class="flex-grow">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-200 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+                                            <ion-icon name="diamond"></ion-icon>
+                                            PREMIUM
+                                        </span>
+                                        <span class="text-xs text-slate-500 dark:text-gray-400">8:00 PM EST</span>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Análisis Sectorial: Tech vs. Energía Q3</h3>
+                                    <p class="text-slate-600 dark:text-gray-400 text-sm">Comparativa profunda entre sectores tecnológicos y energéticos para el próximo trimestre.</p>
+                                </div>
+                                <button class="bg-amber-200 dark:bg-amber-800 hover:bg-amber-600 dark:hover:bg-amber-700 hover:text-white dark:hover:text-white text-amber-800 dark:text-amber-200 font-semibold py-2 px-6 rounded-lg transition-all flex items-center gap-2">
+                                    <ion-icon name="notifications-outline"></ion-icon>
+                                    <span>Recordar</span>
+                                </button>
+                            </div>
+                            
+                            <!-- Public Event 3 -->
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm flex items-center gap-6 hover:shadow-md hover:border-slate-300 dark:hover:border-gray-600 transition-all group">
+                                <div class="bg-slate-100 dark:bg-gray-700 text-slate-700 dark:text-gray-300 rounded-lg p-4 text-center w-20 flex-shrink-0 group-hover:bg-slate-200 dark:group-hover:bg-gray-600 transition-colors">
+                                    <p class="text-2xl font-bold">22</p>
+                                    <p class="text-sm font-semibold">JUL</p>
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">GRATIS</span>
+                                        <span class="text-xs text-slate-500 dark:text-gray-400">5:00 PM EST</span>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Q&A en Vivo: Preguntas y Respuestas</h3>
+                                    <p class="text-slate-600 dark:text-gray-400 text-sm">Sesión abierta donde puedes hacer todas tus preguntas sobre trading e inversiones.</p>
+                                </div>
+                                <button class="bg-slate-100 dark:bg-gray-700 hover:bg-slate-700 dark:hover:bg-gray-600 hover:text-white dark:hover:text-white text-slate-700 dark:text-gray-300 font-semibold py-2 px-6 rounded-lg transition-all flex items-center gap-2">
+                                    <ion-icon name="notifications-outline"></ion-icon>
+                                    <span>Recordar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                
+                </section>
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="flex-shrink-0 bg-white dark:bg-gray-800 border-t border-stone-200 dark:border-gray-700 text-slate-600 dark:text-gray-400 py-2 px-4 sm:px-8">
+                <div class="container mx-auto flex items-center justify-between">
+                    <div class="text-xs"><span class="font-bold text-slate-900 dark:text-white">OptionRocket</span> &copy; 2024.</div>
+                    <div class="flex items-center gap-3">
+                        <a href="#" class="text-xs hover:text-slate-900 dark:hover:text-gray-200">Términos</a>
+                        <a href="#" class="text-xs hover:text-slate-900 dark:hover:text-gray-200">Privacidad</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <!-- =================================================================== -->
+        <!-- COMPONENT: NOTIFICATIONS SIDEBAR (OVERLAY)                          -->
+        <!-- =================================================================== -->
+        <aside id="notifications-sidebar" class="fixed top-0 right-0 h-full w-80 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-l border-stone-200 dark:border-gray-700 p-6 transform translate-x-full transition-transform duration-300 ease-in-out z-30">
+            <div class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold text-slate-900 dark:text-white">Notificaciones</h2><button id="close-notifications" class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 text-2xl">&times;</button></div>
+            <div class="space-y-4"><div class="flex items-start space-x-3 bg-stone-100/50 dark:bg-gray-700/50 p-3 rounded-lg"><ion-icon name="trending-up-outline" class="text-green-600 text-2xl mt-1"></ion-icon><div><p class="text-sm text-slate-800 dark:text-gray-200">Nueva alerta de compra para <span class="font-bold">NVDA</span>.</p><p class="text-xs text-slate-500 dark:text-gray-400">Hace 5 minutos</p></div></div><div class="flex items-start space-x-3 p-3 rounded-lg"><ion-icon name="chatbubble-ellipses-outline" class="text-blue-600 text-2xl mt-1"></ion-icon><div><p class="text-sm text-slate-800 dark:text-gray-200"><span class="font-bold">Ana Torres</span> te mencionó en <span class="font-bold"># general</span>.</p><p class="text-xs text-slate-500 dark:text-gray-400">Hace 20 minutos</p></div></div></div>
+        </aside>
+
+        <!-- MOBILE BOTTOM NAVIGATION -->
+        <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-stone-200 dark:border-gray-700 flex justify-around py-2 z-10">
+            <a href="dashboard.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="grid" class="text-2xl"></ion-icon><span class="text-xs">Inicio</span></a>
+            <a href="feed.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="newspaper" class="text-2xl"></ion-icon><span class="text-xs">Feed</span></a>
+            <a href="pnl.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="trending-up" class="text-2xl"></ion-icon><span class="text-xs">P&L</span></a>
+            <a href="alerts.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="alert-circle" class="text-2xl"></ion-icon><span class="text-xs">Alertas</span></a>
+            <a href="profile.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="person" class="text-2xl"></ion-icon><span class="text-xs">Perfil</span></a>
+        </nav>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script src="../js/app.js"></script>
+</body>
+</html>

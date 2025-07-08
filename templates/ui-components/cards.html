@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cards - OptionRocket UI Components</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Ionicons via CDN -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+    
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .component-section {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .dark .component-section {
+            border-color: #374151;
+        }
+        
+        .component-preview {
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+        }
+        
+        .copy-button {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .component-section:hover .copy-button {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
+    
+    <!-- Header -->
+    <header class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-b border-stone-200 dark:border-gray-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="text-2xl font-bold gradient-text">OR</div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-900 dark:text-white">Cards</h1>
+                        <p class="text-sm text-slate-500 dark:text-gray-400">Content container components</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 transition-colors">
+                        <ion-icon name="moon-outline" class="text-xl"></ion-icon>
+                    </button>
+                    <a href="index.html" class="flex items-center gap-2 bg-slate-700 hover:bg-slate-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        <ion-icon name="arrow-back-outline"></ion-icon>
+                        <span>Back to Components</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Introduction -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Card Components</h2>
+            <p class="text-lg text-slate-600 dark:text-gray-400 mb-8">
+                Flexible content containers with various layouts and styles for displaying information, statistics, and content.
+            </p>
+        </section>
+
+        <!-- Basic Cards -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Basic Cards</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Simple content cards with consistent styling</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('basic-cards')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="basic-cards">
+                    <!-- Simple Card -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Card Title</h3>
+                        <p class="text-slate-600 dark:text-gray-400">This is a simple card with basic content and styling.</p>
+                    </div>
+                    
+                    <!-- Card with Icon -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-blue-100 dark:bg-blue-900/50 p-2 rounded-lg">
+                                <ion-icon name="analytics-outline" class="text-2xl text-blue-600 dark:text-blue-400"></ion-icon>
+                            </div>
+                            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Analytics</h3>
+                        </div>
+                        <p class="text-slate-600 dark:text-gray-400">Card with icon header for better visual hierarchy.</p>
+                    </div>
+                    
+                    <!-- Card with Action -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Action Card</h3>
+                        <p class="text-slate-600 dark:text-gray-400 mb-4">Card with action button at the bottom.</p>
+                        <button class="bg-slate-700 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Statistics Cards</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Cards designed for displaying metrics and statistics</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('stat-cards')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="stat-cards">
+                    <!-- Positions Card -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                        <h3 class="font-semibold text-slate-600 dark:text-gray-300">Posiciones Abiertas</h3>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">4</p>
+                    </div>
+                    
+                    <!-- P&L Card -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                        <h3 class="font-semibold text-slate-600 dark:text-gray-300">Ganancia/Pérdida (Hoy)</h3>
+                        <p class="text-3xl font-bold text-green-600 mt-2">+$1,280.50</p>
+                    </div>
+                    
+                    <!-- Alerts Card -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                        <h3 class="font-semibold text-slate-600 dark:text-gray-300">Nuevas Alertas</h3>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">2</p>
+                    </div>
+                    
+                    <!-- Messages Card -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                        <h3 class="font-semibold text-slate-600 dark:text-gray-300">Mensajes No Leídos</h3>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">17</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Cards -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Premium Cards</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Special cards with gradient backgrounds and premium styling</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('premium-cards')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" id="premium-cards">
+                    <!-- Premium Event Card -->
+                    <div class="relative bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 dark:from-amber-900/30 dark:via-amber-800/40 dark:to-orange-900/30 p-8 rounded-xl border-2 border-amber-300/40 dark:border-amber-700 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                        <!-- Decorative background elements -->
+                        <div class="absolute -top-20 -right-20 w-40 h-40 bg-amber-300/20 rounded-full blur-3xl"></div>
+                        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-300/20 rounded-full blur-2xl"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="bg-amber-400 dark:bg-amber-500 p-2 rounded-lg">
+                                    <ion-icon name="calendar" class="text-amber-900 dark:text-amber-100 text-xl"></ion-icon>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Próximo Evento Premium</h3>
+                                    <ion-icon name="diamond" class="text-amber-600 dark:text-amber-400 text-sm"></ion-icon>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white/70 dark:bg-gray-900/30 p-6 rounded-lg border border-amber-200/50 dark:border-amber-700/50 backdrop-blur-sm">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 dark:text-white text-lg mb-1">Webinar: Estrategias Q4 2024</h4>
+                                        <p class="text-amber-700 dark:text-amber-300 text-sm font-semibold">Análisis Macroeconómico Premium</p>
+                                    </div>
+                                    <span class="bg-amber-200 dark:bg-amber-800/50 text-amber-800 dark:text-amber-200 text-xs font-bold px-3 py-1 rounded-full">PREMIUM</span>
+                                </div>
+                                
+                                <p class="text-slate-700 dark:text-gray-300 text-sm mb-4 leading-relaxed">
+                                    Únete a nuestros analistas senior para descubrir las mejores oportunidades de inversión para el último trimestre del año.
+                                </p>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-4 text-sm">
+                                        <div class="flex items-center gap-1 text-slate-600 dark:text-gray-400">
+                                            <ion-icon name="time" class="text-amber-600 dark:text-amber-400"></ion-icon>
+                                            <span>15 Dic, 7:00 PM</span>
+                                        </div>
+                                        <div class="flex items-center gap-1 text-slate-600 dark:text-gray-400">
+                                            <ion-icon name="people" class="text-amber-600 dark:text-amber-400"></ion-icon>
+                                            <span>89 registrados</span>
+                                        </div>
+                                    </div>
+                                    <button class="bg-amber-400 hover:bg-amber-300 dark:bg-amber-500 dark:hover:bg-amber-400 text-amber-900 dark:text-amber-100 font-bold py-2 px-4 text-sm rounded-lg flex items-center gap-2 transition-all duration-200 hover:scale-105 shadow-md">
+                                        <ion-icon name="diamond" class="text-sm"></ion-icon>
+                                        <span>Registrarse</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Market News Card -->
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="bg-blue-100 dark:bg-blue-900/50 p-2 rounded-lg">
+                                <ion-icon name="newspaper" class="text-blue-600 dark:text-blue-400 text-xl"></ion-icon>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Noticias del Mercado</h3>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-green-100 dark:bg-green-900/50 p-1 rounded">
+                                    <ion-icon name="trending-up" class="text-green-600 dark:text-green-400 text-sm"></ion-icon>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-slate-900 dark:text-white">S&P 500 alcanza nuevos máximos</p>
+                                    <p class="text-xs text-slate-500 dark:text-gray-400">Hace 2 horas</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-3">
+                                <div class="bg-red-100 dark:bg-red-900/50 p-1 rounded">
+                                    <ion-icon name="trending-down" class="text-red-600 dark:text-red-400 text-sm"></ion-icon>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-slate-900 dark:text-white">Bitcoin retrocede 3%</p>
+                                    <p class="text-xs text-slate-500 dark:text-gray-400">Hace 4 horas</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-3">
+                                <div class="bg-blue-100 dark:bg-blue-900/50 p-1 rounded">
+                                    <ion-icon name="information-circle" class="text-blue-600 dark:text-blue-400 text-sm"></ion-icon>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-slate-900 dark:text-white">Fed mantiene tasas estables</p>
+                                    <p class="text-xs text-slate-500 dark:text-gray-400">Hace 6 horas</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Cards -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Content Cards</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Cards for displaying articles, posts, and rich content</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('content-cards')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="space-y-6" id="content-cards">
+                    <!-- Article Card -->
+                    <article class="flex flex-col sm:flex-row bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:border-slate-400 dark:hover:border-gray-600 transition-all overflow-hidden cursor-pointer">
+                        <div class="sm:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                                 class="w-full h-48 sm:h-full object-cover rounded-lg" 
+                                 alt="Article image">
+                        </div>
+                        <div class="p-6 sm:w-2/3">
+                            <span class="text-xs font-semibold uppercase text-slate-500 dark:text-gray-400">Criptomonedas</span>
+                            <h3 class="text-xl font-bold my-2 text-slate-900 dark:text-white">El Halving de Bitcoin y su impacto</h3>
+                            <p class="text-slate-600 dark:text-gray-400 text-sm">Un análisis sobre los efectos históricos y las proyecciones futuras del próximo halving de Bitcoin.</p>
+                            <div class="flex items-center gap-4 mt-4 text-sm text-slate-500 dark:text-gray-400">
+                                <span>5 min de lectura</span>
+                                <span>•</span>
+                                <span>Hace 2 horas</span>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <!-- Premium Content Card -->
+                    <article class="relative flex flex-col sm:flex-row bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 dark:from-amber-900/30 dark:via-amber-800/40 dark:to-orange-900/30 p-8 rounded-xl border-2 border-amber-300/40 dark:border-amber-700 shadow-lg hover:shadow-xl hover:border-amber-400/60 dark:hover:border-amber-600 transition-all duration-300 overflow-hidden cursor-pointer">
+                        <!-- Decorative background elements -->
+                        <div class="absolute -top-20 -right-20 w-40 h-40 bg-amber-300/20 rounded-full blur-3xl"></div>
+                        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-300/20 rounded-full blur-2xl"></div>
+                        
+                        <div class="sm:w-1/3 relative z-10">
+                            <img src="https://images.unsplash.com/photo-1665686308827-eb62e4f6604d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                                 class="w-full h-48 sm:h-full object-cover blur-sm rounded-lg" 
+                                 alt="Premium content">
+                            <div class="absolute inset-0 bg-black/30 rounded-lg flex items-center justify-center">
+                                <button class="bg-amber-400 hover:bg-amber-300 text-amber-900 font-bold py-2 px-4 text-sm rounded-full flex items-center gap-2 transform-gpu transition-all duration-200 hover:scale-105 shadow-lg">
+                                    <ion-icon name="diamond" class="text-lg"></ion-icon>
+                                    <span>Leer Análisis Premium</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6 sm:w-2/3 relative z-10">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-xs font-bold uppercase text-amber-700 dark:text-amber-400 bg-amber-200/50 dark:bg-amber-800/30 px-2 py-1 rounded-full">Análisis Premium</span>
+                                <ion-icon name="diamond" class="text-amber-600 dark:text-amber-400 text-sm"></ion-icon>
+                            </div>
+                            <h3 class="text-xl font-bold my-2 text-slate-900 dark:text-white">3 Opciones de compra en el sector tecnológico</h3>
+                            <p class="text-slate-600 dark:text-gray-300 text-sm leading-relaxed">Nuestros analistas han identificado tres empresas con un potencial de crecimiento explosivo en el sector tecnológico.</p>
+                            <div class="flex items-center gap-4 mt-4 text-sm text-amber-700 dark:text-amber-300">
+                                <span>Solo para miembros Premium</span>
+                                <span>•</span>
+                                <span>Actualizado hoy</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Cards -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Navigation Cards</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Clickable cards for navigation and menu items</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('nav-cards')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="nav-cards">
+                    <!-- Dashboard Card -->
+                    <a href="#" class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105 group">
+                        <div class="flex items-center gap-3 mb-3">
+                            <ion-icon name="grid-outline" class="text-2xl text-blue-600 dark:text-blue-400"></ion-icon>
+                            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Dashboard</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Panel principal con métricas y estadísticas</p>
+                        <div class="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 mt-3 group-hover:text-blue-700 dark:group-hover:text-blue-300">
+                            <span>Ir al Dashboard</span>
+                            <ion-icon name="arrow-forward-outline" class="transition-transform group-hover:translate-x-1"></ion-icon>
+                        </div>
+                    </a>
+
+                    <!-- Feed Card -->
+                    <a href="#" class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105 group">
+                        <div class="flex items-center gap-3 mb-3">
+                            <ion-icon name="newspaper-outline" class="text-2xl text-green-600 dark:text-green-400"></ion-icon>
+                            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Feed</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Feed de noticias y publicaciones</p>
+                        <div class="flex items-center gap-2 text-sm text-green-600 dark:text-green-400 mt-3 group-hover:text-green-700 dark:group-hover:text-green-300">
+                            <span>Ver Feed</span>
+                            <ion-icon name="arrow-forward-outline" class="transition-transform group-hover:translate-x-1"></ion-icon>
+                        </div>
+                    </a>
+
+                    <!-- Premium Card -->
+                    <a href="#" class="bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 dark:from-amber-900/30 dark:via-amber-800/40 dark:to-orange-900/30 p-6 rounded-xl border-2 border-amber-300/40 dark:border-amber-700 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105 group">
+                        <div class="flex items-center gap-3 mb-3">
+                            <ion-icon name="rocket-outline" class="text-2xl text-amber-600 dark:text-amber-400"></ion-icon>
+                            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Premium</h3>
+                        </div>
+                        <p class="text-sm text-amber-800 dark:text-amber-200">Suscripción premium y beneficios</p>
+                        <div class="flex items-center gap-2 text-sm text-amber-700 dark:text-amber-300 mt-3 group-hover:text-amber-800 dark:group-hover:text-amber-200">
+                            <span>Explorar Premium</span>
+                            <ion-icon name="arrow-forward-outline" class="transition-transform group-hover:translate-x-1"></ion-icon>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Copy to Clipboard Script -->
+    <script>
+        async function copyCode(elementId) {
+            const element = document.getElementById(elementId);
+            const html = element.innerHTML;
+            
+            try {
+                await navigator.clipboard.writeText(html);
+                
+                // Show feedback
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('bg-green-100', 'dark:bg-green-900/50', 'text-green-600', 'dark:text-green-400');
+                button.classList.remove('bg-blue-100', 'dark:bg-blue-900/50', 'text-blue-600', 'dark:text-blue-400');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('bg-green-100', 'dark:bg-green-900/50', 'text-green-600', 'dark:text-green-400');
+                    button.classList.add('bg-blue-100', 'dark:bg-blue-900/50', 'text-blue-600', 'dark:text-blue-400');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+            }
+        }
+        
+        // Theme Toggle Script
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.classList.toggle('dark', currentTheme === 'dark');
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            const newTheme = html.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            
+            const icon = themeToggle.querySelector('ion-icon');
+            icon.name = newTheme === 'dark' ? 'sunny-outline' : 'moon-outline';
+        });
+        
+        const icon = themeToggle.querySelector('ion-icon');
+        icon.name = currentTheme === 'dark' ? 'sunny-outline' : 'moon-outline';
+    </script>
+</body>
+</html> 

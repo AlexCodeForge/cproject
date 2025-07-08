@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpine.js Component Examples - OptionRocket</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Ionicons via CDN -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-stone-100 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300" x-data>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-slate-900 dark:text-white mb-8">Alpine.js Component Examples</h1>
+        
+        <!-- =================================================================== -->
+        <!-- MODAL COMPONENT EXAMPLE                                             -->
+        <!-- =================================================================== -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">Modal Component</h2>
+            <p class="text-slate-600 dark:text-gray-400 mb-6">Replaces vanilla JS modal functionality with Alpine.js</p>
+            
+            <!-- Modal Trigger -->
+            <div x-data="modal('edit-user-modal')">
+                <button @click="open()" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    Open User Edit Modal
+                </button>
+                
+                <!-- Modal -->
+                <div x-show="isOpen" 
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     @click="closeOnClickOutside($event)"
+                     @keydown.escape="closeOnEscape($event)"
+                     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                     style="display: none;">
+                    
+                    <div x-show="isOpen"
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0 transform scale-95"
+                         x-transition:enter-end="opacity-100 transform scale-100"
+                         x-transition:leave="transition ease-in duration-200"
+                         x-transition:leave-start="opacity-100 transform scale-100"
+                         x-transition:leave-end="opacity-0 transform scale-95"
+                         class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full mx-4">
+                        
+                        <!-- Modal Header -->
+                        <div class="flex items-center justify-between p-6 border-b border-stone-200 dark:border-gray-700">
+                            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Edit User</h3>
+                            <button @click="close()" class="text-slate-500 hover:text-slate-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                <ion-icon name="close-outline" class="text-xl"></ion-icon>
+                            </button>
+                        </div>
+                        
+                        <!-- Modal Body -->
+                        <div class="p-6" x-data="form('edit-user')">
+                            <form @submit.prevent="submit()">
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Name</label>
+                                    <input x-model="formData.name" 
+                                           type="text" 
+                                           class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700"
+                                           placeholder="Enter user name">
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Email</label>
+                                    <input x-model="formData.email" 
+                                           type="email" 
+                                           class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700"
+                                           placeholder="Enter email">
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Role</label>
+                                    <select x-model="formData.role" 
+                                            class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700">
+                                        <option value="regular">Regular</option>
+                                        <option value="premium">Premium</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="flex justify-end gap-3">
+                                    <button type="button" 
+                                            @click="close()" 
+                                            class="px-4 py-2 text-slate-600 dark:text-gray-400 hover:bg-stone-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" 
+                                            :disabled="isSubmitting"
+                                            class="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg transition-colors">
+                                        <span x-show="!isSubmitting">Save Changes</span>
+                                        <span x-show="isSubmitting">Saving...</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- FEED COMPONENT EXAMPLE                                              -->
+        <!-- =================================================================== -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">Feed Component</h2>
+            <p class="text-slate-600 dark:text-gray-400 mb-6">Feed with view switching and filtering using Alpine.js stores</p>
+            
+            <div x-data="{
+                init() {
+                    // Initialize feed store with sample data
+                    this.$store.feed.posts = [
+                        { 
+                            id: 1, 
+                            title: 'Market Update: Tech Stocks Rally',
+                            content: 'Technology stocks are showing strong momentum...',
+                            category: 'market',
+                            author: 'David Vega',
+                            date: '2024-01-15',
+                            image: 'https://via.placeholder.com/400x200'
+                        },
+                        { 
+                            id: 2, 
+                            title: 'Premium Analysis: Q4 Outlook',
+                            content: 'Our premium analysis for Q4 shows...',
+                            category: 'premium',
+                            author: 'Ana Torres',
+                            date: '2024-01-14',
+                            image: 'https://via.placeholder.com/400x200'
+                        },
+                        { 
+                            id: 3, 
+                            title: 'Crypto Weekly Roundup',
+                            content: 'Bitcoin and altcoins performance this week...',
+                            category: 'crypto',
+                            author: 'Carlos Rodriguez',
+                            date: '2024-01-13',
+                            image: 'https://via.placeholder.com/400x200'
+                        }
+                    ];
+                }
+            }">
+                <!-- Feed Controls -->
+                <div class="flex items-center justify-between mb-6">
+                    <!-- Filter Buttons -->
+                    <div class="flex gap-2">
+                        <template x-for="filter in ['all', 'market', 'premium', 'crypto']" :key="filter">
+                            <button @click="$store.feed.setFilter(filter)"
+                                    :class="$store.feed.currentFilter === filter ? 
+                                           'bg-slate-700 text-white' : 
+                                           'bg-white text-slate-600 hover:bg-slate-100'"
+                                    class="px-4 py-2 rounded-lg border border-stone-300 transition-colors capitalize">
+                                <span x-text="filter"></span>
+                            </button>
+                        </template>
+                    </div>
+                    
+                    <!-- View Toggle -->
+                    <div class="flex gap-2">
+                        <button @click="$store.feed.setListView()"
+                                :class="$store.feed.viewMode === 'list' ? 
+                                       'bg-stone-200 text-slate-700' : 
+                                       'bg-white text-slate-500 hover:bg-stone-100'"
+                                class="p-2 rounded-lg border border-stone-300 transition-colors">
+                            <ion-icon name="list-outline" class="text-xl"></ion-icon>
+                        </button>
+                        <button @click="$store.feed.setGridView()"
+                                :class="$store.feed.viewMode === 'grid' ? 
+                                       'bg-stone-200 text-slate-700' : 
+                                       'bg-white text-slate-500 hover:bg-stone-100'"
+                                class="p-2 rounded-lg border border-stone-300 transition-colors">
+                            <ion-icon name="grid-outline" class="text-xl"></ion-icon>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Feed Container -->
+                <div :class="$store.feed.viewMode === 'grid' ? 
+                           'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6' : 
+                           'space-y-6'">
+                    <template x-for="post in $store.feed.filteredPosts" :key="post.id">
+                        <article x-data="feedItem(post)"
+                                 class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all cursor-pointer"
+                                 :class="$store.feed.viewMode === 'list' ? 'flex gap-6 p-6' : 'p-6'"
+                                 @click="openPost()">
+                            
+                            <!-- Post Image -->
+                            <div :class="$store.feed.viewMode === 'list' ? 'w-48 flex-shrink-0' : 'w-full mb-4'">
+                                <img :src="post.image" 
+                                     :alt="post.title"
+                                     class="w-full h-32 object-cover rounded-lg">
+                            </div>
+                            
+                            <!-- Post Content -->
+                            <div class="flex-1">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex-1">
+                                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2" x-text="post.title"></h3>
+                                        <p class="text-slate-600 dark:text-gray-400 text-sm line-clamp-2" x-text="post.content"></p>
+                                    </div>
+                                    
+                                    <!-- Reminder Button -->
+                                    <button @click.stop="toggleReminder()"
+                                            :class="isReminded ? 
+                                                   'bg-green-600 text-white' : 
+                                                   'bg-stone-200 text-slate-700 hover:bg-stone-300'"
+                                            class="ml-4 px-3 py-1 rounded-lg text-sm font-medium transition-colors flex items-center gap-1">
+                                        <ion-icon :name="isReminded ? 'checkmark-outline' : 'notifications-outline'" class="text-sm"></ion-icon>
+                                        <span x-text="isReminded ? 'Agendado' : 'Recordarme'"></span>
+                                    </button>
+                                </div>
+                                
+                                <!-- Post Meta -->
+                                <div class="flex items-center justify-between text-sm text-slate-500 dark:text-gray-400">
+                                    <div class="flex items-center gap-4">
+                                        <span x-text="post.author"></span>
+                                        <span x-text="post.date"></span>
+                                    </div>
+                                    <span class="bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-2 py-1 rounded text-xs font-medium capitalize" 
+                                          x-text="post.category"></span>
+                                </div>
+                            </div>
+                        </article>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- DROPDOWN COMPONENT EXAMPLE                                          -->
+        <!-- =================================================================== -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">Dropdown Component</h2>
+            <p class="text-slate-600 dark:text-gray-400 mb-6">Reusable dropdown with outside click handling</p>
+            
+            <div x-data="dropdown()" class="relative inline-block">
+                <button @click="toggle()" 
+                        class="bg-white dark:bg-gray-800 border border-stone-300 dark:border-gray-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-stone-50 dark:hover:bg-gray-700 transition-colors">
+                    <span>Options</span>
+                    <ion-icon name="chevron-down-outline" class="text-sm" :class="{ 'rotate-180': open }"></ion-icon>
+                </button>
+                
+                <div x-show="open"
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 transform scale-95"
+                     x-transition:enter-end="opacity-100 transform scale-100"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100 transform scale-100"
+                     x-transition:leave-end="opacity-0 transform scale-95"
+                     @click.outside="close()"
+                     class="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-stone-300 dark:border-gray-600 rounded-lg shadow-lg z-10"
+                     style="display: none;">
+                    
+                    <div class="py-2">
+                        <a href="#" @click.prevent="close()" class="block px-4 py-2 text-sm text-slate-700 dark:text-gray-300 hover:bg-stone-100 dark:hover:bg-gray-700">Option 1</a>
+                        <a href="#" @click.prevent="close()" class="block px-4 py-2 text-sm text-slate-700 dark:text-gray-300 hover:bg-stone-100 dark:hover:bg-gray-700">Option 2</a>
+                        <a href="#" @click.prevent="close()" class="block px-4 py-2 text-sm text-slate-700 dark:text-gray-300 hover:bg-stone-100 dark:hover:bg-gray-700">Option 3</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- AVATAR UPLOAD COMPONENT EXAMPLE                                     -->
+        <!-- =================================================================== -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">Avatar Upload Component</h2>
+            <p class="text-slate-600 dark:text-gray-400 mb-6">File upload with preview using Alpine.js</p>
+            
+            <div x-data="avatarUpload()" class="flex items-center gap-4">
+                <!-- Avatar Preview -->
+                <div class="relative">
+                    <img :src="imageUrl || 'https://via.placeholder.com/80x80'" 
+                         alt="Avatar" 
+                         class="w-20 h-20 rounded-full object-cover border-2 border-stone-300 dark:border-gray-600">
+                    
+                    <!-- Upload Button -->
+                    <label class="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white p-1 rounded-full cursor-pointer transition-colors">
+                        <ion-icon name="camera-outline" class="text-sm"></ion-icon>
+                        <input type="file" 
+                               @change="handleFileChange($event)" 
+                               accept="image/*" 
+                               class="hidden">
+                    </label>
+                </div>
+                
+                <div>
+                    <h3 class="font-medium text-slate-900 dark:text-white">Profile Picture</h3>
+                    <p class="text-sm text-slate-600 dark:text-gray-400">Click the camera icon to upload a new image</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- THEME TOGGLE EXAMPLE                                                -->
+        <!-- =================================================================== -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">Theme Toggle</h2>
+            <p class="text-slate-600 dark:text-gray-400 mb-6">Global theme management with Alpine.js store</p>
+            
+            <button @click="$store.app.toggleTheme()" 
+                    class="flex items-center gap-3 bg-white dark:bg-gray-800 border border-stone-300 dark:border-gray-600 px-6 py-3 rounded-lg hover:bg-stone-50 dark:hover:bg-gray-700 transition-colors">
+                <ion-icon :name="$store.app.isDarkMode ? 'sunny-outline' : 'moon-outline'" class="text-xl"></ion-icon>
+                <span x-text="$store.app.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"></span>
+            </button>
+        </section>
+    </div>
+
+    <!-- Alpine.js App Script -->
+    <script src="../js/alpine-app.js"></script>
+</body>
+</html> 

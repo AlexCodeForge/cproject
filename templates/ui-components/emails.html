@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Templates - OptionRocket UI Components</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Ionicons via CDN -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+    
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .component-section {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .dark .component-section {
+            border-color: #374151;
+        }
+        
+        .component-preview {
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+        }
+        
+        .copy-button {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .component-section:hover .copy-button {
+            opacity: 1;
+        }
+        
+        .email-template {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: 'Inter', Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        .email-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .email-content {
+            padding: 24px;
+        }
+        
+        .email-footer {
+            background: #f8fafc;
+            padding: 16px 24px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .email-button {
+            background: #475569;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            margin: 16px 0;
+        }
+        
+        .email-button:hover {
+            background: #334155;
+        }
+        
+        .email-button.blue {
+            background: #2563eb;
+        }
+        
+        .email-button.blue:hover {
+            background: #1d4ed8;
+        }
+        
+        .email-button.green {
+            background: #16a34a;
+        }
+        
+        .email-button.green:hover {
+            background: #15803d;
+        }
+        
+        .email-button.red {
+            background: #dc2626;
+        }
+        
+        .email-button.red:hover {
+            background: #b91c1c;
+        }
+        
+        .email-button.premium {
+            background: linear-gradient(to right, #f59e0b, #f97316);
+            color: #92400e;
+            font-weight: 700;
+        }
+        
+        .email-button.premium:hover {
+            background: linear-gradient(to right, #d97706, #ea580c);
+        }
+    </style>
+</head>
+<body class="bg-stone-100 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
+    
+    <!-- Header -->
+    <header class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-b border-stone-200 dark:border-gray-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="text-2xl font-bold gradient-text">OR</div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-900 dark:text-white">Email Templates</h1>
+                        <p class="text-sm text-slate-500 dark:text-gray-400">Professional email designs</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 transition-colors">
+                        <ion-icon name="moon-outline" class="text-xl"></ion-icon>
+                    </button>
+                    <a href="index.html" class="flex items-center gap-2 bg-slate-700 hover:bg-slate-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        <ion-icon name="arrow-back-outline"></ion-icon>
+                        <span>Back to Components</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Introduction -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Email Templates</h2>
+            <p class="text-lg text-slate-600 dark:text-gray-400 mb-8">
+                Professional email templates for various use cases including welcome emails, newsletters, notifications, and transactional emails.
+            </p>
+        </section>
+
+        <!-- Welcome Email -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Welcome Email</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Onboarding email template for new users</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('welcome-email')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="email-template" id="welcome-email">
+                    <div class="email-header">
+                        <h1 style="margin: 0; font-size: 28px; font-weight: 700;">¡Bienvenido a OptionRocket!</h1>
+                        <p style="margin: 8px 0 0 0; opacity: 0.9;">Estamos emocionados de tenerte con nosotros</p>
+                    </div>
+                    
+                    <div class="email-content">
+                        <p style="margin: 0 0 16px 0; color: #64748b; font-size: 16px; line-height: 1.5;">
+                            Hola <strong style="color: #1e293b;">Juan Pérez</strong>,
+                        </p>
+                        
+                        <p style="margin: 0 0 16px 0; color: #64748b; font-size: 16px; line-height: 1.5;">
+                            ¡Gracias por unirte a OptionRocket! Tu cuenta ha sido creada exitosamente y ya puedes empezar a explorar nuestras herramientas de trading.
+                        </p>
+                        
+                        <p style="margin: 0 0 24px 0; color: #64748b; font-size: 16px; line-height: 1.5;">
+                            Para comenzar, te recomendamos:
+                        </p>
+                        
+                        <ul style="margin: 0 0 24px 0; color: #64748b; font-size: 16px; line-height: 1.5; padding-left: 20px;">
+                            <li style="margin-bottom: 8px;">Completar tu perfil de usuario</li>
+                            <li style="margin-bottom: 8px;">Configurar tus preferencias de trading</li>
+                            <li style="margin-bottom: 8px;">Explorar nuestras herramientas de análisis</li>
+                        </ul>
+                        
+                        <div style="text-align: center; margin: 32px 0;">
+                            <a href="#" style="background: #475569; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600;">
+                                Empezar Ahora
+                            </a>
+                        </div>
+                        
+                        <p style="margin: 0; color: #64748b; font-size: 16px; line-height: 1.5;">
+                            Si tienes alguna pregunta, no dudes en contactarnos.
+                        </p>
+                    </div>
+                    
+                    <div class="email-footer">
+                        <p style="margin: 0; color: #64748b; font-size: 14px;">
+                            © 2024 OptionRocket. Todos los derechos reservados.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Newsletter</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Weekly newsletter template with market insights</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('newsletter-email')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="email-template" id="newsletter-email">
+                    <div class="email-header">
+                        <h1 style="margin: 0; font-size: 28px; font-weight: 700;">Insights Semanales</h1>
+                        <p style="margin: 8px 0 0 0; opacity: 0.9;">Semana del 15 al 21 de Enero, 2024</p>
+                    </div>
+                    
+                    <div class="email-content">
+                        <h2 style="margin: 0 0 16px 0; color: #1e293b; font-size: 20px; font-weight: 600;">
+                            📈 Resumen del Mercado
+                        </h2>
+                        
+                        <p style="margin: 0 0 16px 0; color: #64748b; font-size: 16px; line-height: 1.5;">
+                            Esta semana los mercados han mostrado una volatilidad moderada, con el S&P 500 subiendo un 2.3% y el Nasdaq ganando 1.8%.
+                        </p>
+                        
+                        <div style="background: #f1f5f9; padding: 16px; border-radius: 8px; margin: 20px 0; border: 1px solid #e2e8f0;">
+                            <h3 style="margin: 0 0 12px 0; color: #1e293b; font-size: 18px; font-weight: 600;">
+                                🎯 Oportunidades Destacadas
+                            </h3>
+                            <ul style="margin: 0; color: #64748b; font-size: 16px; line-height: 1.5; padding-left: 20px;">
+                                <li style="margin-bottom: 8px;">AAPL: Potencial rebote técnico</li>
+                                <li style="margin-bottom: 8px;">TSLA: Rompimiento de resistencia</li>
+                                <li style="margin-bottom: 8px;">SPY: Tendencia alcista confirmada</li>
+                            </ul>
+                        </div>
+                        
+                        <h3 style="margin: 24px 0 16px 0; color: #1e293b; font-size: 18px; font-weight: 600;">
+                            📊 Estadísticas de la Semana
+                        </h3>
+                        
+                        <div style="display: flex; gap: 16px; margin: 16px 0;">
+                            <div style="flex: 1; text-align: center; background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                <div style="font-size: 24px; font-weight: 700; color: #16a34a;">+2.3%</div>
+                                <div style="font-size: 14px; color: #64748b;">S&P 500</div>
+                            </div>
+                            <div style="flex: 1; text-align: center; background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                <div style="font-size: 24px; font-weight: 700; color: #2563eb;">$42.1B</div>
+                                <div style="font-size: 14px; color: #64748b;">Volumen</div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin: 32px 0;">
+                            <a href="#" style="background: #2563eb; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600;">
+                                Ver Análisis Completo
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="email-footer">
+                        <p style="margin: 0 0 8px 0; color: #64748b; font-size: 14px;">
+                            © 2024 OptionRocket. Todos los derechos reservados.
+                        </p>
+                        <p style="margin: 0; color: #64748b; font-size: 12px;">
+                            <a href="#" style="color: #64748b; text-decoration: none;">Cancelar suscripción</a> | 
+                            <a href="#" style="color: #64748b; text-decoration: none;">Preferencias</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction Confirmation -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Transaction Confirmation</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Order confirmation and receipt email</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('transaction-email')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="email-template" id="transaction-email">
+                    <div class="email-header">
+                        <h1 style="margin: 0; font-size: 28px; font-weight: 700;">Orden Ejecutada</h1>
+                        <p style="margin: 8px 0 0 0; opacity: 0.9;">Confirmación de Transacción #OR-2024-001</p>
+                    </div>
+                    
+                    <div class="email-content">
+                        <div style="background: #dcfce7; border: 1px solid #bbf7d0; padding: 16px; border-radius: 8px; margin: 0 0 24px 0;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="color: #16a34a; font-size: 18px;">✓</div>
+                                <div style="color: #15803d; font-weight: 600;">Orden ejecutada exitosamente</div>
+                            </div>
+                        </div>
+                        
+                        <h2 style="margin: 0 0 16px 0; color: #1e293b; font-size: 20px; font-weight: 600;">
+                            Detalles de la Transacción
+                        </h2>
+                        
+                        <div style="background: #f8fafc; padding: 16px; border-radius: 8px; margin: 16px 0; border: 1px solid #e2e8f0;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 8px 0; color: #64748b; font-size: 14px; width: 40%;">Símbolo:</td>
+                                    <td style="padding: 8px 0; color: #1e293b; font-weight: 600;">AAPL</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0; color: #64748b; font-size: 14px;">Tipo de Orden:</td>
+                                    <td style="padding: 8px 0; color: #1e293b; font-weight: 600;">Compra - Mercado</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0; color: #64748b; font-size: 14px;">Cantidad:</td>
+                                    <td style="padding: 8px 0; color: #1e293b; font-weight: 600;">100 acciones</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0; color: #64748b; font-size: 14px;">Precio:</td>
+                                    <td style="padding: 8px 0; color: #1e293b; font-weight: 600;">$185.42</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0; color: #64748b; font-size: 14px;">Total:</td>
+                                    <td style="padding: 8px 0; color: #1e293b; font-weight: 600; font-size: 18px;">$18,542.00</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <p style="margin: 24px 0 16px 0; color: #64748b; font-size: 16px; line-height: 1.5;">
+                            Tu orden ha sido ejecutada y las acciones han sido añadidas a tu portafolio.
+                        </p>
+                        
+                        <div style="text-align: center; margin: 32px 0;">
+                            <a href="#" style="background: #16a34a; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600;">
+                                Ver Portafolio
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="email-footer">
+                        <p style="margin: 0; color: #64748b; font-size: 14px;">
+                            © 2024 OptionRocket. Todos los derechos reservados.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Password Reset -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Password Reset</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Security email for password recovery</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('password-reset-email')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="email-template" id="password-reset-email">
+                    <div class="email-header">
+                        <h1 style="margin: 0; font-size: 28px; font-weight: 700;">Restablecer Contraseña</h1>
+                        <p style="margin: 8px 0 0 0; opacity: 0.9;">Solicitud de cambio de contraseña</p>
+                    </div>
+                    
+                    <div class="email-content">
+                        <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 16px; border-radius: 8px; margin: 0 0 24px 0;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="color: #dc2626; font-size: 18px;">⚠️</div>
+                                <div style="color: #dc2626; font-weight: 600;">Solicitud de seguridad</div>
+                            </div>
+                        </div>
+                        
+                        <p style="margin: 0 0 16px 0; color: #64748b; font-size: 16px; line-height: 1.5;">
+                            Hola,
+                        </p>
+                        
+                        <p style="margin: 0 0 16px 0; color: #64748b; font-size: 16px; line-height: 1.5;">
+                            Recibimos una solicitud para restablecer la contraseña de tu cuenta en OptionRocket.
+                        </p>
+                        
+                        <p style="margin: 0 0 24px 0; color: #64748b; font-size: 16px; line-height: 1.5;">
+                            Si hiciste esta solicitud, haz clic en el botón de abajo para crear una nueva contraseña:
+                        </p>
+                        
+                        <div style="text-align: center; margin: 32px 0;">
+                            <a href="#" style="background: #dc2626; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600;">
+                                Restablecer Contraseña
+                            </a>
+                        </div>
+                        
+                        <p style="margin: 24px 0 16px 0; color: #64748b; font-size: 16px; line-height: 1.5;">
+                            Este enlace expirará en 24 horas por seguridad.
+                        </p>
+                        
+                        <div style="background: #f1f5f9; padding: 16px; border-radius: 8px; margin: 24px 0; border: 1px solid #e2e8f0;">
+                            <p style="margin: 0; color: #64748b; font-size: 14px; line-height: 1.5;">
+                                <strong style="color: #1e293b;">¿No solicitaste este cambio?</strong><br>
+                                Si no solicitaste restablecer tu contraseña, puedes ignorar este email. Tu contraseña permanecerá sin cambios.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="email-footer">
+                        <p style="margin: 0; color: #64748b; font-size: 14px;">
+                            © 2024 OptionRocket. Todos los derechos reservados.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Alert -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Price Alert</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Trading alert notification email</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('alert-email')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="email-template" id="alert-email">
+                    <div class="email-header">
+                        <h1 style="margin: 0; font-size: 28px; font-weight: 700;">🚨 Alerta de Precio</h1>
+                        <p style="margin: 8px 0 0 0; opacity: 0.9;">Tu alerta ha sido activada</p>
+                    </div>
+                    
+                    <div class="email-content">
+                        <div style="background: #dbeafe; border: 1px solid #93c5fd; padding: 16px; border-radius: 8px; margin: 0 0 24px 0;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="color: #2563eb; font-size: 18px;">📈</div>
+                                <div style="color: #2563eb; font-weight: 600;">Precio objetivo alcanzado</div>
+                            </div>
+                        </div>
+                        
+                        <h2 style="margin: 0 0 16px 0; color: #1e293b; font-size: 20px; font-weight: 600;">
+                            TSLA - Tesla Inc.
+                        </h2>
+                        
+                        <div style="background: #f8fafc; padding: 16px; border-radius: 8px; margin: 16px 0; border: 1px solid #e2e8f0;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 8px 0; color: #64748b; font-size: 14px; width: 40%;">Precio Actual:</td>
+                                    <td style="padding: 8px 0; color: #1e293b; font-weight: 600; font-size: 18px;">$245.67</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0; color: #64748b; font-size: 14px;">Precio Objetivo:</td>
+                                    <td style="padding: 8px 0; color: #1e293b; font-weight: 600;">$245.00</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0; color: #64748b; font-size: 14px;">Cambio:</td>
+                                    <td style="padding: 8px 0; color: #16a34a; font-weight: 600;">+$12.45 (+5.34%)</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0; color: #64748b; font-size: 14px;">Activada:</td>
+                                    <td style="padding: 8px 0; color: #1e293b; font-weight: 600;">21 Ene 2024, 14:32</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <p style="margin: 24px 0 16px 0; color: #64748b; font-size: 16px; line-height: 1.5;">
+                            Tu alerta de precio para TSLA ha sido activada. El precio ha alcanzado tu objetivo de $245.00.
+                        </p>
+                        
+                        <div style="text-align: center; margin: 32px 0;">
+                            <a href="#" style="background: #2563eb; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600;">
+                                Ver en Plataforma
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="email-footer">
+                        <p style="margin: 0; color: #64748b; font-size: 14px;">
+                            © 2024 OptionRocket. Todos los derechos reservados.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const icon = themeToggle.querySelector('ion-icon');
+        
+        // Check for saved theme preference or default to light
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.classList.toggle('dark', savedTheme === 'dark');
+        icon.setAttribute('name', savedTheme === 'dark' ? 'sunny-outline' : 'moon-outline');
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            icon.setAttribute('name', isDark ? 'sunny-outline' : 'moon-outline');
+        });
+
+        // Copy to clipboard function
+        function copyCode(elementId) {
+            const element = document.getElementById(elementId);
+            const html = element.outerHTML;
+            
+            navigator.clipboard.writeText(html).then(() => {
+                // Show success message
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('bg-green-100', 'text-green-600');
+                button.classList.remove('bg-blue-100', 'text-blue-600');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('bg-green-100', 'text-green-600');
+                    button.classList.add('bg-blue-100', 'text-blue-600');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptionRocket UI Components Library</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Ionicons via CDN -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+    
+    <style>
+        .component-preview {
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        
+        .component-card {
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .component-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-stone-100 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
+    
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-b border-stone-200 dark:border-gray-700 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center gap-3">
+                        <div class="text-2xl font-bold gradient-text">OR</div>
+                        <div>
+                            <h1 class="text-xl font-bold text-slate-900 dark:text-white">UI Components</h1>
+                            <p class="text-sm text-slate-500 dark:text-gray-400">OptionRocket Design System</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-4">
+                        <button id="theme-toggle" class="p-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 transition-colors">
+                            <ion-icon name="moon-outline" class="text-xl"></ion-icon>
+                        </button>
+                        <a href="../Template/index.html" class="flex items-center gap-2 bg-slate-700 hover:bg-slate-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                            <ion-icon name="arrow-back-outline"></ion-icon>
+                            <span>Back to Templates</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            
+            <!-- Introduction -->
+            <section class="mb-12">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-4">
+                        Component Library
+                    </h2>
+                    <p class="text-lg text-slate-600 dark:text-gray-400 max-w-3xl mx-auto">
+                        A comprehensive collection of reusable UI components extracted from the OptionRocket templates. 
+                        Each component is designed with Tailwind CSS and follows modern design principles.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 text-center">
+                        <div class="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                            <ion-icon name="cube-outline" class="text-2xl text-blue-600 dark:text-blue-400"></ion-icon>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Modular Design</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Components are designed to be easily reusable across different projects</p>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 text-center">
+                        <div class="bg-green-100 dark:bg-green-900/50 p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                            <ion-icon name="color-palette-outline" class="text-2xl text-green-600 dark:text-green-400"></ion-icon>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Consistent Styling</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">All components follow the same design tokens and color system</p>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 text-center">
+                        <div class="bg-purple-100 dark:bg-purple-900/50 p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                            <ion-icon name="code-outline" class="text-2xl text-purple-600 dark:text-purple-400"></ion-icon>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Copy & Paste</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Ready-to-use HTML code that you can copy directly into your projects</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Component Categories -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">Component Categories</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Buttons -->
+                    <a href="buttons.html" class="component-card bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 group">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-blue-100 dark:bg-blue-900/50 p-2 rounded-lg">
+                                <ion-icon name="radio-button-on-outline" class="text-2xl text-blue-600 dark:text-blue-400"></ion-icon>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Buttons</h3>
+                                <p class="text-sm text-slate-500 dark:text-gray-400">12 variants</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-400 mb-4">Primary, secondary, outline, premium, and icon buttons with different states</p>
+                        <div class="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300">
+                            <span>View Components</span>
+                            <ion-icon name="arrow-forward-outline" class="transition-transform group-hover:translate-x-1"></ion-icon>
+                        </div>
+                    </a>
+
+                    <!-- Cards -->
+                    <a href="cards.html" class="component-card bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 group">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-green-100 dark:bg-green-900/50 p-2 rounded-lg">
+                                <ion-icon name="card-outline" class="text-2xl text-green-600 dark:text-green-400"></ion-icon>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Cards</h3>
+                                <p class="text-sm text-slate-500 dark:text-gray-400">8 variants</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-400 mb-4">Basic cards, premium cards, stat cards, and content cards with different layouts</p>
+                        <div class="flex items-center gap-2 text-sm text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300">
+                            <span>View Components</span>
+                            <ion-icon name="arrow-forward-outline" class="transition-transform group-hover:translate-x-1"></ion-icon>
+                        </div>
+                    </a>
+
+                    <!-- Navigation -->
+                    <a href="navigation.html" class="component-card bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 group">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-purple-100 dark:bg-purple-900/50 p-2 rounded-lg">
+                                <ion-icon name="menu-outline" class="text-2xl text-purple-600 dark:text-purple-400"></ion-icon>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Navigation</h3>
+                                <p class="text-sm text-slate-500 dark:text-gray-400">5 variants</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-400 mb-4">Expandable sidebar, mobile navigation, breadcrumbs, and navigation bars</p>
+                        <div class="flex items-center gap-2 text-sm text-purple-600 dark:text-purple-400 group-hover:text-purple-700 dark:group-hover:text-purple-300">
+                            <span>View Components</span>
+                            <ion-icon name="arrow-forward-outline" class="transition-transform group-hover:translate-x-1"></ion-icon>
+                        </div>
+                    </a>
+
+                    <!-- Forms -->
+                    <a href="forms.html" class="component-card bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 group">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-orange-100 dark:bg-orange-900/50 p-2 rounded-lg">
+                                <ion-icon name="document-text-outline" class="text-2xl text-orange-600 dark:text-orange-400"></ion-icon>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Forms</h3>
+                                <p class="text-sm text-slate-500 dark:text-gray-400">10 variants</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-400 mb-4">Input fields, selects, textareas, toggles, and complete form layouts</p>
+                        <div class="flex items-center gap-2 text-sm text-orange-600 dark:text-orange-400 group-hover:text-orange-700 dark:group-hover:text-orange-300">
+                            <span>View Components</span>
+                            <ion-icon name="arrow-forward-outline" class="transition-transform group-hover:translate-x-1"></ion-icon>
+                        </div>
+                    </a>
+
+                    <!-- Alerts & Notifications -->
+                    <a href="alerts.html" class="component-card bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 group">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-red-100 dark:bg-red-900/50 p-2 rounded-lg">
+                                <ion-icon name="alert-circle-outline" class="text-2xl text-red-600 dark:text-red-400"></ion-icon>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Alerts</h3>
+                                <p class="text-sm text-slate-500 dark:text-gray-400">6 variants</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-400 mb-4">Success, error, warning, info alerts and notification components</p>
+                        <div class="flex items-center gap-2 text-sm text-red-600 dark:text-red-400 group-hover:text-red-700 dark:group-hover:text-red-300">
+                            <span>View Components</span>
+                            <ion-icon name="arrow-forward-outline" class="transition-transform group-hover:translate-x-1"></ion-icon>
+                        </div>
+                    </a>
+
+                    <!-- Modals -->
+                    <a href="modals.html" class="component-card bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 group">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-indigo-100 dark:bg-indigo-900/50 p-2 rounded-lg">
+                                <ion-icon name="layers-outline" class="text-2xl text-indigo-600 dark:text-indigo-400"></ion-icon>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Modals</h3>
+                                <p class="text-sm text-slate-500 dark:text-gray-400">10 variants</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-400 mb-4">Dialog overlays, confirmations, forms, and premium upgrade modals</p>
+                        <div class="flex items-center gap-2 text-sm text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300">
+                            <span>View Components</span>
+                            <ion-icon name="arrow-forward-outline" class="transition-transform group-hover:translate-x-1"></ion-icon>
+                        </div>
+                    </a>
+
+                    <!-- Premium Components -->
+                    <a href="premium.html" class="component-card bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 dark:from-amber-900/30 dark:via-amber-800/40 dark:to-orange-900/30 p-6 rounded-xl border-2 border-amber-300/40 dark:border-amber-700 shadow-sm hover:shadow-md transition-all duration-300 group">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-amber-200 dark:bg-amber-800/50 p-2 rounded-lg">
+                                <ion-icon name="diamond-outline" class="text-2xl text-amber-600 dark:text-amber-400"></ion-icon>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Premium</h3>
+                                <p class="text-sm text-amber-700 dark:text-amber-400">4 variants</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-amber-800 dark:text-amber-200 mb-4">Premium badges, cards, buttons, and special highlight components</p>
+                        <div class="flex items-center gap-2 text-sm text-amber-700 dark:text-amber-300 group-hover:text-amber-800 dark:group-hover:text-amber-200">
+                            <span>View Components</span>
+                            <ion-icon name="arrow-forward-outline" class="transition-transform group-hover:translate-x-1"></ion-icon>
+                        </div>
+                    </a>
+
+                    <!-- Email Templates -->
+                    <a href="emails.html" class="component-card bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 group">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-teal-100 dark:bg-teal-900/50 p-2 rounded-lg">
+                                <ion-icon name="mail-outline" class="text-2xl text-teal-600 dark:text-teal-400"></ion-icon>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Email Templates</h3>
+                                <p class="text-sm text-slate-500 dark:text-gray-400">5 variants</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-gray-400 mb-4">Welcome emails, newsletters, notifications, and transactional templates</p>
+                        <div class="flex items-center gap-2 text-sm text-teal-600 dark:text-teal-400 group-hover:text-teal-700 dark:group-hover:text-teal-300">
+                            <span>View Components</span>
+                            <ion-icon name="arrow-forward-outline" class="transition-transform group-hover:translate-x-1"></ion-icon>
+                        </div>
+                    </a>
+
+                </div>
+            </section>
+
+            <!-- Quick Start -->
+            <section class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 p-8">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Quick Start</h2>
+                <p class="text-slate-600 dark:text-gray-400 mb-6">
+                    Get started with the OptionRocket UI components by including the required dependencies in your project.
+                </p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">1. Include Tailwind CSS</h3>
+                        <div class="code-block">
+                            <code>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</code>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">2. Add Ionicons</h3>
+                        <div class="code-block">
+                            <code>&lt;script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"&gt;&lt;/script&gt;</code>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">3. Include Inter Font</h3>
+                        <div class="code-block">
+                            <code>&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"&gt;</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white dark:bg-gray-800 border-t border-stone-200 dark:border-gray-700 py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="text-xl font-bold gradient-text">OR</div>
+                        <span class="text-slate-600 dark:text-gray-400">UI Components</span>
+                    </div>
+                    <div class="text-sm text-slate-500 dark:text-gray-400">
+                        Built with ❤️ for OptionRocket
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Theme Toggle Script -->
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.classList.toggle('dark', currentTheme === 'dark');
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            const newTheme = html.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            
+            // Update icon
+            const icon = themeToggle.querySelector('ion-icon');
+            icon.name = newTheme === 'dark' ? 'sunny-outline' : 'moon-outline';
+        });
+        
+        // Set initial icon
+        const icon = themeToggle.querySelector('ion-icon');
+        icon.name = currentTheme === 'dark' ? 'sunny-outline' : 'moon-outline';
+    </script>
+</body>
+</html> 

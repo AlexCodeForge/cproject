@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buttons - OptionRocket UI Components</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Ionicons via CDN -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+    
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        
+        .component-section {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .dark .component-section {
+            border-color: #374151;
+        }
+        
+        .component-preview {
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+        }
+        
+        .copy-button {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .component-section:hover .copy-button {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
+    
+    <!-- Header -->
+    <header class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-b border-stone-200 dark:border-gray-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="text-2xl font-bold gradient-text">OR</div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-900 dark:text-white">Buttons</h1>
+                        <p class="text-sm text-slate-500 dark:text-gray-400">Interactive button components</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 transition-colors">
+                        <ion-icon name="moon-outline" class="text-xl"></ion-icon>
+                    </button>
+                    <a href="index.html" class="flex items-center gap-2 bg-slate-700 hover:bg-slate-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        <ion-icon name="arrow-back-outline"></ion-icon>
+                        <span>Back to Components</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Introduction -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Button Components</h2>
+            <p class="text-lg text-slate-600 dark:text-gray-400 mb-8">
+                A comprehensive collection of button components with different styles, states, and variants used throughout the OptionRocket application.
+            </p>
+        </section>
+
+        <!-- Primary Buttons -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Primary Buttons</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Main action buttons with solid backgrounds</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('primary-buttons')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="flex flex-wrap gap-4" id="primary-buttons">
+                    <!-- Slate Primary -->
+                    <button class="bg-slate-700 hover:bg-slate-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        Primary Action
+                    </button>
+                    
+                    <!-- Blue Primary -->
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        Submit
+                    </button>
+                    
+                    <!-- Green Success -->
+                    <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        Success
+                    </button>
+                    
+                    <!-- Red Danger -->
+                    <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        Delete
+                    </button>
+                    
+                    <!-- With Icon -->
+                    <button class="bg-slate-700 hover:bg-slate-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2">
+                        <ion-icon name="save-outline"></ion-icon>
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Buttons -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Premium Buttons</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Special buttons for premium features and actions</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('premium-buttons')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="flex flex-wrap gap-4" id="premium-buttons">
+                    <!-- Premium Gradient -->
+                    <button class="bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-amber-900 px-6 py-3 rounded-lg font-bold transition-all duration-200 hover:scale-105 shadow-md hover:shadow-lg flex items-center gap-2">
+                        <ion-icon name="diamond"></ion-icon>
+                        Premium
+                    </button>
+                    
+                    <!-- Premium Outline -->
+                    <button class="border-2 border-amber-400 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 px-6 py-3 rounded-lg font-bold transition-colors flex items-center gap-2">
+                        <ion-icon name="diamond-outline"></ion-icon>
+                        Upgrade
+                    </button>
+                    
+                    <!-- Premium Action -->
+                    <button class="bg-amber-400 hover:bg-amber-300 dark:bg-amber-500 dark:hover:bg-amber-400 text-amber-900 dark:text-amber-100 font-bold py-2 px-4 text-sm rounded-lg flex items-center gap-2 transition-all duration-200 hover:scale-105 shadow-md">
+                        <ion-icon name="diamond" class="text-sm"></ion-icon>
+                        <span>Registrarse</span>
+                    </button>
+                    
+                    <!-- Premium Large -->
+                    <button class="bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-amber-900 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-3">
+                        <ion-icon name="diamond" class="text-xl"></ion-icon>
+                        <span>Get Premium Access</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Outline Buttons -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Outline Buttons</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Secondary buttons with border styling</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('outline-buttons')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="flex flex-wrap gap-4" id="outline-buttons">
+                    <!-- Default Outline -->
+                    <button class="border border-stone-300 dark:border-gray-600 text-slate-700 dark:text-gray-300 hover:bg-stone-100 dark:hover:bg-gray-700 px-6 py-3 rounded-lg font-semibold transition-colors">
+                        Cancel
+                    </button>
+                    
+                    <!-- Blue Outline -->
+                    <button class="border border-blue-300 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 px-6 py-3 rounded-lg font-semibold transition-colors">
+                        Learn More
+                    </button>
+                    
+                    <!-- Green Outline -->
+                    <button class="border border-green-300 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 px-6 py-3 rounded-lg font-semibold transition-colors">
+                        Approve
+                    </button>
+                    
+                    <!-- With Icon -->
+                    <button class="border border-stone-300 dark:border-gray-600 text-slate-700 dark:text-gray-300 hover:bg-stone-100 dark:hover:bg-gray-700 px-6 py-3 rounded-lg font-semibold transition-colors flex items-center gap-2">
+                        <ion-icon name="download-outline"></ion-icon>
+                        Download
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Icon Buttons -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Icon Buttons</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Compact buttons with icons only</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('icon-buttons')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="flex flex-wrap gap-4" id="icon-buttons">
+                    <!-- Theme Toggle -->
+                    <button class="p-3 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-colors">
+                        <ion-icon name="moon-outline" class="text-2xl"></ion-icon>
+                    </button>
+                    
+                    <!-- Notifications -->
+                    <button class="p-3 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-colors relative">
+                        <ion-icon name="notifications-outline" class="text-2xl"></ion-icon>
+                        <span class="absolute top-1 right-1 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                        </span>
+                    </button>
+                    
+                    <!-- Settings -->
+                    <button class="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors">
+                        <ion-icon name="settings-outline" class="text-2xl"></ion-icon>
+                    </button>
+                    
+                    <!-- Close -->
+                    <button class="p-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400 transition-colors">
+                        <ion-icon name="close-outline" class="text-xl"></ion-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Filter Buttons</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Pill-shaped buttons for filtering and categories</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('filter-buttons')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="flex flex-wrap gap-2" id="filter-buttons">
+                    <!-- Active Filter -->
+                    <button class="bg-slate-700 text-white px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap">
+                        Todos
+                    </button>
+                    
+                    <!-- Inactive Filters -->
+                    <button class="bg-white dark:bg-gray-800 text-slate-600 dark:text-gray-400 px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap border border-stone-200 dark:border-gray-600 hover:bg-stone-100 dark:hover:bg-gray-700 transition-colors">
+                        Criptomonedas
+                    </button>
+                    
+                    <button class="bg-white dark:bg-gray-800 text-slate-600 dark:text-gray-400 px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap border border-stone-200 dark:border-gray-600 hover:bg-stone-100 dark:hover:bg-gray-700 transition-colors">
+                        Mercados Globales
+                    </button>
+                    
+                    <!-- Premium Filter -->
+                    <button class="bg-gradient-to-r from-amber-400 to-orange-400 text-amber-900 px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap border-2 border-amber-300 shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-1">
+                        <ion-icon name="diamond" class="text-xs"></ion-icon>
+                        Premium
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Navigation Buttons</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Buttons used for navigation and menu items</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('nav-buttons')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="space-y-4" id="nav-buttons">
+                    <!-- Active Nav Item -->
+                    <a href="#" class="flex items-center p-3 rounded-xl text-slate-800 dark:text-gray-200 bg-stone-200 dark:bg-gray-700 transition-all w-full max-w-xs">
+                        <ion-icon name="grid-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                        <span class="ml-4 text-sm font-semibold">Dashboard</span>
+                    </a>
+                    
+                    <!-- Inactive Nav Items -->
+                    <a href="#" class="flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all w-full max-w-xs">
+                        <ion-icon name="newspaper-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                        <span class="ml-4 text-sm font-semibold">Feed</span>
+                    </a>
+                    
+                    <a href="#" class="flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all w-full max-w-xs">
+                        <ion-icon name="trending-up-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                        <span class="ml-4 text-sm font-semibold">P&L</span>
+                    </a>
+                    
+                    <!-- With Badge -->
+                    <a href="#" class="flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all w-full max-w-xs">
+                        <div class="relative">
+                            <ion-icon name="chatbubbles-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                            <span class="absolute top-0 right-0 flex h-2.5 w-2.5">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                            </span>
+                        </div>
+                        <span class="ml-4 text-sm font-semibold">Chat</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Toggle Buttons -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">View Toggle Buttons</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Buttons for switching between different view modes</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('toggle-buttons')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="flex items-center gap-2" id="toggle-buttons">
+                    <!-- Active View -->
+                    <button class="p-2 rounded-lg text-slate-700 bg-stone-200 dark:bg-gray-700 dark:text-gray-200">
+                        <ion-icon name="list-outline" class="text-xl"></ion-icon>
+                    </button>
+                    
+                    <!-- Inactive View -->
+                    <button class="p-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-700 dark:hover:text-gray-200 transition-colors">
+                        <ion-icon name="grid-outline" class="text-xl"></ion-icon>
+                    </button>
+                    
+                    <!-- Card View -->
+                    <button class="p-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-700 dark:hover:text-gray-200 transition-colors">
+                        <ion-icon name="apps-outline" class="text-xl"></ion-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Copy to Clipboard Script -->
+    <script>
+        async function copyCode(elementId) {
+            const element = document.getElementById(elementId);
+            const html = element.innerHTML;
+            
+            try {
+                await navigator.clipboard.writeText(html);
+                
+                // Show feedback
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('bg-green-100', 'dark:bg-green-900/50', 'text-green-600', 'dark:text-green-400');
+                button.classList.remove('bg-blue-100', 'dark:bg-blue-900/50', 'text-blue-600', 'dark:text-blue-400');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('bg-green-100', 'dark:bg-green-900/50', 'text-green-600', 'dark:text-green-400');
+                    button.classList.add('bg-blue-100', 'dark:bg-blue-900/50', 'text-blue-600', 'dark:text-blue-400');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+            }
+        }
+        
+        // Theme Toggle Script
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.classList.toggle('dark', currentTheme === 'dark');
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            const newTheme = html.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            
+            // Update icon
+            const icon = themeToggle.querySelector('ion-icon');
+            icon.name = newTheme === 'dark' ? 'sunny-outline' : 'moon-outline';
+        });
+        
+        // Set initial icon
+        const icon = themeToggle.querySelector('ion-icon');
+        icon.name = currentTheme === 'dark' ? 'sunny-outline' : 'moon-outline';
+    </script>
+</body>
+</html> 

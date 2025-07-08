@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptionRocket - Alertas Admin</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Ionicons via CDN -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-stone-100 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
+
+    <div class="flex app-container">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside id="sidebar" class="hidden lg:flex lg:flex-col w-20 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-r border-stone-200 dark:border-gray-700 py-4 transition-all duration-300 ease-in-out z-20 is-expanded">
+            
+            <div class="relative flex items-center justify-center px-4 mb-6 flex-shrink-0 h-8">
+                <div id="logo-collapsed" class="text-3xl font-bold gradient-text">OR</div>
+                <span id="logo-expanded" class="text-2xl font-bold gradient-text whitespace-nowrap">OptionRocket</span>
+            </div>
+            
+            <nav id="main-nav" class="flex flex-col space-y-2 flex-grow px-4">
+                <a href="admin-dashboard.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="bar-chart-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Admin</span>
+                </a>
+                <a href="admin-users.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="people-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Usuarios</span>
+                </a>
+                <a href="admin-pnl.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="trending-up-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">P&L</span>
+                </a>
+                <a href="admin-payments.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="card-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Pagos</span>
+                </a>
+                <a href="admin-posts.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="create-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Posts</span>
+                </a>
+                <a href="admin-alerts.html" class="nav-item active flex items-center p-3 rounded-xl overflow-hidden text-slate-800 dark:text-gray-200 bg-stone-200 dark:bg-gray-700 transition-all">
+                    <ion-icon name="megaphone-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Alertas</span>
+                </a>
+                <a href="admin-events.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="calendar-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Eventos</span>
+                </a>
+                <a href="admin-settings.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="settings-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Configuración</span>
+                </a>
+            </nav>
+
+            
+            <div class="flex flex-col space-y-2 px-4 flex-shrink-0 pt-4">
+                <button id="theme-toggle" title="Cambiar Tema" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden"><ion-icon name="moon-outline" class="text-2xl flex-shrink-0"></ion-icon><span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Tema</span></button>
+                <button id="admin-mode-toggle" title="Modo Administrador" class="w-full flex items-center p-3 rounded-xl text-slate-800 dark:text-gray-200 bg-stone-200 dark:bg-gray-700 transition-all overflow-hidden"><ion-icon name="shield-checkmark-outline" class="text-2xl flex-shrink-0"></ion-icon><span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Admin</span></button>
+                <button id="notifications-toggle" title="Notificaciones" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden">
+                    <div class="relative">
+                        <ion-icon name="notifications-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                        <span class="absolute top-0 right-0 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                        </span>
+                    </div>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Notificaciones</span>
+                </button>
+                <a href="profile.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all"><ion-icon name="person-outline" class="text-2xl flex-shrink-0"></ion-icon><span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Perfil</span></a>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="flex-1 main-content-wrapper">
+            <main class="flex-1 p-4 sm:p-8 main-content-scrollable">
+                
+                <!-- SECTION CONTENT -->
+                <section id="admin-alerts" class="section active">
+                    
+                     <div class="flex justify-between items-center mb-8">
+                        <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">Gestionar Alertas de Trading</h1>
+                        <button class="bg-slate-700 dark:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-800 dark:hover:bg-gray-600 open-modal" data-modal="new-alert-modal">Crear Alerta</button>
+                    </div>
+                    
+                    <!-- Alerts Management Widgets -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-slate-600 dark:text-gray-400">Alertas Activas</p>
+                                    <p class="text-2xl font-bold text-slate-900 dark:text-white">247</p>
+                                </div>
+                                <div class="bg-green-100 dark:bg-green-900/50 p-3 rounded-full">
+                                    <ion-icon name="notifications-outline" class="text-green-600 dark:text-green-400 text-xl"></ion-icon>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-sm">
+                                <span class="text-green-600 dark:text-green-400 font-semibold">+15</span>
+                                <span class="text-slate-600 dark:text-gray-400 ml-2">hoy</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-slate-600 dark:text-gray-400">Alertas Ejecutadas</p>
+                                    <p class="text-2xl font-bold text-slate-900 dark:text-white">1,847</p>
+                                </div>
+                                <div class="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full">
+                                    <ion-icon name="checkmark-done-outline" class="text-blue-600 dark:text-blue-400 text-xl"></ion-icon>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-sm">
+                                <span class="text-green-600 dark:text-green-400 font-semibold">+28</span>
+                                <span class="text-slate-600 dark:text-gray-400 ml-2">esta semana</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-slate-600 dark:text-gray-400">Tasa de Éxito</p>
+                                    <p class="text-2xl font-bold text-slate-900 dark:text-white">78%</p>
+                                </div>
+                                <div class="bg-purple-100 dark:bg-purple-900/50 p-3 rounded-full">
+                                    <ion-icon name="trophy-outline" class="text-purple-600 dark:text-purple-400 text-xl"></ion-icon>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-sm">
+                                <span class="text-green-600 dark:text-green-400 font-semibold">+5%</span>
+                                <span class="text-slate-600 dark:text-gray-400 ml-2">vs mes anterior</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-slate-600 dark:text-gray-400">Alertas Expiradas</p>
+                                    <p class="text-2xl font-bold text-slate-900 dark:text-white">124</p>
+                                </div>
+                                <div class="bg-red-100 dark:bg-red-900/50 p-3 rounded-full">
+                                    <ion-icon name="time-outline" class="text-red-600 dark:text-red-400 text-xl"></ion-icon>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center text-sm">
+                                <span class="text-red-600 dark:text-red-400 font-semibold">-12</span>
+                                <span class="text-slate-600 dark:text-gray-400 ml-2">vs mes anterior</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-stone-50 dark:bg-gray-700/50 text-xs text-slate-600 dark:text-gray-400 uppercase">
+                                <tr>
+                                    <th class="p-4">Símbolo</th>
+                                    <th class="p-4">Tipo</th>
+                                    <th class="p-4">Precio de Entrada</th>
+                                    <th class="p-4">Estado</th>
+                                    <th class="p-4">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-stone-200 dark:border-gray-700 hover:bg-stone-50 dark:hover:bg-gray-700/50">
+                                    <td class="p-4 font-bold text-slate-900 dark:text-white">TSLA</td>
+                                    <td class="p-4"><span class="bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 text-xs font-semibold px-2 py-1 rounded-full">COMPRA</span></td>
+                                    <td class="p-4 text-slate-900 dark:text-gray-300">$185.50</td>
+                                    <td class="p-4"><span class="text-green-600 dark:text-green-400 font-semibold">Activa</span></td>
+                                    <td class="p-4 space-x-4"><button class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white open-modal" data-modal="edit-alert-modal">Editar</button><button class="text-red-500 hover:text-red-700 dark:hover:text-red-400">Cancelar</button></td>
+                                </tr>
+                                <tr class="border-b border-stone-200 dark:border-gray-700 hover:bg-stone-50 dark:hover:bg-gray-700/50">
+                                    <td class="p-4 font-bold text-slate-900 dark:text-white">AAPL</td>
+                                    <td class="p-4"><span class="bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 text-xs font-semibold px-2 py-1 rounded-full">COMPRA</span></td>
+                                    <td class="p-4 text-slate-900 dark:text-gray-300">$212.30</td>
+                                    <td class="p-4"><span class="text-green-600 dark:text-green-400 font-semibold">Activa</span></td>
+                                    <td class="p-4 space-x-4"><button class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white open-modal" data-modal="edit-alert-modal">Editar</button><button class="text-red-500 hover:text-red-700 dark:hover:text-red-400">Cancelar</button></td>
+                                </tr>
+                                 <tr class="border-b border-stone-200 dark:border-gray-700 hover:bg-stone-50 dark:hover:bg-gray-700/50">
+                                    <td class="p-4 font-bold text-slate-900 dark:text-white">NVDA</td>
+                                    <td class="p-4"><span class="bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 text-xs font-semibold px-2 py-1 rounded-full">VENTA</span></td>
+                                    <td class="p-4 text-slate-900 dark:text-gray-300">$120.80</td>
+                                    <td class="p-4 text-slate-500 dark:text-gray-400">Expirada</td>
+                                    <td class="p-4 space-x-4"><button class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white open-modal" data-modal="edit-alert-modal">Ver</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                
+                </section>
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="flex-shrink-0 bg-white dark:bg-gray-800 border-t border-stone-200 dark:border-gray-700 text-slate-600 dark:text-gray-400 py-2 px-4 sm:px-8">
+                <div class="container mx-auto flex items-center justify-between">
+                    <div class="text-xs"><span class="font-bold text-slate-900 dark:text-white">OptionRocket</span> &copy; 2024.</div>
+                    <div class="flex items-center gap-3">
+                        <a href="#" class="text-xs hover:text-slate-900 dark:hover:text-gray-200">Términos</a>
+                        <a href="#" class="text-xs hover:text-slate-900 dark:hover:text-gray-200">Privacidad</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <!-- =================================================================== -->
+        <!-- COMPONENT: NOTIFICATIONS SIDEBAR (OVERLAY)                          -->
+        <!-- =================================================================== -->
+        <aside id="notifications-sidebar" class="fixed top-0 right-0 h-full w-80 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-l border-stone-200 dark:border-gray-700 p-6 transform translate-x-full transition-transform duration-300 ease-in-out z-30">
+            <div class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold text-slate-900 dark:text-white">Notificaciones</h2><button id="close-notifications" class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 text-2xl">&times;</button></div>
+            <div class="space-y-4"><div class="flex items-start space-x-3 bg-stone-100/50 dark:bg-gray-700/50 p-3 rounded-lg"><ion-icon name="trending-up-outline" class="text-green-600 text-2xl mt-1"></ion-icon><div><p class="text-sm text-slate-800 dark:text-gray-200">Nueva alerta de compra para <span class="font-bold">NVDA</span>.</p><p class="text-xs text-slate-500 dark:text-gray-400">Hace 5 minutos</p></div></div><div class="flex items-start space-x-3 p-3 rounded-lg"><ion-icon name="chatbubble-ellipses-outline" class="text-blue-600 text-2xl mt-1"></ion-icon><div><p class="text-sm text-slate-800 dark:text-gray-200"><span class="font-bold">Ana Torres</span> te mencionó en <span class="font-bold"># general</span>.</p><p class="text-xs text-slate-500 dark:text-gray-400">Hace 20 minutos</p></div></div></div>
+        </aside>
+
+        <!-- MOBILE BOTTOM NAVIGATION -->
+        <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-stone-200 dark:border-gray-700 flex justify-around py-2 z-10">
+            <a href="dashboard.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="grid" class="text-2xl"></ion-icon><span class="text-xs">Inicio</span></a>
+            <a href="feed.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="newspaper" class="text-2xl"></ion-icon><span class="text-xs">Feed</span></a>
+            <a href="pnl.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="trending-up" class="text-2xl"></ion-icon><span class="text-xs">P&L</span></a>
+            <a href="alerts.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="alert-circle" class="text-2xl"></ion-icon><span class="text-xs">Alertas</span></a>
+            <a href="profile.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="person" class="text-2xl"></ion-icon><span class="text-xs">Perfil</span></a>
+        </nav>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script src="../js/app.js"></script>
+</body>
+</html>

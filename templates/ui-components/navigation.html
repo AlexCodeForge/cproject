@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation - OptionRocket UI Components</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Ionicons via CDN -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+    
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .component-section {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .dark .component-section {
+            border-color: #374151;
+        }
+        
+        .component-preview {
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+        }
+        
+        .copy-button {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .component-section:hover .copy-button {
+            opacity: 1;
+        }
+        
+        .demo-sidebar {
+            height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
+    
+    <!-- Header -->
+    <header class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-b border-stone-200 dark:border-gray-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="text-2xl font-bold gradient-text">OR</div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-900 dark:text-white">Navigation</h1>
+                        <p class="text-sm text-slate-500 dark:text-gray-400">Navigation and menu components</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 transition-colors">
+                        <ion-icon name="moon-outline" class="text-xl"></ion-icon>
+                    </button>
+                    <a href="index.html" class="flex items-center gap-2 bg-slate-700 hover:bg-slate-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        <ion-icon name="arrow-back-outline"></ion-icon>
+                        <span>Back to Components</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Introduction -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Navigation Components</h2>
+            <p class="text-lg text-slate-600 dark:text-gray-400 mb-8">
+                Navigation components including sidebars, mobile navigation, breadcrumbs, and menu items for seamless user experience.
+            </p>
+        </section>
+
+        <!-- Expandable Sidebar -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Expandable Sidebar</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Collapsible sidebar navigation with icons and labels</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('expandable-sidebar')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="demo-sidebar bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border border-stone-200 dark:border-gray-700 rounded-lg" id="expandable-sidebar">
+                    <!-- Sidebar Content -->
+                    <div class="w-64 py-4 transition-all duration-300 ease-in-out">
+                        
+                        <div class="flex items-center justify-center px-4 mb-6 h-8">
+                            <span class="text-2xl font-bold gradient-text">OptionRocket</span>
+                        </div>
+                        
+                        <!-- User Navigation -->
+                        <nav class="flex flex-col space-y-2 px-4 mb-6">
+                            <a href="#" class="flex items-center p-3 rounded-xl text-slate-800 dark:text-gray-200 bg-stone-200 dark:bg-gray-700 transition-all">
+                                <ion-icon name="grid-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                                <span class="ml-4 text-sm font-semibold">Dashboard</span>
+                            </a>
+                            <a href="#" class="flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                                <ion-icon name="newspaper-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                                <span class="ml-4 text-sm font-semibold">Feed</span>
+                            </a>
+                            <a href="#" class="flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                                <ion-icon name="trending-up-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                                <span class="ml-4 text-sm font-semibold">P&L</span>
+                            </a>
+                            <a href="#" class="flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                                <ion-icon name="alert-circle-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                                <span class="ml-4 text-sm font-semibold">Alertas</span>
+                            </a>
+                            <a href="#" class="flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                                <div class="relative">
+                                    <ion-icon name="chatbubbles-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                                    <span class="absolute top-0 right-0 flex h-2.5 w-2.5">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                                    </span>
+                                </div>
+                                <span class="ml-4 text-sm font-semibold">Chat</span>
+                            </a>
+                            <a href="#" class="flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                                <ion-icon name="rocket-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                                <span class="ml-4 text-sm font-semibold">Premium</span>
+                            </a>
+                        </nav>
+
+                        <!-- Sidebar bottom controls -->
+                        <div class="flex flex-col space-y-2 px-4 pt-4 border-t border-stone-200 dark:border-gray-700">
+                            <button class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                                <ion-icon name="moon-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                                <span class="ml-4 text-sm font-semibold">Tema</span>
+                            </button>
+                            <button class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                                <div class="relative">
+                                    <ion-icon name="notifications-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                                    <span class="absolute top-0 right-0 flex h-2.5 w-2.5">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                                    </span>
+                                </div>
+                                <span class="ml-4 text-sm font-semibold">Notificaciones</span>
+                            </button>
+                            <a href="#" class="flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                                <ion-icon name="person-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                                <span class="ml-4 text-sm font-semibold">Perfil</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Mobile Bottom Navigation</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Fixed bottom navigation for mobile devices</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('mobile-nav')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="max-w-md mx-auto">
+                    <nav class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border border-stone-200 dark:border-gray-700 rounded-lg flex justify-around py-2" id="mobile-nav">
+                        <a href="#" class="flex flex-col items-center text-slate-700 dark:text-gray-200 p-2">
+                            <ion-icon name="grid" class="text-2xl"></ion-icon>
+                            <span class="text-xs font-bold">Inicio</span>
+                        </a>
+                        <a href="#" class="flex flex-col items-center text-slate-500 dark:text-gray-400 p-2">
+                            <ion-icon name="newspaper" class="text-2xl"></ion-icon>
+                            <span class="text-xs">Feed</span>
+                        </a>
+                        <a href="#" class="flex flex-col items-center text-slate-500 dark:text-gray-400 p-2">
+                            <ion-icon name="trending-up" class="text-2xl"></ion-icon>
+                            <span class="text-xs">P&L</span>
+                        </a>
+                        <a href="#" class="flex flex-col items-center text-slate-500 dark:text-gray-400 p-2">
+                            <ion-icon name="alert-circle" class="text-2xl"></ion-icon>
+                            <span class="text-xs">Alertas</span>
+                        </a>
+                        <a href="#" class="flex flex-col items-center text-slate-500 dark:text-gray-400 p-2">
+                            <ion-icon name="person" class="text-2xl"></ion-icon>
+                            <span class="text-xs">Perfil</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Navigation -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Chat Channel Navigation</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Sidebar navigation for chat channels and rooms</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('chat-nav')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="w-64 bg-stone-50/50 dark:bg-gray-700/50 p-4 border border-stone-200 dark:border-gray-600 rounded-lg" id="chat-nav">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Canales</h2>
+                    <nav class="space-y-2">
+                        <a href="#" class="flex items-center space-x-2 px-3 py-2 rounded-lg bg-slate-700 dark:bg-slate-600 text-white font-semibold">
+                            <ion-icon name="chatbox-ellipses"></ion-icon>
+                            <span># general</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-2 px-3 py-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-600 hover:text-slate-800 dark:hover:text-gray-200 transition-colors">
+                            <ion-icon name="trending-up"></ion-icon>
+                            <span># análisis</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-2 px-3 py-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-600 hover:text-slate-800 dark:hover:text-gray-200 transition-colors">
+                            <ion-icon name="options"></ion-icon>
+                            <span># opciones</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-2 px-3 py-2 rounded-lg text-amber-600 dark:text-amber-400 hover:bg-stone-200 dark:hover:bg-gray-600 hover:text-amber-700 dark:hover:text-amber-300 font-semibold transition-colors">
+                            <ion-icon name="diamond"></ion-icon>
+                            <span># premium</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-2 px-3 py-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-600 hover:text-slate-800 dark:hover:text-gray-200 transition-colors">
+                            <ion-icon name="help-circle"></ion-icon>
+                            <span># ayuda</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Navigation -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Admin Navigation</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Navigation for admin panel and management features</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('admin-nav')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="w-64 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border border-stone-200 dark:border-gray-700 rounded-lg py-4" id="admin-nav">
+                    
+                    <div class="flex items-center justify-center px-4 mb-6 h-8">
+                        <span class="text-2xl font-bold gradient-text">OptionRocket</span>
+                    </div>
+                    
+                    <nav class="flex flex-col space-y-2 px-4 mb-6">
+                        <a href="#" class="flex items-center p-3 rounded-xl text-slate-800 dark:text-gray-200 bg-stone-200 dark:bg-gray-700 transition-all">
+                            <ion-icon name="bar-chart-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                            <span class="ml-4 text-sm font-semibold">Admin</span>
+                        </a>
+                        <a href="#" class="flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                            <ion-icon name="people-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                            <span class="ml-4 text-sm font-semibold">Usuarios</span>
+                        </a>
+                        <a href="#" class="flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                            <ion-icon name="card-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                            <span class="ml-4 text-sm font-semibold">Pagos</span>
+                        </a>
+                        <a href="#" class="flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                            <ion-icon name="create-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                            <span class="ml-4 text-sm font-semibold">Posts</span>
+                        </a>
+                        <a href="#" class="flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                            <ion-icon name="settings-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                            <span class="ml-4 text-sm font-semibold">Configuración</span>
+                        </a>
+                    </nav>
+
+                    <div class="flex flex-col space-y-2 px-4 pt-4 border-t border-stone-200 dark:border-gray-700">
+                        <button class="w-full flex items-center p-3 rounded-xl text-slate-800 dark:text-gray-200 bg-stone-200 dark:bg-gray-700 transition-all">
+                            <ion-icon name="shield-checkmark-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                            <span class="ml-4 text-sm font-semibold">Admin</span>
+                        </button>
+                        <button class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                            <ion-icon name="log-out-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                            <span class="ml-4 text-sm font-semibold">Salir</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Breadcrumbs -->
+        <div class="component-section">
+            <div class="bg-white dark:bg-gray-800 p-6 border-b border-stone-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Breadcrumbs</h3>
+                        <p class="text-sm text-slate-600 dark:text-gray-400">Navigation breadcrumbs for showing current page location</p>
+                    </div>
+                    <button class="copy-button bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-3 py-1 rounded text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/70 transition-colors" onclick="copyCode('breadcrumbs')">
+                        Copy Code
+                    </button>
+                </div>
+            </div>
+            
+            <div class="component-preview p-8 bg-stone-50 dark:bg-gray-900/50">
+                <div class="space-y-4" id="breadcrumbs">
+                    <!-- Simple Breadcrumb -->
+                    <nav class="flex" aria-label="Breadcrumb">
+                        <ol class="flex items-center space-x-2">
+                            <li>
+                                <a href="#" class="text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-gray-200">
+                                    <ion-icon name="home-outline" class="text-lg"></ion-icon>
+                                </a>
+                            </li>
+                            <li>
+                                <ion-icon name="chevron-forward-outline" class="text-slate-400 dark:text-gray-500"></ion-icon>
+                            </li>
+                            <li>
+                                <a href="#" class="text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-gray-200">
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <ion-icon name="chevron-forward-outline" class="text-slate-400 dark:text-gray-500"></ion-icon>
+                            </li>
+                            <li>
+                                <span class="text-slate-900 dark:text-white font-medium">
+                                    Analytics
+                                </span>
+                            </li>
+                        </ol>
+                    </nav>
+                    
+                    <!-- Breadcrumb with Background -->
+                    <nav class="bg-white dark:bg-gray-800 px-4 py-2 rounded-lg border border-stone-200 dark:border-gray-700" aria-label="Breadcrumb">
+                        <ol class="flex items-center space-x-2 text-sm">
+                            <li>
+                                <a href="#" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+                                    <ion-icon name="home-outline" class="text-lg"></ion-icon>
+                                </a>
+                            </li>
+                            <li>
+                                <ion-icon name="chevron-forward-outline" class="text-slate-400 dark:text-gray-500"></ion-icon>
+                            </li>
+                            <li>
+                                <a href="#" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+                                    Admin
+                                </a>
+                            </li>
+                            <li>
+                                <ion-icon name="chevron-forward-outline" class="text-slate-400 dark:text-gray-500"></ion-icon>
+                            </li>
+                            <li>
+                                <a href="#" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
+                                    Usuarios
+                                </a>
+                            </li>
+                            <li>
+                                <ion-icon name="chevron-forward-outline" class="text-slate-400 dark:text-gray-500"></ion-icon>
+                            </li>
+                            <li>
+                                <span class="text-slate-900 dark:text-white font-medium">
+                                    Perfil de Usuario
+                                </span>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Copy to Clipboard Script -->
+    <script>
+        async function copyCode(elementId) {
+            const element = document.getElementById(elementId);
+            const html = element.innerHTML;
+            
+            try {
+                await navigator.clipboard.writeText(html);
+                
+                // Show feedback
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('bg-green-100', 'dark:bg-green-900/50', 'text-green-600', 'dark:text-green-400');
+                button.classList.remove('bg-blue-100', 'dark:bg-blue-900/50', 'text-blue-600', 'dark:text-blue-400');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('bg-green-100', 'dark:bg-green-900/50', 'text-green-600', 'dark:text-green-400');
+                    button.classList.add('bg-blue-100', 'dark:bg-blue-900/50', 'text-blue-600', 'dark:text-blue-400');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+            }
+        }
+        
+        // Theme Toggle Script
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.classList.toggle('dark', currentTheme === 'dark');
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            const newTheme = html.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            
+            const icon = themeToggle.querySelector('ion-icon');
+            icon.name = newTheme === 'dark' ? 'sunny-outline' : 'moon-outline';
+        });
+        
+        const icon = themeToggle.querySelector('ion-icon');
+        icon.name = currentTheme === 'dark' ? 'sunny-outline' : 'moon-outline';
+    </script>
+</body>
+</html> 

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptionRocket - Configuración Admin</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Ionicons via CDN -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-stone-100 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
+
+    <div class="flex app-container">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside id="sidebar" class="hidden lg:flex lg:flex-col w-20 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-r border-stone-200 dark:border-gray-700 py-4 transition-all duration-300 ease-in-out z-20 is-expanded">
+            
+            <div class="relative flex items-center justify-center px-4 mb-6 flex-shrink-0 h-8">
+                <div id="logo-collapsed" class="text-3xl font-bold gradient-text">OR</div>
+                <span id="logo-expanded" class="text-2xl font-bold gradient-text whitespace-nowrap">OptionRocket</span>
+            </div>
+            
+            <nav id="main-nav" class="flex flex-col space-y-2 flex-grow px-4">
+                <a href="admin-dashboard.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="bar-chart-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Admin</span>
+                </a>
+                <a href="admin-users.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="people-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Usuarios</span>
+                </a>
+                <a href="admin-pnl.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="trending-up-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">P&L</span>
+                </a>
+                <a href="admin-payments.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="card-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Pagos</span>
+                </a>
+                <a href="admin-posts.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="create-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Posts</span>
+                </a>
+                <a href="admin-alerts.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="megaphone-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Alertas</span>
+                </a>
+                <a href="admin-events.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="calendar-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Eventos</span>
+                </a>
+                <a href="admin-settings.html" class="nav-item active flex items-center p-3 rounded-xl overflow-hidden text-slate-800 dark:text-gray-200 bg-stone-200 dark:bg-gray-700 transition-all">
+                    <ion-icon name="settings-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Configuración</span>
+                </a>
+            </nav>
+
+            
+            <div class="flex flex-col space-y-2 px-4 flex-shrink-0 pt-4">
+                <button id="theme-toggle" title="Cambiar Tema" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden"><ion-icon name="moon-outline" class="text-2xl flex-shrink-0"></ion-icon><span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Tema</span></button>
+                <button id="admin-mode-toggle" title="Modo Administrador" class="w-full flex items-center p-3 rounded-xl text-slate-800 dark:text-gray-200 bg-stone-200 dark:bg-gray-700 transition-all overflow-hidden"><ion-icon name="shield-checkmark-outline" class="text-2xl flex-shrink-0"></ion-icon><span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Admin</span></button>
+                <button id="notifications-toggle" title="Notificaciones" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden">
+                    <div class="relative">
+                        <ion-icon name="notifications-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                        <span class="absolute top-0 right-0 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                        </span>
+                    </div>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Notificaciones</span>
+                </button>
+                <a href="profile.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all"><ion-icon name="person-outline" class="text-2xl flex-shrink-0"></ion-icon><span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Perfil</span></a>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="flex-1 main-content-wrapper">
+            <main class="flex-1 p-4 sm:p-8 main-content-scrollable">
+                
+                <!-- SECTION CONTENT -->
+                <section id="admin-settings" class="section active">
+                    
+                    <div class="flex justify-between items-center mb-8">
+                        <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">Configuración del Sistema</h1>
+                        <button id="save-all-settings" class="bg-slate-700 dark:bg-gray-700 hover:bg-slate-800 dark:hover:bg-gray-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+                            <ion-icon name="save-outline" class="text-xl"></ion-icon>
+                            <span>Guardar Todo</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        
+                        <!-- App Configuration -->
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="bg-blue-100 dark:bg-blue-900/50 p-2 rounded-lg">
+                                    <ion-icon name="cog-outline" class="text-blue-600 dark:text-blue-400 text-xl"></ion-icon>
+                                </div>
+                                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Configuración General</h2>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Nombre de la Aplicación</label>
+                                    <input type="text" id="app-name" value="OptionRocket" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Descripción</label>
+                                    <textarea id="app-description" rows="3" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Descripción de la aplicación...">Dashboard de Trading Profesional</textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Zona Horaria</label>
+                                    <select id="app-timezone" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        <option value="UTC">UTC</option>
+                                        <option value="America/New_York">New York (EST)</option>
+                                        <option value="America/Los_Angeles">Los Angeles (PST)</option>
+                                        <option value="Europe/London">London (GMT)</option>
+                                        <option value="America/Mexico_City" selected>Mexico City (CST)</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Idioma por Defecto</label>
+                                    <select id="app-language" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        <option value="es" selected>Español</option>
+                                        <option value="en">English</option>
+                                        <option value="pt">Português</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Features Management -->
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="bg-green-100 dark:bg-green-900/50 p-2 rounded-lg">
+                                    <ion-icon name="toggle-outline" class="text-green-600 dark:text-green-400 text-xl"></ion-icon>
+                                </div>
+                                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Gestión de Funcionalidades</h2>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Feed de Noticias</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Mostrar sección de noticias del mercado</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="feature-feed" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">P&L Tracking</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Seguimiento de ganancias y pérdidas</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="feature-pnl" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Chat en Vivo</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Sistema de chat en tiempo real</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="feature-chat" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Video en Vivo</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Transmisiones en vivo</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="feature-video" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Cursos</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Módulo de cursos educativos</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="feature-courses" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Eventos</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Calendario de eventos</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="feature-events" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Contenido Premium</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Funcionalidades premium</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="feature-premium" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- API Configuration -->
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="bg-purple-100 dark:bg-purple-900/50 p-2 rounded-lg">
+                                    <ion-icon name="key-outline" class="text-purple-600 dark:text-purple-400 text-xl"></ion-icon>
+                                </div>
+                                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Configuración de APIs</h2>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                                        Alpha Vantage API Key
+                                        <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input type="password" id="alphavantage-key" class="w-full px-3 py-2 pr-10 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Ingresa tu API key">
+                                        <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center toggle-password">
+                                            <ion-icon name="eye-outline" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"></ion-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                                        Polygon.io API Key
+                                        <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input type="password" id="polygon-key" class="w-full px-3 py-2 pr-10 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Ingresa tu API key">
+                                        <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center toggle-password">
+                                            <ion-icon name="eye-outline" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"></ion-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                                        News API Key
+                                        <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input type="password" id="news-key" class="w-full px-3 py-2 pr-10 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Ingresa tu API key">
+                                        <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center toggle-password">
+                                            <ion-icon name="eye-outline" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"></ion-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                                        Webhook URL
+                                    </label>
+                                    <input type="url" id="webhook-url" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="https://tu-webhook.com/endpoint">
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">API Rate Limiting</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Limitar llamadas a la API</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="api-rate-limit" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+                                    <div class="flex items-start gap-3">
+                                        <ion-icon name="warning-outline" class="text-yellow-600 dark:text-yellow-400 text-lg mt-0.5"></ion-icon>
+                                        <div>
+                                            <h4 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Información Importante</h4>
+                                            <p class="text-xs text-yellow-700 dark:text-yellow-300 mt-1">Las API keys se almacenan de forma segura y encriptada. Nunca compartas tus claves con terceros.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Security & Access -->
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="bg-red-100 dark:bg-red-900/50 p-2 rounded-lg">
+                                    <ion-icon name="shield-checkmark-outline" class="text-red-600 dark:text-red-400 text-xl"></ion-icon>
+                                </div>
+                                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Seguridad y Acceso</h2>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Autenticación de Dos Factores</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Requerir 2FA para todos los usuarios</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="require-2fa" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Registro Público</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Permitir registro de nuevos usuarios</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="public-registration" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Modo Mantenimiento</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Activar página de mantenimiento</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="maintenance-mode" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Tiempo de Sesión (minutos)</label>
+                                    <input type="number" id="session-timeout" value="60" min="15" max="1440" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Intentos de Login Máximos</label>
+                                    <input type="number" id="max-login-attempts" value="5" min="3" max="10" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">IPs Permitidas (separadas por coma)</label>
+                                    <textarea id="allowed-ips" rows="3" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="192.168.1.1, 10.0.0.1"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notification Settings -->
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="bg-orange-100 dark:bg-orange-900/50 p-2 rounded-lg">
+                                    <ion-icon name="notifications-outline" class="text-orange-600 dark:text-orange-400 text-xl"></ion-icon>
+                                </div>
+                                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Configuración de Notificaciones</h2>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Notificaciones Email</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Enviar notificaciones por email</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="email-notifications" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Notificaciones Push</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Notificaciones del navegador</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="push-notifications" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Servidor SMTP</label>
+                                    <input type="text" id="smtp-server" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="smtp.gmail.com">
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Puerto SMTP</label>
+                                        <input type="number" id="smtp-port" value="587" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Encriptación</label>
+                                        <select id="smtp-encryption" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                            <option value="tls">TLS</option>
+                                            <option value="ssl">SSL</option>
+                                            <option value="none">Ninguna</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Email de Envío</label>
+                                    <input type="email" id="smtp-from-email" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="noreply@optionrocket.com">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Contraseña SMTP</label>
+                                    <div class="relative">
+                                        <input type="password" id="smtp-password" class="w-full px-3 py-2 pr-10 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Contraseña del servidor SMTP">
+                                        <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center toggle-password">
+                                            <ion-icon name="eye-outline" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"></ion-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Performance & Caching -->
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="bg-cyan-100 dark:bg-cyan-900/50 p-2 rounded-lg">
+                                    <ion-icon name="speedometer-outline" class="text-cyan-600 dark:text-cyan-400 text-xl"></ion-icon>
+                                </div>
+                                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Rendimiento y Caché</h2>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Caché de Datos</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Activar caché para mejorar rendimiento</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="enable-cache" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Tiempo de Caché (minutos)</label>
+                                    <input type="number" id="cache-duration" value="30" min="5" max="1440" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="text-sm font-medium text-slate-700 dark:text-gray-300">Compresión</label>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Comprimir respuestas del servidor</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="enable-compression" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Límite de Memoria (MB)</label>
+                                    <input type="number" id="memory-limit" value="512" min="128" max="2048" class="w-full px-3 py-2 border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                </div>
+                                
+                                <div class="flex items-center justify-center gap-4 pt-4">
+                                    <button id="clear-cache" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                                        <ion-icon name="trash-outline" class="text-lg"></ion-icon>
+                                        <span>Limpiar Caché</span>
+                                    </button>
+                                    <button id="optimize-db" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                                        <ion-icon name="construct-outline" class="text-lg"></ion-icon>
+                                        <span>Optimizar BD</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end gap-4 mt-8">
+                        <button id="reset-settings" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+                            <ion-icon name="refresh-outline" class="text-xl"></ion-icon>
+                            <span>Restablecer</span>
+                        </button>
+                        <button id="export-settings" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+                            <ion-icon name="download-outline" class="text-xl"></ion-icon>
+                            <span>Exportar</span>
+                        </button>
+                        <button id="import-settings" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+                            <ion-icon name="cloud-upload-outline" class="text-xl"></ion-icon>
+                            <span>Importar</span>
+                        </button>
+                    </div>
+                
+                </section>
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="flex-shrink-0 bg-white dark:bg-gray-800 border-t border-stone-200 dark:border-gray-700 text-slate-600 dark:text-gray-400 py-2 px-4 sm:px-8">
+                <div class="container mx-auto flex items-center justify-between">
+                    <div class="text-xs"><span class="font-bold text-slate-900 dark:text-white">OptionRocket</span> &copy; 2024.</div>
+                    <div class="flex items-center gap-3">
+                        <a href="#" class="text-xs hover:text-slate-900 dark:hover:text-gray-200">Términos</a>
+                        <a href="#" class="text-xs hover:text-slate-900 dark:hover:text-gray-200">Privacidad</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <!-- =================================================================== -->
+        <!-- COMPONENT: NOTIFICATIONS SIDEBAR (OVERLAY)                          -->
+        <!-- =================================================================== -->
+        <aside id="notifications-sidebar" class="fixed top-0 right-0 h-full w-80 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-l border-stone-200 dark:border-gray-700 p-6 transform translate-x-full transition-transform duration-300 ease-in-out z-30">
+            <div class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold text-slate-900 dark:text-white">Notificaciones</h2><button id="close-notifications" class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 text-2xl">&times;</button></div>
+            <div class="space-y-4"><div class="flex items-start space-x-3 bg-stone-100/50 dark:bg-gray-700/50 p-3 rounded-lg"><ion-icon name="trending-up-outline" class="text-green-600 text-2xl mt-1"></ion-icon><div><p class="text-sm text-slate-800 dark:text-gray-200">Nueva alerta de compra para <span class="font-bold">NVDA</span>.</p><p class="text-xs text-slate-500 dark:text-gray-400">Hace 5 minutos</p></div></div><div class="flex items-start space-x-3 p-3 rounded-lg"><ion-icon name="chatbubble-ellipses-outline" class="text-blue-600 text-2xl mt-1"></ion-icon><div><p class="text-sm text-slate-800 dark:text-gray-200"><span class="font-bold">Ana Torres</span> te mencionó en <span class="font-bold"># general</span>.</p><p class="text-xs text-slate-500 dark:text-gray-400">Hace 20 minutos</p></div></div></div>
+        </aside>
+
+        <!-- MOBILE BOTTOM NAVIGATION -->
+        <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-stone-200 dark:border-gray-700 flex justify-around py-2 z-10">
+            <a href="dashboard.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="grid" class="text-2xl"></ion-icon><span class="text-xs">Inicio</span></a>
+            <a href="feed.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="newspaper" class="text-2xl"></ion-icon><span class="text-xs">Feed</span></a>
+            <a href="pnl.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="trending-up" class="text-2xl"></ion-icon><span class="text-xs">P&L</span></a>
+            <a href="alerts.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="alert-circle" class="text-2xl"></ion-icon><span class="text-xs">Alertas</span></a>
+            <a href="profile.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="person" class="text-2xl"></ion-icon><span class="text-xs">Perfil</span></a>
+        </nav>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script src="../js/app.js"></script>
+</body>
+</html>

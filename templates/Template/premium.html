@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptionRocket - Premium</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Ionicons via CDN -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-stone-100 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
+
+    <div class="flex app-container">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside id="sidebar" class="hidden lg:flex lg:flex-col w-20 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-r border-stone-200 dark:border-gray-700 py-4 transition-all duration-300 ease-in-out z-20">
+            
+            <div class="relative flex items-center justify-center px-4 mb-6 flex-shrink-0 h-8">
+                <div id="logo-collapsed" class="text-3xl font-bold gradient-text">OR</div>
+                <span id="logo-expanded" class="text-2xl font-bold gradient-text whitespace-nowrap">OptionRocket</span>
+            </div>
+            
+            <nav id="main-nav" class="flex flex-col space-y-2 flex-grow px-4">
+                <a href="dashboard.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="grid-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Dashboard</span>
+                </a>
+                <a href="feed.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="newspaper-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Feed</span>
+                </a>
+                <a href="pnl.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="trending-up-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">P&L</span>
+                </a>
+                <a href="alerts.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="alert-circle-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Alertas</span>
+                </a>
+                <a href="chat.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <div class="relative">
+                        <ion-icon name="chatbubbles-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                        <span class="absolute top-0 right-0 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                        </span>
+                    </div>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Chat</span>
+                </a>
+                <a href="video.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="videocam-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">En Vivo</span>
+                </a>
+                <a href="courses.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="school-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Cursos</span>
+                </a>
+                <a href="events.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="calendar-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Eventos</span>
+                </a>
+                <a href="premium.html" class="nav-item active flex items-center p-3 rounded-xl overflow-hidden text-slate-800 dark:text-gray-200 bg-stone-200 dark:bg-gray-700 transition-all">
+                    <ion-icon name="rocket-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Premium</span>
+                </a>
+                <a href="profile.html" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <ion-icon name="person-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Perfil</span>
+                </a>
+            </nav>
+
+            <div class="flex flex-col space-y-2 px-4 flex-shrink-0 pt-4">
+                <button id="theme-toggle" title="Cambiar Tema" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden"><ion-icon name="moon-outline" class="text-2xl flex-shrink-0"></ion-icon><span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Tema</span></button>
+                <a href="index.html" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden"><ion-icon name="home-outline" class="text-2xl flex-shrink-0"></ion-icon><span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Inicio</span></a>
+                            <button id="notifications-toggle" title="Notificaciones" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden">
+                    <div class="relative">
+                        <ion-icon name="notifications-outline" class="text-2xl flex-shrink-0"></ion-icon>
+                        <span class="absolute top-0 right-0 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                        </span>
+                    </div>
+                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap opacity-0 pointer-events-none transition-opacity">Notificaciones</span>
+                </button>
+                </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="flex-1 main-content-wrapper">
+            <main class="flex-1 p-4 sm:p-8 main-content-scrollable">
+                
+                <!-- SECTION CONTENT -->
+                <section id="premium" class="section active">
+                    
+                    <div class="max-w-7xl mx-auto">
+                        <!-- Premium Header with enhanced styling -->
+                        <div class="text-center mb-12 relative">
+                            <!-- Decorative background elements -->
+                            <div class="absolute -top-20 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-gradient-to-r from-amber-200/30 to-orange-200/30 dark:from-amber-600/10 dark:to-orange-600/10 rounded-full blur-3xl"></div>
+                            
+                            <div class="relative z-10">
+                                <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white mb-4">
+                                    Lanza tu Trading a la 
+                                    <span class="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Estratosfera</span>.
+                                </h1>
+                                <p class="text-lg text-slate-600 dark:text-gray-300 max-w-2xl mx-auto">
+                                    Conviértete en miembro de OptionRocket Premium y accede a análisis exclusivos, señales de trading y herramientas profesionales.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Enhanced Billing Toggle -->
+                        <div class="flex justify-center items-center space-x-4 mb-10">
+                            <span class="font-medium text-slate-700 dark:text-gray-300">Mensual</span>
+                            <label for="billing-toggle" class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="billing-toggle" class="sr-only peer">
+                                <div class="w-14 h-8 bg-stone-200 dark:bg-gray-600 rounded-full peer peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-amber-300/50 dark:peer-focus:ring-amber-600/50 peer-checked:bg-gradient-to-r peer-checked:from-amber-500 peer-checked:to-orange-500 transition-all duration-300"></div>
+                                <div class="absolute top-1 left-1 bg-white dark:bg-gray-200 border-stone-300 dark:border-gray-500 border rounded-full h-6 w-6 transition-transform peer-checked:translate-x-6 shadow-md"></div>
+                            </label>
+                            <span class="font-medium text-slate-700 dark:text-gray-300">
+                                Anual 
+                                <span class="text-green-600 dark:text-green-400 font-semibold">(Ahorra 20%)</span>
+                            </span>
+                        </div>
+                        
+                        <!-- Enhanced Premium Cards -->
+                        <div class="grid lg:grid-cols-2 gap-8">
+                            <!-- Regular Plan Card -->
+                            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200">
+                                <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Regular (Gratis)</h3>
+                                <p class="text-slate-600 dark:text-gray-400 mt-2">Para empezar a explorar.</p>
+                                <ul class="space-y-4 mt-6 text-slate-700 dark:text-gray-300">
+                                    <li class="flex items-center gap-3">
+                                        <ion-icon name="checkmark-circle" class="text-green-500 text-2xl"></ion-icon>
+                                        <span>Acceso a Foros Públicos</span>
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <ion-icon name="checkmark-circle" class="text-green-500 text-2xl"></ion-icon>
+                                        <span>Chat General</span>
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <ion-icon name="close-circle" class="text-red-400 text-2xl"></ion-icon>
+                                        <span>Alertas y Señales de Trading</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Premium Plan Card with enhanced styling -->
+                            <div class="relative bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 dark:from-amber-900/20 dark:via-amber-800/30 dark:to-orange-900/20 p-8 rounded-xl border-2 border-amber-400/50 dark:border-amber-600/50 shadow-lg hover:shadow-xl transition-all duration-300">
+                                <!-- Decorative background elements -->
+                                <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-300/20 dark:bg-amber-600/10 rounded-full blur-2xl"></div>
+                                <div class="absolute -bottom-5 -left-5 w-24 h-24 bg-orange-300/20 dark:bg-orange-600/10 rounded-full blur-xl"></div>
+                                
+                                <!-- Premium Badge -->
+                                <div class="absolute -top-4 right-8 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg flex items-center gap-1 z-10">
+                                    <ion-icon name="diamond" class="text-xs"></ion-icon>
+                                    MÁS POPULAR
+                                </div>
+                                
+                                <div class="relative z-10">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Premium</h3>
+                                        <ion-icon name="diamond" class="text-amber-600 dark:text-amber-400 text-lg"></ion-icon>
+                                    </div>
+                                    <p class="text-slate-600 dark:text-gray-300 mt-2">Desbloquea todo el potencial.</p>
+                                    
+                                    <p class="my-6">
+                                        <span id="price-display" class="text-5xl font-extrabold text-slate-900 dark:text-white">$29</span>
+                                        <span class="text-slate-500 dark:text-gray-400"> / mes</span>
+                                    </p>
+                                    
+                                    <button class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
+                                        Mejorar a Premium
+                                    </button>
+                                    
+                                    <ul class="space-y-4 mt-6 text-slate-700 dark:text-gray-300">
+                                        <li class="flex items-center gap-3">
+                                            <ion-icon name="checkmark-circle" class="text-green-500 text-2xl"></ion-icon>
+                                            <span>Todo lo del plan Regular, y además:</span>
+                                        </li>
+                                        <li class="flex items-center gap-3">
+                                            <ion-icon name="checkmark-circle" class="text-green-500 text-2xl"></ion-icon>
+                                            <span>Alertas y Señales Premium</span>
+                                        </li>
+                                        <li class="flex items-center gap-3">
+                                            <ion-icon name="checkmark-circle" class="text-green-500 text-2xl"></ion-icon>
+                                            <span>Acceso a Canales de Chat Exclusivos</span>
+                                        </li>
+                                        <li class="flex items-center gap-3">
+                                            <ion-icon name="checkmark-circle" class="text-green-500 text-2xl"></ion-icon>
+                                            <span>Sesiones en Vivo y Grabaciones</span>
+                                        </li>
+                                        <li class="flex items-center gap-3">
+                                            <ion-icon name="checkmark-circle" class="text-green-500 text-2xl"></ion-icon>
+                                            <span>Todos los Cursos y Análisis</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                </section>
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="flex-shrink-0 bg-white dark:bg-gray-800 border-t border-stone-200 dark:border-gray-700 text-slate-600 dark:text-gray-400 py-2 px-4 sm:px-8">
+                <div class="container mx-auto flex items-center justify-between">
+                    <div class="text-xs"><span class="font-bold text-slate-900 dark:text-white">OptionRocket</span> &copy; 2024.</div>
+                    <div class="flex items-center gap-3">
+                        <a href="#" class="text-xs hover:text-slate-900 dark:hover:text-gray-200">Términos</a>
+                        <a href="#" class="text-xs hover:text-slate-900 dark:hover:text-gray-200">Privacidad</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <!-- =================================================================== -->
+        <!-- COMPONENT: NOTIFICATIONS SIDEBAR (OVERLAY)                          -->
+        <!-- =================================================================== -->
+        <aside id="notifications-sidebar" class="fixed top-0 right-0 h-full w-80 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-l border-stone-200 dark:border-gray-700 p-6 transform translate-x-full transition-transform duration-300 ease-in-out z-30">
+            <div class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold text-slate-900 dark:text-white">Notificaciones</h2><button id="close-notifications" class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 text-2xl">&times;</button></div>
+            <div class="space-y-4"><div class="flex items-start space-x-3 bg-stone-100/50 dark:bg-gray-700/50 p-3 rounded-lg"><ion-icon name="trending-up-outline" class="text-green-600 text-2xl mt-1"></ion-icon><div><p class="text-sm text-slate-800 dark:text-gray-200">Nueva alerta de compra para <span class="font-bold">NVDA</span>.</p><p class="text-xs text-slate-500 dark:text-gray-400">Hace 5 minutos</p></div></div><div class="flex items-start space-x-3 p-3 rounded-lg"><ion-icon name="chatbubble-ellipses-outline" class="text-blue-600 text-2xl mt-1"></ion-icon><div><p class="text-sm text-slate-800 dark:text-gray-200"><span class="font-bold">Ana Torres</span> te mencionó en <span class="font-bold"># general</span>.</p><p class="text-xs text-slate-500 dark:text-gray-400">Hace 20 minutos</p></div></div></div>
+        </aside>
+
+        <!-- MOBILE BOTTOM NAVIGATION -->
+        <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-stone-200 dark:border-gray-700 flex justify-around py-2 z-10">
+            <a href="dashboard.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="grid" class="text-2xl"></ion-icon><span class="text-xs">Inicio</span></a>
+            <a href="feed.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="newspaper" class="text-2xl"></ion-icon><span class="text-xs">Feed</span></a>
+            <a href="pnl.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="trending-up" class="text-2xl"></ion-icon><span class="text-xs">P&L</span></a>
+            <a href="alerts.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="alert-circle" class="text-2xl"></ion-icon><span class="text-xs">Alertas</span></a>
+            <a href="profile.html" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2"><ion-icon name="person" class="text-2xl"></ion-icon><span class="text-xs">Perfil</span></a>
+        </nav>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script src="../js/app.js"></script>
+</body>
+</html>
