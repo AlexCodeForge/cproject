@@ -29,6 +29,8 @@ class ChatParticipant extends Model
         'permissions',
     ];
 
+    protected $with = ['user'];
+
     /**
      * The attributes that should be cast.
      *

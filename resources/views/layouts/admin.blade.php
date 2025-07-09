@@ -302,6 +302,9 @@
     </div>
 
     @livewireScripts
+    <livewire:components.modals.confirmation-modal />
+    <livewire:components.modals.success-modal />
+    <livewire:components.modals.error-modal />
     @stack('scripts')
     @stack('modals')
 </body>

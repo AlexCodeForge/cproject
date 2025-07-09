@@ -18,7 +18,7 @@ use App\Livewire\UserPanel\Courses;
 use App\Livewire\UserPanel\Events;
 use App\Livewire\UserPanel\Profile;
 use App\Livewire\UserPanel\Chat;
-use App\Livewire\Admin\Chat\ChannelManagement;
+use App\Livewire\AdminPanel\Chat\ChannelManagement;
 
 Route::view('/', 'welcome');
 

@@ -1,14 +1,36 @@
-<div>
+<div x-data="{ sidebarOpen: false }">
     <section id="chat" class="section active">
         <div class="h-full flex flex-col max-w-7xl mx-auto">
-            <div class="flex-1 flex bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm min-h-[calc(100vh-10rem)]">
+            <div class="flex-1 flex bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm min-h-[calc(100vh-10rem)] relative">
+                <!-- Backdrop for mobile -->
+                <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-black bg-opacity-50 z-10 sm:hidden" x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"></div>
+
                 <!-- Sidebar with channels -->
-                <div class="w-64 bg-stone-50/50 dark:bg-gray-700/50 p-4 border-r border-stone-200 dark:border-gray-600 flex-col hidden sm:flex">
-                    <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Canales</h2>
-                    <nav class="space-y-2 flex-grow">
+                <div
+                    :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen }"
+                    class="fixed inset-y-0 left-0 w-64 bg-stone-50/95 dark:bg-gray-700/95 backdrop-blur-sm p-4 border-r border-stone-200 dark:border-gray-600 flex-col flex z-20 sm:relative sm:translate-x-0 sm:flex sm:bg-stone-50/50 dark:sm:bg-gray-700/50 sm:backdrop-blur-none transition-transform duration-300 ease-in-out"
+                >
+                    <div class="flex justify-between items-center sm:hidden mb-4">
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Channels</h2>
+                        <button @click="sidebarOpen = false">
+                            <x-ionicon-close-outline class="w-6 h-6 text-slate-500 dark:text-gray-400" />
+                        </button>
+                    </div>
+
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4 hidden sm:block">Canales</h2>
+                    <nav class="space-y-2 h-48 overflow-y-auto scrollbar-hide">
                         @foreach($channels as $channel)
-                            <a href="#" wire:click.prevent="changeChannel({{ $channel->id }})" class="flex items-center space-x-2 px-3 py-2 rounded-lg {{ $activeChannel && $activeChannel->id === $channel->id ? 'bg-slate-700 dark:bg-slate-600 text-white font-semibold' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-600 hover:text-slate-800 dark:hover:text-gray-200' }} transition-colors">
-                                <ion-icon name="{{ $channel->icon ?? 'chatbox-ellipses' }}"></ion-icon>
+                            <a href="#" wire:click.prevent="changeChannel({{ $channel->id }}); sidebarOpen = false"
+                               @class([
+                                   'flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors',
+                                   'bg-slate-700 dark:bg-slate-600' => $activeChannel && $activeChannel->id === $channel->id,
+                                   'text-amber-500 dark:text-amber-400 font-semibold' => $channel->type === 'premium',
+                                   'text-white font-semibold' => $activeChannel && $activeChannel->id === $channel->id && $channel->type !== 'premium',
+                                   'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-600 hover:text-slate-800 dark:hover:text-gray-200' => !($activeChannel && $activeChannel->id === $channel->id) && $channel->type !== 'premium',
+                                   'hover:bg-stone-200 dark:hover:bg-gray-600 hover:text-amber-700 dark:hover:text-amber-300' => !($activeChannel && $activeChannel->id === $channel->id) && $channel->type === 'premium'
+                               ])
+                            >
+                                <ion-icon name="{{ $channel->type === 'premium' ? 'diamond' : ($channel->icon ?? 'chatbox-ellipses-outline') }}" class="w-6 h-6"></ion-icon>
                                 <span># {{ $channel->name }}</span>
                             </a>
                         @endforeach
@@ -17,10 +39,16 @@
                     <hr class="my-4 border-stone-200 dark:border-gray-600">
 
                     <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Joinable Channels</h2>
-                    <nav class="space-y-2 flex-grow">
+                    <nav class="space-y-2 h-48 overflow-y-auto scrollbar-hide">
                         @foreach($joinableChannels as $channel)
-                            <a href="#" wire:click.prevent="joinChannel({{ $channel->id }})" class="flex items-center space-x-2 px-3 py-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-600 hover:text-slate-800 dark:hover:text-gray-200 transition-colors">
-                                <ion-icon name="add-circle-outline"></ion-icon>
+                            <a href="#" wire:click.prevent="joinChannel({{ $channel->id }}); sidebarOpen = false"
+                               @class([
+                                   'flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors',
+                                   'font-semibold text-amber-600 dark:text-amber-400 hover:bg-stone-200 dark:hover:bg-gray-600 hover:text-amber-700 dark:hover:text-amber-300' => $channel->type === 'premium',
+                                   'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-600 hover:text-slate-800 dark:hover:text-gray-200' => $channel->type !== 'premium',
+                               ])
+                            >
+                                <ion-icon name="{{ $channel->type === 'premium' ? 'diamond' : 'add-circle-outline' }}" class="w-6 h-6"></ion-icon>
                                 <span># {{ $channel->name }}</span>
                             </a>
                         @endforeach
@@ -32,9 +60,14 @@
                     @if($activeChannel)
                         <!-- Chat header -->
                         <div class="p-4 border-b border-stone-200 dark:border-gray-600 flex justify-between items-center">
-                            <div>
-                                <h3 class="text-xl font-bold text-slate-900 dark:text-white"># {{ $activeChannel->name }}</h3>
-                                <p class="text-sm text-slate-500 dark:text-gray-400">{{ $activeChannel->description }}</p>
+                            <div class="flex items-center space-x-3">
+                                <button @click="sidebarOpen = true" class="sm:hidden text-slate-500 dark:text-gray-400">
+                                    <x-ionicon-menu-outline class="w-6 h-6" />
+                                </button>
+                                <div>
+                                    <h3 class="text-xl font-bold text-slate-900 dark:text-white"># {{ $activeChannel->name }}</h3>
+                                    <p class="text-sm text-slate-500 dark:text-gray-400">{{ $activeChannel->description }}</p>
+                                </div>
                             </div>
                             <div>
                                 <button wire:click="leaveChannel({{ $activeChannel->id }})" class="text-red-500 hover:text-red-700">Leave Channel</button>
@@ -117,7 +150,13 @@
                         </div>
                     @else
                         <div class="flex-1 flex items-center justify-center text-slate-500 dark:text-gray-400">
-                            <p>Select a channel to start chatting.</p>
+                            <div class="text-center">
+                                <button @click="sidebarOpen = true" class="sm:hidden text-slate-500 dark:text-gray-400 mb-4">
+                                    <x-ionicon-menu-outline class="w-8 h-8 mx-auto" />
+                                    <span class="text-sm">View Channels</span>
+                                </button>
+                                <p>Select a channel to start chatting.</p>
+                            </div>
                         </div>
                     @endif
                 </div>

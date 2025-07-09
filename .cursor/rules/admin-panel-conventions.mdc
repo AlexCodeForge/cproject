@@ -1,0 +1,28 @@
+---
+name: Admin Panel Conventions
+---
+
+-   **Follow the Admin Panel Development Guide**: All new features or modules built for the admin panel must adhere to the conventions outlined in the [Admin Panel Development Guide](mdc:docs/admin-panel-development.md).
+
+-   **Directory Structure**:
+    -   Place component classes in `app/Livewire/AdminPanel/{ModuleName}/`.
+    -   Place page views in `resources/views/admin_panel/{module-name}/`.
+    -   Place component-specific views in `resources/views/admin_panel/{module-name}/livewire/`.
+
+-   **Component Architecture**:
+    -   Use a top-level **Page Component** (e.g., `UserManagement.php`) to set the layout and include the main **Functional Component**.
+    -   The Functional Component (e.g., `UserTable.php`) should contain all the logic for the feature.
+
+-   **Global Modals**:
+    -   **DO NOT** create modals inside feature components.
+    -   **ALWAYS** use the global, event-driven modals:
+        -   `ConfirmationModal`: Trigger with `dispatch('showConfirmationModal', ...)`.
+        -   `SuccessModal`: Trigger with `dispatch('showSuccessModal', ...)`.
+        -   `ErrorModal`: Trigger with `dispatch('showErrorModal', ...)`.
+    -   Reference the [guide](mdc:docs/admin-panel-development.md#3-reusable-global-modals) for detailed usage examples.
+
+-   **Routing**:
+    -   Admin routes in `routes/web.php` must point to the **Page Component** class, not the functional component or a Blade view directly.
+
+-   **Routing**:
+    -   Admin routes in `routes/web.php` must point to the **Page Component** class, not the functional component or a Blade view directly.

@@ -49,7 +49,7 @@ class Chat extends Component
             ->get() ?? collect();
 
         $this->joinableChannels = ChatChannel::where('is_active', true)
-            ->where('type', 'public')
+            ->whereIn('type', ['public', 'premium'])
             ->whereNotIn('id', $this->channels->pluck('id') ?? [])
             ->orderBy('sort_order')
             ->get() ?? collect();
@@ -188,9 +188,11 @@ class Chat extends Component
     public function joinChannel(int $channelId): void
     {
         $channel = ChatChannel::find($channelId);
-        if ($channel && $channel->type === 'public') {
+        if ($channel && in_array($channel->type, ['public', 'premium'])) {
+            // Future enhancement: Check if user has premium role if channel is premium.
             $channel->participants()->attach(Auth::id());
             $this->loadChannels();
+            $this->changeChannel($channelId);
         }
     }
 

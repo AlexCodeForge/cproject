@@ -67,6 +67,6 @@ class ChatChannel extends Model
      */
     public function participants()
     {
-        return $this->belongsToMany(User::class, 'chat_participants');
+        return $this->belongsToMany(User::class, 'chat_participants', 'chat_channel_id', 'user_id');
     }
 }
