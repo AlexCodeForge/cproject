@@ -36,6 +36,9 @@ class Chat extends Component
         if ($this->channels->isNotEmpty()) {
             $this->changeChannel($this->channels->first()->id);
         }
+
+        // Dispatch a scroll-to-bottom event after the component is mounted and channels are loaded
+        $this->dispatch('scroll-to-bottom');
     }
 
     public function loadChannels(): void

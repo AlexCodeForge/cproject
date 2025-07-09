@@ -127,8 +127,13 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('livewire:navigated', function() {
     const chatContainer = document.getElementById('chat-container');
+
+    // If we are not on the chat page, do nothing.
+    if (!chatContainer) {
+        return;
+    }
 
     function scrollToBottom() {
         if (chatContainer) {
@@ -136,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Scroll to bottom on initial load
+    // Scroll to bottom on initial load or navigation
     scrollToBottom();
 
     // Listen for events from Livewire
@@ -208,16 +213,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Handle component destruction
-    window.addEventListener('beforeunload', function() {
+    // This function will be called when we navigate away from the page
+    const cleanup = () => {
         if (currentEchoChannel && currentChannelId) {
-            console.log(`📤 Leaving channel on unload: chat.${currentChannelId}`);
+            console.log(`📤 Leaving channel on navigation: chat.${currentChannelId}`);
             try {
                 window.Echo.leave(`chat.${currentChannelId}`);
             } catch (error) {
-                console.error('❌ Error leaving channel on unload:', error);
+                console.error('❌ Error leaving channel on navigation:', error);
             }
         }
-    });
+        // Important: remove the listener to avoid memory leaks
+        document.removeEventListener('livewire:navigating', cleanup);
+    };
+
+    // Add the cleanup listener for when we navigate away
+    document.addEventListener('livewire:navigating', cleanup);
 });
 </script>

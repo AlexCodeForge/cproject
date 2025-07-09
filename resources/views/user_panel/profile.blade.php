@@ -52,13 +52,13 @@ new #[Layout('layouts.app')] class extends Component
 
                 <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
                     <div class="max-w-xl">
-                        <livewire:profile.update-profile-information-form />
+                        <livewire:profile.update_profile_information_form />
                     </div>
                 </div>
 
                 <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm">
                     <div class="max-w-xl">
-                        <livewire:profile.update-password-form />
+                        <livewire:profile.update_password_form />
                     </div>
                 </div>
 
@@ -89,7 +89,7 @@ new #[Layout('layouts.app')] class extends Component
                 </div>
 
                  <!-- Delete Account -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-6">
+                {{-- <div class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-6">
                      <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                         <ion-icon name="trash-outline"></ion-icon>
                         Delete Account
@@ -98,9 +98,9 @@ new #[Layout('layouts.app')] class extends Component
                         Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.
                     </p>
                     <div class="mt-6">
-                         <livewire:profile.delete-user-form />
+                         <livewire:profile.delete_user_form />
                     </div>
-                </div>
+                </div> --}}
 
             </div>
 
