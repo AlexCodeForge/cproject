@@ -12,6 +12,7 @@ use App\Notifications\WelcomeEmailNotification;
 use App\Notifications\CustomEmailVerificationNotification;
 use Laravel\Cashier\Billable;
 use App\Models\Post;
+use App\Models\ChatChannel;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -97,6 +98,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    /**
+     * Get the chat channels the user is a participant in.
+     */
+    public function chatChannels()
+    {
+        return $this->belongsToMany(ChatChannel::class, 'chat_participants');
     }
 
     /**

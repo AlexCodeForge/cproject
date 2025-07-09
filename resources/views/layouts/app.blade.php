@@ -7,7 +7,7 @@
     <title>{{ $title ?? config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/shared-layout.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/shared-layout.js'])
     @livewireStyles
 
     <!-- Google Fonts: Inter -->
@@ -197,7 +197,7 @@
                         <x-ionicon-alert-circle-outline class="w-6 h-6 flex-shrink-0" />
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Alertas</span>
                     </a>
-                    <a href="#" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
+                    <a href="{{ route('chat') }}" class="nav-item {{ request()->routeIs('chat') ? 'active bg-stone-200 dark:bg-gray-700 text-slate-800 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200' }} flex items-center p-3 rounded-xl overflow-hidden transition-all" wire:navigate>
                         <div class="relative">
                             <x-ionicon-chatbubbles-outline class="w-6 h-6 flex-shrink-0" />
                             <span class="absolute top-0 right-0 flex h-2.5 w-2.5">

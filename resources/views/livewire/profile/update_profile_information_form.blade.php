@@ -5,11 +5,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
+use Livewire\WithFileUploads;
 
 new class extends Component
 {
+    use WithFileUploads;
+
     public string $name = '';
     public string $email = '';
+    public $avatar;
 
     /**
      * Mount the component.
@@ -30,6 +34,7 @@ new class extends Component
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+            'avatar' => ['nullable', 'image', 'max:1024'],
         ]);
 
         $user->fill($validated);
@@ -39,6 +44,11 @@ new class extends Component
         }
 
         $user->save();
+
+        if ($this->avatar) {
+            $path = $this->avatar->store('avatars', 'public');
+            $user->profile()->updateOrCreate(['user_id' => $user->id], ['avatar' => $path]);
+        }
 
         $this->dispatch('profile-updated', name: $user->name);
     }
@@ -74,6 +84,37 @@ new class extends Component
     </header>
 
     <form wire:submit="updateProfileInformation" class="mt-6 space-y-6">
+        <!-- Avatar Photo -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-input-label for="avatar" value="{{ __('Avatar') }}" />
+
+            <!-- Current Avatar -->
+            <div class="mt-2" x-show="!photoPreview">
+                @if (Auth::user()->profile?->avatar)
+                    <img src="{{ asset('storage/' . Auth::user()->profile->avatar) }}" alt="{{ Auth::user()->name }}" class="rounded-full h-20 w-20 object-cover">
+                @else
+                    <span class="inline-block h-20 w-20 rounded-full overflow-hidden bg-gray-100">
+                        <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 20.993V24H0v-2.997A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </span>
+                @endif
+            </div>
+
+            <!-- New Avatar Preview -->
+            <div class="mt-2" x-show="photoPreview" style="display: none;">
+                <span class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center"
+                      x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
+                </span>
+            </div>
+
+            <x-secondary-button class="mt-2 me-2" type="button" x-on:click.prevent="$refs.photo.click()">
+                {{ __('Select A New Avatar') }}
+            </x-secondary-button>
+
+            <x-input-error :messages="$errors->get('avatar')" class="mt-2" />
+        </div>
+
         <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required autofocus autocomplete="name" />

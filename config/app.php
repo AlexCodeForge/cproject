@@ -173,12 +173,8 @@ return [
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
-        // App\Providers\AuthServiceProvider::class, // Commented out as it might not exist
-        // App\Providers\BroadcastServiceProvider::class, // Commented out as it might not exist
-        // App\Providers\EventServiceProvider::class, // Commented out as it might not exist
-        // App\Providers\RouteServiceProvider::class, // Commented out as it might not exist
         App\Providers\VoltServiceProvider::class,
-
+        App\Providers\BroadcastServiceProvider::class,
     ],
 
     /*

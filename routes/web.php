@@ -13,11 +13,12 @@ use App\Livewire\UserPanel\Dashboard;
 use App\Livewire\UserPanel\Feed;
 use App\Livewire\UserPanel\Pnl;
 use App\Livewire\UserPanel\Alerts;
-use App\Livewire\UserPanel\Chat;
 use App\Livewire\UserPanel\Live;
 use App\Livewire\UserPanel\Courses;
 use App\Livewire\UserPanel\Events;
 use App\Livewire\UserPanel\Profile;
+use App\Livewire\UserPanel\Chat;
+use App\Livewire\Admin\Chat\ChannelManagement;
 
 Route::view('/', 'welcome');
 
@@ -75,6 +76,7 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->name('ad
     Volt::route('/posts', PostIndex::class)->name('posts.index');
     Volt::route('/posts/create', CreatePost::class)->name('posts.create');
     Volt::route('/posts/{post}/edit', EditPost::class)->name('posts.edit');
+    Volt::route('/chat/channels', ChannelManagement::class)->name('chat.channels');
 });
 
 require __DIR__.'/auth.php';
