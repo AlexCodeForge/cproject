@@ -11,6 +11,7 @@ use App\Notifications\CustomResetPasswordNotification;
 use App\Notifications\WelcomeEmailNotification;
 use App\Notifications\CustomEmailVerificationNotification;
 use Laravel\Cashier\Billable;
+use App\Models\Post;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -88,6 +89,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function profile()
     {
         return $this->hasOne(UserProfile::class);
+    }
+
+    /**
+     * Get the posts for the user.
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 
     /**

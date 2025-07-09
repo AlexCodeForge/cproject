@@ -14,12 +14,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Run the role seeder first
-        $this->call([
-            RoleSeeder::class,
-            SubscriptionPlansSeeder::class,
-            PostCategoriesSeeder::class,
-            ChatChannelsSeeder::class,
-        ]);
+        $this->call(RoleSeeder::class);
+        $this->call(SubscriptionPlansSeeder::class);
+        $this->call(PostCategoriesSeeder::class);
+        $this->call(ChatChannelsSeeder::class);
+        $this->call(PostSeeder::class);
 
         // Create a test admin user
         $admin = User::factory()->create([
