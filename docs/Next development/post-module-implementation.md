@@ -188,15 +188,15 @@ By following this layered testing approach, we aim to catch issues early and ens
     *   [x] Add category and status filters in the same UI style.
 
 4.  **Create `CreatePost` Component (Separate Page)**:
-    *   [ ] Create `app/Livewire/AdminPanel/Posts/CreatePost.php`.
-    *   [ ] Create `resources/views/admin_panel/posts/create.blade.php`.
-    *   [ ] Define public properties for all post fields (title, content, featured_image, etc.).
-    *   [ ] Include `WithFileUploads` trait for `featured_image`.
-    *   [ ] Implement `#[Validate]` attributes or `$this->validate()` in the `save()` method.
-    *   [ ] Handle `featured_image` upload, storage, and saving the path to the database.
-    *   [ ] Ensure validation errors are displayed using `<x-input-error>`.
-    *   [ ] Implement the `save()` method to create a new post record.
-    *   [ ] Set up navigation to `PostManagement` after successful creation.
+    *   [x] Create `app/Livewire/AdminPanel/Posts/CreatePost.php`.
+    *   [x] Create `resources/views/admin_panel/posts/create.blade.php`.
+    *   [x] Define public properties for all post fields (title, content, featured_image, etc.).
+    *   [x] Include `WithFileUploads` trait for `featured_image`.
+    *   [x] Implement `#[Validate]` attributes or `$this->validate()` in the `save()` method.
+    *   [x] Handle `featured_image` upload, storage, and saving the path to the database.
+    *   [x] Ensure validation errors are displayed using `<x-input-error>`.
+    *   [x] Implement the `save()` method to create a new post record.
+    *   [x] Set up navigation to `PostManagement` after successful creation.
 
 5.  **Create `EditPost` Component (Separate Page)**:
     *   [ ] Create `app/Livewire/AdminPanel/Posts/EditPost.php`.
