@@ -96,11 +96,12 @@ new #[Layout('layouts.auth')] class extends Component
                     </div>
                 </div>
             </div>
+            <!-- Back to Login Link -->
         </div>
     </div>
 
     <!-- Right Side - Auth Forms -->
-    <div class="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-8 relative min-h-screen bg-stone-100 dark:bg-gray-900">
+    <div class="w-full lg:w-1/2 flex flex-col items-center p-4 sm:p-6 lg:p-8 relative bg-stone-100 dark:bg-gray-900 max-h-screen overflow-y-auto">
         <!-- Mobile Logo -->
         <div class="lg:hidden absolute top-4 left-4 sm:top-6 sm:left-6 z-10">
             <h1 class="text-xl sm:text-2xl font-bold gradient-text">OptionRocket</h1>

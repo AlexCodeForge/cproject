@@ -22,7 +22,7 @@
         }
 
         .email-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%); /* Updated gradient */
             color: white;
             padding: 24px;
             text-align: center;
@@ -40,7 +40,7 @@
         }
 
         .email-button {
-            background: #475569;
+            background: #f97316; /* Updated button color */
             color: white;
             padding: 12px 24px;
             border-radius: 6px;
@@ -51,7 +51,7 @@
         }
 
         .email-button:hover {
-            background: #334155;
+            background: #e55b0a; /* Updated button hover color */
         }
     </style>
 </head>
@@ -83,7 +83,7 @@
             </ul>
 
             <div style="text-align: center; margin: 32px 0;">
-                <a href="{{ $dashboardUrl }}" style="background: #475569; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600;">
+                <a href="{{ $dashboardUrl }}" style="background: #f97316; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600;">
                     Empezar Ahora
                 </a>
             </div>

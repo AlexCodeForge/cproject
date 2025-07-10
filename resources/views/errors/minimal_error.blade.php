@@ -1,41 +1,3 @@
-<?php
-
-use Illuminate\Support\Facades\Password;
-use Livewire\Attributes\Layout;
-use Livewire\Volt\Component;
-
-new #[Layout('layouts.auth')] class extends Component
-{
-    public string $email = '';
-
-    /**
-     * Send a password reset link to the provided email address.
-     */
-    public function sendPasswordResetLink(): void
-    {
-        $this->validate([
-            'email' => ['required', 'string', 'email'],
-        ]);
-
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
-        $status = Password::sendResetLink(
-            $this->only('email')
-        );
-
-        if ($status != Password::RESET_LINK_SENT) {
-            $this->addError('email', __($status));
-
-            return;
-        }
-
-        $this->reset('email');
-
-        session()->flash('status', __($status));
-    }
-}; ?>
-
 <div class="min-h-screen flex flex-col lg:flex-row">
     <!-- Left Side - Hero Section -->
     <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-gray-950 dark:via-gray-900 dark:to-black relative overflow-hidden">
@@ -57,16 +19,16 @@ new #[Layout('layouts.auth')] class extends Component
             <!-- Hero Content -->
             <div class="max-w-md mx-auto">
                 <h2 class="text-3xl font-bold mb-6 leading-tight text-white dark:text-gray-100">
-                    ¿Olvidaste tu Contraseña?
+                    Ups, ¡Algo Salió Mal!
                 </h2>
                 <p class="text-lg text-gray-300 dark:text-gray-200 mb-8 leading-relaxed">
-                    No te preocupes. Introduce tu email y te enviaremos un enlace para recuperarla.
+                    Parece que encontramos un pequeño problema. Pero no te preocupes, estamos trabajando en ello.
                 </p>
             </div>
         </div>
     </div>
 
-    <!-- Right Side - Auth Forms -->
+    <!-- Right Side - Error Message -->
     <div class="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-8 relative min-h-screen bg-stone-100 dark:bg-gray-900">
         <!-- Mobile Logo -->
         <div class="lg:hidden absolute top-4 left-4 sm:top-6 sm:left-6 z-10">
@@ -80,31 +42,57 @@ new #[Layout('layouts.auth')] class extends Component
             </svg>
         </button>
 
-        <div class="w-full max-w-md mt-12 sm:mt-16 lg:mt-0">
-            <div class="text-center mb-6 sm:mb-8">
-                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-2">Recuperar Contraseña</h2>
-                <p class="text-sm sm:text-base text-slate-600 dark:text-gray-400">¿Olvidaste tu contraseña? No hay problema. Simplemente dinos tu dirección de correo electrónico y te enviaremos un enlace para restablecer la contraseña que te permitirá elegir una nueva.</p>
-            </div>
-
-            <!-- Session Status -->
-            <x-auth-session-status class="mb-4" :status="session('status')" />
-
-            <form wire:submit="sendPasswordResetLink" class="space-y-4 sm:space-y-6">
-                <!-- Email Address -->
-                <div>
-                    <label for="email" class="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
-                        Correo Electrónico
-                    </label>
-                    <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus />
-                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                </div>
-
-                <div class="flex items-center justify-end mt-4">
-                    <x-primary-button>
-                        Enviar Enlace de Restablecimiento
-                    </x-primary-button>
-                </div>
-            </form>
+        <div class="w-full max-w-md mt-12 sm:mt-16 lg:mt-0 text-center">
+            <h2 class="text-5xl sm:text-6xl font-bold text-slate-900 dark:text-white mb-4">
+                {{ $errorCode ?? 'Error' }}
+            </h2>
+            <p class="text-lg sm:text-xl text-slate-600 dark:text-gray-400 mb-8">
+                {{ $errorMessage ?? 'La página que buscas no existe o algo salió mal.' }}
+            </p>
+            <a href="{{ route('dashboard') }}" wire:navigate class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-amber-500 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all">
+                Ir al Inicio
+            </a>
         </div>
     </div>
 </div>
+
+@push('styles')
+<style>
+    .gradient-text {
+        background: linear-gradient(135deg, #f59e0b, #ea580c);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
+@endpush
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.classList.toggle('dark', currentTheme === 'dark');
+
+        updateThemeIcon(currentTheme === 'dark');
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = html.classList.contains('dark');
+            html.classList.toggle('dark', !isDark);
+            localStorage.setItem('theme', !isDark ? 'dark' : 'light');
+            updateThemeIcon(!isDark);
+        });
+
+        function updateThemeIcon(isDark) {
+            const icon = themeToggle.querySelector('svg path');
+            if (isDark) {
+                icon.setAttribute('d', 'M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z');
+            } else {
+                icon.setAttribute('d', 'M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z');
+            }
+        }
+    });
+</script>
+@endpush

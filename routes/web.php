@@ -18,7 +18,11 @@ use App\Livewire\AdminPanel\Chat\ChannelManagement;
 use App\Livewire\AdminPanel\Posts\PostManagement;
 use App\Livewire\AdminPanel\Posts\CreatePost;
 
-Route::view('/', 'welcome');
+
+//must change this when landing page is ready
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 
 // Use Livewire Volt for user dashboard
 Volt::route('dashboard', Dashboard::class)
@@ -77,3 +81,24 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->name('ad
 });
 
 require __DIR__.'/auth.php';
+
+// Temporarily add this route for email preview
+Route::get('/email-preview', function () {
+    $user = App\Models\User::first(); // Or create a dummy user
+    if (!$user) {
+        // If no user exists, create a dummy one for testing
+        $user = App\Models\User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]);
+    }
+
+    // Instantiate the Notification
+    $notification = new App\Notifications\CustomEmailVerificationNotification($user);
+
+    // Call the toMail method on the Notification to get the Mailable instance
+    $mailable = $notification->toMail($user); // The toMail method usually takes a notifiable (user) as argument
+
+    // Render the Mailable
+    return $mailable->render();
+});

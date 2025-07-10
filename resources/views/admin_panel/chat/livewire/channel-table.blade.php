@@ -17,7 +17,7 @@
     </div>
 
     <!-- Channel Management Widgets -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-6">
             <div class="flex items-center justify-between">
                 <div>
@@ -54,17 +54,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-slate-600 dark:text-gray-400">Nuevos Hoy</p>
-                    <p class="text-2xl font-bold text-slate-900 dark:text-white">{{ $newChannelsToday }}</p>
-                </div>
-                <div class="bg-purple-100 dark:bg-purple-900/50 p-3 rounded-full">
-                    <x-ionicon-add-circle-outline class="text-purple-600 dark:text-purple-400 text-xl w-6 h-6"/>
-                </div>
-            </div>
-        </div>
+
     </div>
 
     <div class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm overflow-x-auto">

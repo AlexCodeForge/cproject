@@ -22,7 +22,7 @@
         }
 
         .email-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%); /* Updated gradient */
             color: white;
             padding: 24px;
             text-align: center;
@@ -40,7 +40,7 @@
         }
 
         .email-button {
-            background: #dc2626;
+            background: #f97316; /* Updated button color */
             color: white;
             padding: 12px 24px;
             border-radius: 6px;
@@ -51,7 +51,7 @@
         }
 
         .email-button:hover {
-            background: #b91c1c;
+            background: #e55b0a; /* Updated button hover color */
         }
     </style>
 </head>
@@ -64,7 +64,7 @@
         </div>
 
         <div class="email-content">
-            <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 16px; border-radius: 8px; margin: 0 0 24px 0;">
+            <div style="background: #fff1f2; border: 1px solid #fca5a5; padding: 16px; border-radius: 8px; margin: 0 0 24px 0;">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <div style="color: #dc2626; font-size: 18px;">⚠️</div>
                     <div style="color: #dc2626; font-weight: 600;">Solicitud de seguridad</div>
@@ -84,7 +84,7 @@
             </p>
 
             <div style="text-align: center; margin: 32px 0;">
-                <a href="{{ $resetUrl }}" style="background: #dc2626; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600;">
+                <a href="{{ $resetUrl }}" style="background: #f97316; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600;">
                     Restablecer Contraseña
                 </a>
             </div>

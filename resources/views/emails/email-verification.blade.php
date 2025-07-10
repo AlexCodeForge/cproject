@@ -22,7 +22,7 @@
         }
 
         .email-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%); /* Updated gradient */
             color: white;
             padding: 24px;
             text-align: center;
@@ -40,7 +40,7 @@
         }
 
         .email-button {
-            background: #2563eb;
+            background: #f97316; /* Updated button color */
             color: white;
             padding: 12px 24px;
             border-radius: 6px;
@@ -51,7 +51,7 @@
         }
 
         .email-button:hover {
-            background: #1d4ed8;
+            background: #e55b0a; /* Updated button hover color */
         }
     </style>
 </head>
@@ -64,10 +64,10 @@
         </div>
 
         <div class="email-content">
-            <div style="background: #dbeafe; border: 1px solid #93c5fd; padding: 16px; border-radius: 8px; margin: 0 0 24px 0;">
+            <div style="background: #fffbeb; border: 1px solid #fcd34d; padding: 16px; border-radius: 8px; margin: 0 0 24px 0;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="color: #2563eb; font-size: 18px;">📧</div>
-                    <div style="color: #2563eb; font-weight: 600;">Verificación requerida</div>
+                    <div style="color: #d97706; font-size: 18px;">📧</div>
+                    <div style="color: #d97706; font-weight: 600;">Verificación requerida</div>
                 </div>
             </div>
 
@@ -84,7 +84,7 @@
             </p>
 
             <div style="text-align: center; margin: 32px 0;">
-                <a href="{{ $verificationUrl }}" style="background: #2563eb; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600;">
+                <a href="{{ $verificationUrl }}" style="background: #f97316; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600;">
                     Verificar Email
                 </a>
             </div>
@@ -102,7 +102,7 @@
 
             <p style="margin: 24px 0 0 0; color: #64748b; font-size: 14px; line-height: 1.5;">
                 Si tienes problemas con el botón, copia y pega este enlace en tu navegador:<br>
-                <a href="{{ $verificationUrl }}" style="color: #2563eb; word-break: break-all;">{{ $verificationUrl }}</a>
+                <a href="{{ $verificationUrl }}" style="color: #d97706; word-break: break-all;">{{ $verificationUrl }}</a>
             </p>
         </div>
 

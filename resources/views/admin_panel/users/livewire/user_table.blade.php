@@ -11,7 +11,6 @@
                     @endforeach
                 </select>
             </div>
-            <button class="bg-slate-700 dark:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-800 dark:hover:bg-gray-600">Nuevo Usuario</button>
         </div>
     </div>
 
@@ -24,7 +23,7 @@
                     <p class="text-2xl font-bold text-slate-900 dark:text-white">{{ $totalUsers }}</p>
                 </div>
                 <div class="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full">
-                    <ion-icon name="people-outline" class="text-blue-600 dark:text-blue-400 text-xl"></ion-icon>
+                    <x-ionicon-people-outline class="text-blue-600 dark:text-blue-400 text-xl h-6 w-6" />
                 </div>
             </div>
         </div>
@@ -36,7 +35,7 @@
                     <p class="text-2xl font-bold text-slate-900 dark:text-white">{{ $premiumUsers }}</p>
                 </div>
                 <div class="bg-amber-100 dark:bg-amber-900/50 p-3 rounded-full">
-                    <ion-icon name="star-outline" class="text-amber-600 dark:text-amber-400 text-xl"></ion-icon>
+                    <x-ionicon-star-outline class="text-amber-600 dark:text-amber-400 text-xl h-6 w-6" />
                 </div>
             </div>
         </div>
@@ -48,7 +47,7 @@
                     <p class="text-2xl font-bold text-slate-900 dark:text-white">{{ $activeUsers }}</p>
                 </div>
                 <div class="bg-green-100 dark:bg-green-900/50 p-3 rounded-full">
-                    <ion-icon name="checkmark-circle-outline" class="text-green-600 dark:text-green-400 text-xl"></ion-icon>
+                    <x-ionicon-checkmark-circle-outline class="text-green-600 dark:text-green-400 text-xl h-6 w-6" />
                 </div>
             </div>
         </div>
@@ -60,7 +59,7 @@
                     <p class="text-2xl font-bold text-slate-900 dark:text-white">{{ $newUsersToday }}</p>
                 </div>
                 <div class="bg-purple-100 dark:bg-purple-900/50 p-3 rounded-full">
-                    <ion-icon name="person-add-outline" class="text-purple-600 dark:text-purple-400 text-xl"></ion-icon>
+                    <x-ionicon-person-add-outline class="text-purple-600 dark:text-purple-400 text-xl h-6 w-6" />
                 </div>
             </div>
         </div>
@@ -108,9 +107,11 @@
                         </td>
                         <td class="p-4">
                             <button wire:click="viewUser({{ $user->id }})" class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white">Ver</button>
-                            <button wire:click="toggleUserStatus({{ $user->id }})" class="ml-4 text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white">
-                                {{ $user->email_verified_at ? 'Desverificar' : 'Verificar' }}
-                            </button>
+                            @if (!$user->email_verified_at)
+                                <button wire:click="toggleUserStatus({{ $user->id }})" class="ml-4 text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white">
+                                    Verificar
+                                </button>
+                            @endif
                         </td>
                     </tr>
                 @empty
@@ -150,7 +151,7 @@
                                     </div>
                                 </div>
                                 <button wire:click="closeModal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                                    <ion-icon name="close-outline" class="text-2xl"></ion-icon>
+                                    <x-ionicon-close-outline class="text-2xl h-6 w-6" />
                                 </button>
                             </div>
                         </div>
