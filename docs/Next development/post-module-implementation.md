@@ -13,8 +13,8 @@ The implementation will draw inspiration from the existing `/app/Livewire/AdminP
 We will create three primary Livewire components within `app/Livewire/AdminPanel/Posts`:
 
 -   **`PostManagement.php`**: This component will serve as the main entry point for listing posts, similar to `UserManagement.php`. It will contain the logic for searching, filtering, and displaying the post table.
--   **`CreatePost.php`**: This component will handle the creation of new posts. This will be displayed within a modal.
--   **`EditPost.php`**: This component will handle editing existing posts. It will also be displayed within a modal.
+-   **`CreatePost.php`**: This component will handle the creation of new posts. This will be displayed on a separate page.
+-   **`EditPost.php`**: This component will handle editing existing posts. It will also be displayed on a separate page.
     -   **Edge Case: Form Submission Failures (Validation)**
         -   **Scenario:** A user attempts to create or update a post, but one or more fields fail validation (e.g., missing title, invalid slug).
         -   **Mitigation:** Livewire's built-in validation should be used extensively.
@@ -113,13 +113,13 @@ Similar to the User module, we will implement the `CreatePost` and `EditPost` Li
 ```
 app/Livewire/AdminPanel/Posts/
 ├── PostManagement.php      // Main component for listing posts
-├── CreatePost.php          // Component for creating posts (modal)
-└── EditPost.php            // Component for editing posts (modal)
+├── CreatePost.php          // Component for creating posts (separate page)
+└── EditPost.php            // Component for editing posts (separate page)
 
-resources/views/admin_panel/posts/livewire/
+resources/views/admin_panel/posts/
 ├── post-management.blade.php
-├── create-post.blade.php
-└── edit-post.blade.php
+├── create.blade.php
+└── edit.blade.php
 ```
 
 ## 6. Debugging Strategy
@@ -166,49 +166,52 @@ By following this layered testing approach, we aim to catch issues early and ens
 **Phase 1: Core Post Module (without Trix)**
 
 1.  **Database Migration**:
-    *   [ ] Verify or create a migration for the `posts` table with all necessary CMS-style fields (title, slug, excerpt, content, status, is_premium, is_featured, tags, meta_title, meta_description, published_at, reading_time, difficulty_level, and `featured_image`).
-    *   [ ] Ensure the `featured_image` column is set up correctly (e.g., `string` for path, `nullable`).
-    *   [ ] Add a unique constraint to the `slug` column.
-    *   [ ] Run `php artisan migrate`.
+    *   [x] Verify or create a migration for the `posts` table with all necessary CMS-style fields (title, slug, excerpt, content, status, is_premium, is_featured, tags, meta_title, meta_description, published_at, reading_time, difficulty_level, and `featured_image`).
+    *   [x] Ensure the `featured_image` column is set up correctly (e.g., `string` for path, `nullable`).
+    *   [x] Add a unique constraint to the `slug` column.
+    *   [x] Run `php artisan migrate`.
 
 2.  **`Post` Model (`app/Models/Post.php`)**:
-    *   [ ] Define all fillable properties (`$fillable`).
-    *   [ ] Add casts for `tags` (as `array` or `json`).
-    *   [ ] Implement slug generation in the `boot` method (e.g., using `creating` event and `Str::slug`).
-    *   [ ] Add an accessor for `featured_image_url` to retrieve the full URL.
-    *   [ ] Implement query scopes (e.g., `published()`) for content visibility based on `status` and `published_at`.
+    *   [x] Define all fillable properties (`$fillable`).
+    *   [x] Add casts for `tags` (as `array` or `json`).
+    *   [x] Implement slug generation in the `boot` method (e.g., using `creating` event and `Str::slug`).
+    *   [x] Add an accessor for `featured_image_url` to retrieve the full URL.
+    *   [x] Implement query scopes (e.g., `published()`) for content visibility based on `status` and `published_at`.
 
 3.  **Create `PostManagement` Component**:
-    *   [ ] Create `app/Livewire/AdminPanel/Posts/PostManagement.php`.
-    *   [ ] Create `resources/views/admin_panel/posts/livewire/post-management.blade.php`.
-    *   [ ] Implement basic listing of posts from the database.
-    *   [ ] Add search and filter functionality (if desired at this stage).
-    *   [ ] Set up buttons/actions to trigger the `CreatePost` and `EditPost` modals.
+    *   [x] Create `app/Livewire/AdminPanel/Posts/PostManagement.php`.
+    *   [x] Create `resources/views/admin_panel/posts/livewire/post-management.blade.php`.
+    *   [x] Implement basic listing of posts from the database.
+    *   [x] Add search and filter functionality (if desired at this stage).
+    *   [x] Set up buttons/actions to trigger navigation to `CreatePost` and `EditPost` pages.
+    *   [x] Apply the UI pattern from `user_table.blade.php` (widgets, search, table structure, button styling).
+    *   [x] Add category and status filters in the same UI style.
 
-4.  **Create `CreatePost` Component**:
+4.  **Create `CreatePost` Component (Separate Page)**:
     *   [ ] Create `app/Livewire/AdminPanel/Posts/CreatePost.php`.
-    *   [ ] Create `resources/views/admin_panel/posts/livewire/create-post.blade.php`.
+    *   [ ] Create `resources/views/admin_panel/posts/create.blade.php`.
     *   [ ] Define public properties for all post fields (title, content, featured_image, etc.).
     *   [ ] Include `WithFileUploads` trait for `featured_image`.
     *   [ ] Implement `#[Validate]` attributes or `$this->validate()` in the `save()` method.
     *   [ ] Handle `featured_image` upload, storage, and saving the path to the database.
     *   [ ] Ensure validation errors are displayed using `<x-input-error>`.
     *   [ ] Implement the `save()` method to create a new post record.
-    *   [ ] Set up modal opening/closing logic (e.g., listening for `openPostCreateModal` event, dispatching `closeModal` and `refreshPostList` events).
+    *   [ ] Set up navigation to `PostManagement` after successful creation.
 
-5.  **Create `EditPost` Component**:
+5.  **Create `EditPost` Component (Separate Page)**:
     *   [ ] Create `app/Livewire/AdminPanel/Posts/EditPost.php`.
-    *   [ ] Create `resources/views/admin_panel/posts/livewire/edit-post.blade.php`.
-    *   [ ] Define public properties for all post fields.
-    *   [ ] Implement `mount($postId)` to retrieve and populate the post data. Handle non-existent posts gracefully.
+    *   [ ] Create `resources/views/admin_panel/posts/edit.blade.php`.
+    *   [ ] Define public properties for all post fields (title, content, featured_image, etc.) and `postId`.
+    *   [ ] In the `mount()` method, retrieve the post using `$postId` and populate component properties.
     *   [ ] Include `WithFileUploads` trait for `featured_image`.
     *   [ ] Implement `#[Validate]` attributes or `$this->validate()` in the `update()` method.
-    *   [ ] Handle `featured_image` replacement and old file deletion.
-    *   [ ] Implement the `update()` method to modify the existing post record.
-    *   [ ] Set up modal opening/closing logic.
+    *   [ ] Handle `featured_image` upload, storage, and saving the path to the database (including deletion of old image).
+    *   [ ] Ensure validation errors are displayed using `<x-input-error>`.
+    *   [ ] Implement the `update()` method to update the existing post record.
+    *   [ ] Set up navigation to `PostManagement` after successful update.
 
 6.  **Route Definition**:
-    *   [ ] Define a route in `routes/web.php` for the `PostManagement` component, preferably using `Volt::route()` if it's a page component, or ensure it's loaded as a Livewire component within an existing admin route.
+    *   [x] Define routes for `admin.posts.index`, `admin.posts.create`, and `admin.posts.edit` in `routes/web.php`.
 
 7.  **Manual Testing (Phase 1)**:
     *   [ ] Verify post listing works correctly.

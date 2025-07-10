@@ -60,4 +60,18 @@ class Post extends Model
     {
         return $this->belongsTo(PostCategory::class, 'post_category_id');
     }
+
+    public function getFeaturedImageUrlAttribute()
+    {
+        return $this->featured_image ? asset('storage/' . $this->featured_image) : null;
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('status', 'published')
+            ->where(function ($query) {
+                $query->whereNull('published_at')
+                      ->orWhere('published_at', '<=', now());
+            });
+    }
 }

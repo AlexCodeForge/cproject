@@ -15,6 +15,7 @@ use App\Livewire\UserPanel\Events;
 use App\Livewire\UserPanel\Profile;
 use App\Livewire\UserPanel\Chat;
 use App\Livewire\AdminPanel\Chat\ChannelManagement;
+use App\Livewire\AdminPanel\Posts\PostManagement;
 
 Route::view('/', 'welcome');
 
@@ -70,6 +71,7 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->name('ad
     Volt::route('/dashboard', AdminDashboard::class)->name('dashboard');
     Volt::route('/users', UserManagement::class)->name('users');
     Volt::route('/chat/channels', ChannelManagement::class)->name('chat.channels');
+    Volt::route('/posts', PostManagement::class)->name('posts.index');
 });
 
 require __DIR__.'/auth.php';
