@@ -13,13 +13,13 @@ The implementation will draw inspiration from the existing `/app/Livewire/AdminP
 We will create three primary Livewire components within `app/Livewire/AdminPanel/Posts`:
 
 -   **`PostManagement.php`**: This component will serve as the main entry point for listing posts, similar to `UserManagement.php`. It will contain the logic for searching, filtering, and displaying the post table.
--   **`CreatePost.php`**: This component will handle the creation of new posts. It will include the Trix editor for the main content. This will be displayed within a modal.
--   **`EditPost.php`**: This component will handle editing existing posts. It will also utilize the Trix editor and be displayed within a modal.
+-   **`CreatePost.php`**: This component will handle the creation of new posts. This will be displayed within a modal.
+-   **`EditPost.php`**: This component will handle editing existing posts. It will also be displayed within a modal.
     -   **Edge Case: Form Submission Failures (Validation)**
         -   **Scenario:** A user attempts to create or update a post, but one or more fields fail validation (e.g., missing title, invalid slug).
         -   **Mitigation:** Livewire's built-in validation should be used extensively.
             *   Implement `#[Validate]` attributes on public properties or use the `$this->validate()` method in the Livewire components.
-            *   Display validation errors next to the relevant input fields using `<x-input-error>` (already available in the project) and `wire:model.live` or `wire:offline` for immediate feedback.
+            *   Display validation errors next to the relevant input fields using `<x-input-error>` (already available in the project) and `wire:model` for immediate feedback.
             *   Ensure the "Save" or "Publish" button is disabled until valid input is provided, or provide clear visual feedback when validation fails.
     -   **Edge Case: Non-existent Post for Editing**
         -   **Scenario:** A user tries to edit a post that has been deleted by another user or somehow doesn't exist.
@@ -34,12 +34,6 @@ Corresponding Blade views will be created in `resources/views/admin_panel/posts/
 -   **`post-management.blade.php`**: The main view for the post listing page.
 -   **`create-post.blade.php`**: The view for the post creation modal.
 -   **`edit-post.blade.php`**: The view for the post editing modal.
-
-### 2.3. Trix Editor Component
-
-A reusable Blade component for the Trix editor will be created:
-
--   **`resources/views/components/trix-editor.blade.php`**: This component will encapsulate the Trix editor HTML and JavaScript, ensuring proper `wire:model` binding for Livewire. This component will handle the dynamic syncing of Trix content with Livewire properties.
 
 ## 3. Integration Details
 
@@ -56,7 +50,7 @@ The `app/Models/Post.php` model will serve as the central data structure for all
                 *   Laravel's `Str::slug()` does not guarantee uniqueness. Use a package like `spatie/laravel-sluggable` or implement custom logic to ensure unique slugs. This typically involves appending a unique identifier (like a number) if a duplicate is found (e.g., `my-post`, `my-post-1`, `my-post-2`).
                 *   Add a unique constraint to the `slug` column in the `posts` migration.
     -   **`excerpt`**: A brief summary for previews (string, nullable).
-    -   **`content`**: This is the primary field for the rich text from the Trix editor. It will store the HTML output, including embedded Trix attachments (text/longtext). Livewire will bind to this field directly via `wire:model`.
+    -   **`content`**: This will be a standard text/longtext field for now. Rich text editing with Trix will be integrated in a later stage. Livewire will bind to this field directly via `wire:model`.
     -   **`status`**: (`draft`, `published`, `archived`) to control post visibility (string, enum-like).
     -   **`is_premium`**: Boolean to mark premium content (boolean).
     -   **`is_featured`**: Boolean to highlight important posts (boolean).
@@ -75,35 +69,8 @@ The `app/Models/Post.php` model will serve as the central data structure for all
                 *   Apply this scope to all public-facing queries that retrieve posts.
     -   **`reading_time` & `difficulty_level`**: For user experience and content categorization (integer/decimal, nullable).
 
--   **Trix Editor Images (Content Images)**:
-    -   Images embedded *within* the Trix editor content are handled as **Trix Attachments**. These are separate entities from the `featured_image`.
-    -   A dedicated `TrixAttachment` model (which will need to be created/re-introduced along with its migration and controller) will store metadata about these uploaded images (e.g., path, original name, identifier).
-    -   The `Post` model will establish a `morphMany` relationship to `TrixAttachment` (`public function trixAttachments() { return $this->morphMany(TrixAttachment::class, 'attachable'); }`). This allows us to associate all Trix-uploaded images with a specific `Post` record.
-    -   The `content` field in `Post.php` will store the raw HTML from the Trix editor. This HTML will contain special `data-trix-attachment` attributes referencing the `identifier` of the `TrixAttachment` records.
-    -   When a post is saved (upon form submission), the Livewire component will parse the `content` HTML, extract these `data-trix-attachment` identifiers, and update the corresponding `TrixAttachment` records to link them to the newly created or updated `Post` (by setting `attachable_id` and `attachable_type`).
-    -   **Edge Case: Orphaned `TrixAttachment` Records/Files**
-        -   **Scenario:** A user uploads images via the Trix editor but then cancels the post creation or deletes the images from the editor without saving the post. The files remain on disk and records in `trix_attachments` table.
-        -   **Mitigation:**
-            *   **Temporary Storage & Cleanup:** When Trix uploads an image, initially store it in a temporary location (e.g., `storage/app/public/trix-tmp`). The `TrixAttachment` record should be created with a `pending` status or `attachable_id` being `null`. Implement a scheduled command (e.g., daily or hourly) that deletes `TrixAttachment` records and their associated files that are older than a certain age (e.g., 24 hours) and still have a `pending` status or `null` `attachable_id`.
-            *   **Client-side Cleanup:** When a user removes an image from Trix, the `trix-attachment-remove` event should trigger a backend endpoint to delete the temporary file and `TrixAttachment` record immediately.
-    -   **Edge Case: `TrixAttachment` not linked to `Post` on save**
-        -   **Scenario:** The Livewire component fails to parse the `content` HTML or update the `TrixAttachment` records correctly, leading to images not being associated with the post.
-        -   **Mitigation:**
-            *   Robust parsing logic: Ensure the backend endpoint that receives the Trix content reliably extracts `data-trix-attachment` identifiers.
-            *   Transaction for saving: Wrap the post saving and `TrixAttachment` linking logic in a database transaction to ensure atomicity. If one part fails, the whole operation rolls back.
-    -   **Edge Case: Deleting a Post with Trix Attachments**
-        -   **Scenario:** When a `Post` is deleted, its associated `TrixAttachment` records and their physical image files are not removed, leading to orphaned files and database entries.
-        -   **Mitigation:**
-            *   Use the `deleting` model event on the `Post` model to delete associated `TrixAttachment` records and their files before the post itself is deleted.
-            *   Or, in the `TrixAttachment` model, define a `deleting` event that removes the physical file from storage.
-    -   **Edge Case: Large Image Uploads in Trix**
-        -   **Scenario:** Users upload very large images through Trix, consuming excessive storage or causing slow page loads.
-        -   **Mitigation:**
-            *   **Server-side validation:** In the `TrixAttachmentController` (or similar upload endpoint), enforce file size limits and allowed MIME types. Return appropriate error messages to the Trix editor if validation fails.
-            *   Consider client-side image resizing before upload (e.g., using a JavaScript library) for better UX, though this can add complexity.
-
 -   **Featured Image (`featured_image`)**:
-    -   The `featured_image` field in `Post.php` will store the path or a JSON structure containing details (like different sizes/formats) of the main visual for the post. It is a single, primary image for the post's thumbnail/banner, distinct from any images within the content itself.
+    -   The `featured_image` field in `Post.php` will store the path or a JSON structure containing details (like different sizes/formats) of the main visual for the post. It is a single, primary image for the post's thumbnail/banner. This will be the initial focus for image uploads.
     -   This image will be managed via Livewire's `WithFileUploads` trait within the `CreatePost` and `EditPost` components.
     -   Upon upload (which will be handled *during* the form submission process or as a single, separate explicit action), the image will be processed and stored. The resulting file path or a serialized array of image data will then be saved to the `featured_image` column in the `posts` table.
     -   The `Post` model might include an accessor (e.g., `getFeaturedImageUrlAttribute()`) to easily retrieve the full URL of the featured image for display.
@@ -118,14 +85,10 @@ The `app/Models/Post.php` model will serve as the central data structure for all
         -   **Mitigation:**
             *   When a new `featured_image` is successfully uploaded and saved, delete the old `featured_image` file from storage if it exists. This can be handled in the Livewire component's `updatedFeaturedImage` method or in a dedicated service/trait.
 
-### 3.2. Trix Editor with Livewire
+### 3.2. Form Handling with Livewire
 
--   **`wire:model` Binding**: The `x-trix-editor` component will use `wire:model` (without `.live`, `.blur`, or `.lazy` modifiers unless specifically needed for other minor reactive elements) to bind the Trix editor's content to a public property (e.g., `$content`) in the `CreatePost` and `EditPost` Livewire components. This ensures the component property holds the latest content, but **does not trigger immediate server requests for every keystroke.** The actual saving to the database will be handled by the `save()` or `publish()` actions.
--   **JavaScript Integration**: Custom JavaScript within `trix-editor.blade.php` will be necessary to listen for `trix-change` events and update the hidden input that `wire:model` is bound to. This ensures Livewire has the correct content when the form is submitted. The JavaScript will also handle the `trix-attachment-add` and `trix-attachment-remove` events for image uploads and deletions, interacting with a dedicated backend endpoint.
-    -   **Edge Case: Trix Content Not Syncing with Livewire Property**
-        -   **Scenario:** The JavaScript handling `trix-change` events fails, resulting in the Livewire component receiving outdated content on submission.
-        -   **Mitigation:** Ensure the JavaScript explicitly updates the value of the hidden input element that `wire:model` is bound to. Thoroughly test the JavaScript integration with Livewire to ensure the property is always up-to-date at submission.
--   **File Uploads**: The Trix editor supports image attachments. We will need a dedicated controller endpoint (e.g., `TrixAttachmentController`) to handle image uploads from Trix. This endpoint will receive the image, store it, create a `TrixAttachment` record in the database, and return a JSON response with the attachment's URL and identifier back to the Trix editor. This allows images to be properly embedded and displayed within the editor content.
+-   **`wire:model` Binding**: Standard form inputs will use `wire:model` (without `.live`, `.blur`, or `.lazy` modifiers unless specifically needed for other minor reactive elements) to bind values to public properties in the `CreatePost` and `EditPost` Livewire components. This ensures the component property holds the latest content, but **does not trigger immediate server requests for every keystroke.** The actual saving to the database will be handled by the `save()` or `publish()` actions.
+-   **File Uploads**: Livewire's `WithFileUploads` trait will be used for the `featured_image` upload. We will focus on debugging and ensuring this works correctly.
 
 ### 3.3. Modals for Create/Edit
 
@@ -138,13 +101,12 @@ Similar to the User module, we will implement the `CreatePost` and `EditPost` Li
 
 -   **Consistent Styling**: Maintain the existing UI theme for a cohesive CMS experience.
 -   **Real-time Feedback**: Livewire's reactivity will provide instant validation feedback to the user.
--   **User-Friendly Trix**: Ensure the Trix editor is configured with necessary options (e.g., placeholder, toolbar).
 
 ### 3.5. Performance Considerations
 
--   **Edge Case: Large Posts (Many Trix Attachments/Extensive Content)**
-    -   **Scenario:** Posts with a very large amount of content or many embedded Trix images might cause performance issues on load or save.
-    -   **Mitigation:** Consider lazy loading images within Trix content if needed. Ensure efficient database queries (e.g., eager loading attachments) to prevent slow loads. Optimize content rendering on the frontend.
+-   **Edge Case: Large Posts (Extensive Content without Trix)**
+    -   **Scenario:** Posts with a very large amount of content might cause performance issues on load or save.
+    -   **Mitigation:** Ensure efficient database queries. Optimize content rendering on the frontend.
 
 ## 4. Proposed File Structure
 
@@ -158,38 +120,21 @@ resources/views/admin_panel/posts/livewire/
 ├── post-management.blade.php
 ├── create-post.blade.php
 └── edit-post.blade.php
-
-resources/views/components/
-└── trix-editor.blade.php   // Reusable Trix editor component
 ```
-
-## 5. Next Steps
-
-**Important:** Before creating any new files, always ensure to delete any existing files with the same names to prevent conflicts and ensure a clean implementation.
-
-1.  **Install Trix Editor**:
-    -   Install Trix via npm: `npm install trix`
-    -   Include Trix CSS in your `app.css` (or equivalent): `/* In resources/css/app.css or similar */ @import 'trix/dist/trix.css';`
-    -   Include Trix JavaScript in your `app.js` (or equivalent): `// In resources/js/app.js or similar import 'trix';`
-    -   For detailed instructions, refer to the official Trix GitHub repository: [Trix GitHub](https://github.com/basecamp/trix)
-
-2.  Create `PostManagement.php` and its corresponding `post-management.blade.php`.
-3.  Develop the `x-trix-editor` Blade component (`resources/views/components/trix-editor.blade.php`) with proper Livewire integration.
-4.  Create `CreatePost.php` and `create-post.blade.php`, incorporating the `x-trix-editor` and modal logic.
-5.  Create `EditPost.php` and `edit-post.blade.php`, reusing the `x-trix-editor` and modal logic.
-6.  Update `Post.php` to handle Trix content.
-7.  Implement image upload handling for Trix attachments.
 
 ## 6. Debugging Strategy
 
 To ensure we know what's wrong at any step, we must implement proper debugging throughout the development process:
 
+-   **Implement Debugging in Every New File**:
+    -   **Crucially, every new PHP file (Livewire components, models, controllers, etc.) must be created with Laravel's built-in logging (`Log::info()`, `Log::error()`, `Log::debug()`) already integrated at key points (e.g., `mount`, `save`, `update` methods, or any significant logic blocks).**
+    -   Similarly, **any new or modified JavaScript files must immediately include `console.log()`** statements for tracking variables, events, and component states.
+
 -   **JavaScript Debugging (Frontend)**:
-    -   Utilize `console.log()` extensively in `resources/js/app.js`, `shared-layout.js`, and especially within the `trix-editor.blade.php` JavaScript.
-    -   Monitor Trix events (`trix-change`, `trix-attachment-add`, `trix-attachment-remove`) and the values being sent to Livewire.
-    -   Use browser developer tools to inspect Livewire network requests and responses, checking payload data and any returned errors.
+    -   Utilize `console.log()` extensively in `resources/js/app.js`, `shared-layout.js`, and within any custom JavaScript (especially once `trix-editor.blade.php` is created).
+    -   Monitor Livewire network requests and responses using browser developer tools, checking payload data and any returned errors.
 -   **Laravel Logging (Backend)**:
-    -   Use Laravel's `Log` facade (`Log::info()`, `Log::error()`, `Log::debug()`) in Livewire components (`PostManagement.php`, `CreatePost.php`, `EditPost.php`), the `TrixAttachmentController`, and the `Post` model.
+    -   Use Laravel's `Log` facade (`Log::info()`, `Log::error()`, `Log::debug()`) in Livewire components (`PostManagement.php`, `CreatePost.php`, `EditPost.php`), any attachment controllers, and the `Post` model.
     -   Log validation failures, database operations (create, update, delete), file upload successes/failures, and any unexpected behavior. These logs must be checked consistently from the start of development for each feature.
     -   Ensure sensitive data is not logged.
     -   Regularly check the `storage/logs/laravel.log` file.
@@ -201,23 +146,106 @@ To ensure we know what's wrong at any step, we must implement proper debugging t
 To ensure the module works correctly from the first go, we will implement a robust testing strategy at each step of development:
 
 -   **Unit Tests (for Core Logic)**:
-    -   Write unit tests for the `Post` model, `TrixAttachment` model, and related helper classes to verify their individual functionalities (e.g., slug generation, relationship integrity, attribute casting).
+    -   Write unit tests for the `Post` model and related helper classes to verify their individual functionalities (e.g., slug generation, relationship integrity, attribute casting).
     -   Test Livewire components (`CreatePost`, `EditPost`) in isolation where possible, verifying property updates, method calls, and state changes without full browser interaction.
     -   Use Laravel's built-in testing utilities (`Pest` or `PHPUnit`) for these tests.
 -   **Feature Tests (for Integration)**:
     -   Develop feature tests to simulate user interactions with Livewire components, specifically focusing on form submissions for creating and editing posts.
     -   Verify that validation rules are correctly applied and error messages are displayed.
-    -   Test the end-to-end flow of Trix editor content saving, including image uploads and their association with the `Post` model.
+    -   Test the end-to-end flow of image uploads (for featured image).
     -   Ensure proper redirects or modal closures occur upon successful operations.
--   **Browser/End-to-End Tests (for UI/UX)**:
-    -   Utilize Laravel Dusk (or a similar browser automation tool) to simulate real user interactions in the browser.
-    -   Test the visual rendering of the Trix editor, interaction with the toolbar, and correct display of embedded images.
-    -   Verify the behavior of modals (opening, closing, content loading) and overall UI responsiveness.
-    -   Ensure seamless integration of Livewire with the Trix editor's JavaScript events.
 -   **Manual Testing at Each Step**:
     -   In addition to automated tests, conduct thorough manual testing for each feature from the beginning of its development.
     -   Visually inspect the UI, interact with all elements, and attempt to trigger known edge cases identified in Section 3.
     -   **Crucially, verify database state and check logs (both application and server logs) at every significant step to ensure data integrity and identify any backend issues immediately.**
 
-By following this layered testing approach, we aim to catch issues early and ensure the stability and correctness of the Post module. 
+By following this layered testing approach, we aim to catch issues early and ensure the stability and correctness of the Post module.
+
+## 5. Next Steps (Implementation Checklist)
+
+**Phase 1: Core Post Module (without Trix)**
+
+1.  **Database Migration**:
+    *   [ ] Verify or create a migration for the `posts` table with all necessary CMS-style fields (title, slug, excerpt, content, status, is_premium, is_featured, tags, meta_title, meta_description, published_at, reading_time, difficulty_level, and `featured_image`).
+    *   [ ] Ensure the `featured_image` column is set up correctly (e.g., `string` for path, `nullable`).
+    *   [ ] Add a unique constraint to the `slug` column.
+    *   [ ] Run `php artisan migrate`.
+
+2.  **`Post` Model (`app/Models/Post.php`)**:
+    *   [ ] Define all fillable properties (`$fillable`).
+    *   [ ] Add casts for `tags` (as `array` or `json`).
+    *   [ ] Implement slug generation in the `boot` method (e.g., using `creating` event and `Str::slug`).
+    *   [ ] Add an accessor for `featured_image_url` to retrieve the full URL.
+    *   [ ] Implement query scopes (e.g., `published()`) for content visibility based on `status` and `published_at`.
+
+3.  **Create `PostManagement` Component**:
+    *   [ ] Create `app/Livewire/AdminPanel/Posts/PostManagement.php`.
+    *   [ ] Create `resources/views/admin_panel/posts/livewire/post-management.blade.php`.
+    *   [ ] Implement basic listing of posts from the database.
+    *   [ ] Add search and filter functionality (if desired at this stage).
+    *   [ ] Set up buttons/actions to trigger the `CreatePost` and `EditPost` modals.
+
+4.  **Create `CreatePost` Component**:
+    *   [ ] Create `app/Livewire/AdminPanel/Posts/CreatePost.php`.
+    *   [ ] Create `resources/views/admin_panel/posts/livewire/create-post.blade.php`.
+    *   [ ] Define public properties for all post fields (title, content, featured_image, etc.).
+    *   [ ] Include `WithFileUploads` trait for `featured_image`.
+    *   [ ] Implement `#[Validate]` attributes or `$this->validate()` in the `save()` method.
+    *   [ ] Handle `featured_image` upload, storage, and saving the path to the database.
+    *   [ ] Ensure validation errors are displayed using `<x-input-error>`.
+    *   [ ] Implement the `save()` method to create a new post record.
+    *   [ ] Set up modal opening/closing logic (e.g., listening for `openPostCreateModal` event, dispatching `closeModal` and `refreshPostList` events).
+
+5.  **Create `EditPost` Component**:
+    *   [ ] Create `app/Livewire/AdminPanel/Posts/EditPost.php`.
+    *   [ ] Create `resources/views/admin_panel/posts/livewire/edit-post.blade.php`.
+    *   [ ] Define public properties for all post fields.
+    *   [ ] Implement `mount($postId)` to retrieve and populate the post data. Handle non-existent posts gracefully.
+    *   [ ] Include `WithFileUploads` trait for `featured_image`.
+    *   [ ] Implement `#[Validate]` attributes or `$this->validate()` in the `update()` method.
+    *   [ ] Handle `featured_image` replacement and old file deletion.
+    *   [ ] Implement the `update()` method to modify the existing post record.
+    *   [ ] Set up modal opening/closing logic.
+
+6.  **Route Definition**:
+    *   [ ] Define a route in `routes/web.php` for the `PostManagement` component, preferably using `Volt::route()` if it's a page component, or ensure it's loaded as a Livewire component within an existing admin route.
+
+7.  **Manual Testing (Phase 1)**:
+    *   [ ] Verify post listing works correctly.
+    *   [ ] Test creating a new post, including title, content, and especially the **featured image upload**. Check for validation errors and successful saving.
+    *   [ ] Test editing an existing post, including changing content and **replacing the featured image**.
+    *   [ ] Monitor `storage/logs/laravel.log` and browser console for errors.
+
+**Phase 2: Trix Editor Integration (After Phase 1 is fully working)**
+
+1.  **Install Trix Editor**:
+    *   [ ] Install Trix via npm: `npm install trix`
+    *   [ ] Include Trix CSS in your `app.css` (or equivalent): `/* In resources/css/app.css or similar */ @import 'trix/dist/trix.css';`
+    *   [ ] Include Trix JavaScript in your `app.js` (or equivalent): `// In resources/js/app.js or similar import 'trix';`
+
+2.  **Create `TrixAttachment` Model and Migration**:
+    *   [ ] Create a migration for a `trix_attachments` table with `path`, `original_name`, `identifier`, `attachable_id`, `attachable_type`, `disk` fields.
+    *   [ ] Create `app/Models/TrixAttachment.php` and define `morphTo` relationship.
+
+3.  **Develop `x-trix-editor` Blade Component**:
+    *   [ ] Create `resources/views/components/trix-editor.blade.php`.
+    *   [ ] Encapsulate Trix editor HTML.
+    *   [ ] Implement Alpine.js to bind Trix content to Livewire property: `<trix-editor x-on:trix-change="$wire.content = $event.target.value"></trix-editor>`.
+    *   [ ] Implement JavaScript to handle `trix-attachment-add` and `trix-attachment-remove` events, interacting with a backend endpoint for image uploads/deletions.
+
+4.  **Create `TrixAttachmentController`**:
+    *   [ ] Create a controller to handle Trix attachment uploads (store temporary files, create `TrixAttachment` records, return JSON response with URL/identifier).
+    *   [ ] Implement logic for deleting temporary files when attachments are removed from the editor.
+
+5.  **Update `CreatePost` and `EditPost` Components for Trix**:
+    *   [ ] Integrate the `x-trix-editor` component for the `content` field.
+    *   [ ] Update `save()` and `update()` methods to parse Trix content HTML, extract `data-trix-attachment` identifiers, and link `TrixAttachment` records to the `Post` (by setting `attachable_id` and `attachable_type`).
+    *   [ ] Implement scheduled cleanup for orphaned `TrixAttachment` records/files.
+    *   [ ] Implement a deleting model event on `Post` to remove associated `TrixAttachment` records and files when a post is deleted.
+
+6.  **Manual Testing (Phase 2)**:
+    *   [ ] Test Trix editor functionality: typing, formatting, and **embedding images**.
+    *   [ ] Verify images are uploaded, displayed correctly, and correctly associated with the post upon saving.
+    *   [ ] Test deleting images from the Trix editor and ensure cleanup.
+    *   [ ] Test post deletion to ensure associated Trix images are removed. 
 
