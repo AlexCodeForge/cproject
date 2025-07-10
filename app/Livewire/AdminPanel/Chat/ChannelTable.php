@@ -48,6 +48,22 @@ class ChannelTable extends Component
         ];
     }
 
+    protected function messages()
+    {
+        return [
+            'name.required' => 'El nombre del canal es obligatorio.',
+            'name.string' => 'El nombre del canal debe ser una cadena de texto.',
+            'name.max' => 'El nombre del canal no debe exceder los :max caracteres.',
+            'description.string' => 'La descripción debe ser una cadena de texto.',
+            'type.required' => 'El tipo de canal es obligatorio.',
+            'type.in' => 'El tipo de canal seleccionado no es válido.',
+            'requires_premium.boolean' => 'El valor de "requiere premium" debe ser verdadero o falso.',
+            'is_active.boolean' => 'El valor de "activo" debe ser verdadero o falso.',
+            'max_members.integer' => 'El número máximo de miembros debe ser un número entero.',
+            'max_members.min' => 'El número máximo de miembros debe ser al menos :min.',
+        ];
+    }
+
     public function create()
     {
         $this->reset(['name', 'description', 'type', 'requires_premium', 'is_active', 'max_members']);
@@ -69,7 +85,12 @@ class ChannelTable extends Component
 
     public function save()
     {
-        $this->validate();
+        try {
+            $this->validate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('showErrorModal', message: collect($e->errors())->flatten()->toArray(), title: 'Error de Validación');
+            throw $e; // Re-throw the exception to ensure individual field errors are displayed
+        }
 
         $this->editingChannel->fill([
             'name' => $this->name,

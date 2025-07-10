@@ -9,13 +9,14 @@ class ErrorModal extends Component
 {
     public $showModal = false;
     public $title = 'Error';
-    public $message = 'Ha ocurrido un error inesperado.';
+    public $message = []; // Change to an array to hold multiple messages
 
     #[On('showErrorModal')]
     public function show($message, $title = 'Error')
     {
         $this->title = $title;
-        $this->message = $message;
+        // Ensure message is always an array
+        $this->message = is_array($message) ? $message : [$message];
         $this->showModal = true;
     }
 

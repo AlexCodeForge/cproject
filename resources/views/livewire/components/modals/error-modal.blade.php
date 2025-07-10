@@ -14,9 +14,19 @@
                         </div>
                         <div class="flex-1">
                             <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">{{ $title }}</h3>
-                            <p class="text-slate-600 dark:text-gray-400">
-                                {{ $message }}
-                            </p>
+                            <div class="text-slate-600 dark:text-gray-400">
+                                <div class="mt-4">
+                                    @if (is_array($message))
+                                        <ul class="list-disc list-inside text-red-600 dark:text-red-400">
+                                            @foreach ($message as $msg)
+                                                <li>{{ $msg }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p class="text-red-600 dark:text-red-400">{{ $message }}</p>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                         <button wire:click="closeModal" class="text-slate-400 hover:text-slate-600 dark:text-gray-400 dark:hover:text-gray-200">
                             <x-ionicon-close class="text-xl w-6 h-6"/>
