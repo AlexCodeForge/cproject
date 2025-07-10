@@ -23,6 +23,7 @@
         "alpinejs": "^3.14.9",
         "chart.js": "^4.5.0",
         "chartjs-adapter-date-fns": "^3.0.0",
-        "ionicons": "^8.0.13"
+        "ionicons": "^8.0.13",
+        "trix": "^2.1.15"
     }
 }
