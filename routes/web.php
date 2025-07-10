@@ -5,10 +5,6 @@ use Livewire\Volt\Volt;
 use App\Livewire\UserPanel\PricingPage;
 use App\Livewire\AdminPanel\Dashboard as AdminDashboard;
 use App\Livewire\AdminPanel\Users\UserManagement;
-use App\Livewire\AdminPanel\Posts\CreatePost;
-use App\Livewire\AdminPanel\Posts\EditPost;
-use App\Livewire\AdminPanel\Posts\Index as PostIndex;
-use App\Livewire\UserPanel\Posts\ShowPost;
 use App\Livewire\UserPanel\Dashboard;
 use App\Livewire\UserPanel\Feed;
 use App\Livewire\UserPanel\Pnl;
@@ -67,15 +63,12 @@ Route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'check
 Route::post('/stripe/webhook', [App\Http\Controllers\WebhookController::class, 'handleWebhook'])->name('cashier.webhook');
 Route::post('/billing/cancel', [App\Http\Controllers\BillingController::class, 'cancel'])->middleware(['auth'])->name('billing.cancel');
 
-Route::get('/posts/{post:slug}', ShowPost::class)->name('posts.show');
+Volt::route('/posts/{post:slug}', App\Livewire\UserPanel\Posts\ShowPost::class)->name('posts.show');
 
 // Admin Routes - Protected by admin role
 Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->name('admin.')->group(function () {
     Volt::route('/dashboard', AdminDashboard::class)->name('dashboard');
     Volt::route('/users', UserManagement::class)->name('users');
-    Volt::route('/posts', PostIndex::class)->name('posts.index');
-    Volt::route('/posts/create', CreatePost::class)->name('posts.create');
-    Volt::route('/posts/{post}/edit', EditPost::class)->name('posts.edit');
     Volt::route('/chat/channels', ChannelManagement::class)->name('chat.channels');
 });
 

@@ -20,28 +20,37 @@ class DatabaseSeeder extends Seeder
         $this->call(ChatChannelsSeeder::class);
         $this->call(PostSeeder::class);
 
-        // Create a test admin user
-        $admin = User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@optionrocket.com',
-            'email_verified_at' => now(),
-        ]);
+        // Create or retrieve a test admin user
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@optionrocket.com'],
+            [
+                'name' => 'Admin User',
+                'email_verified_at' => now(),
+                'password' => bcrypt('password'), // Default password
+            ]
+        );
         $admin->assignRole('admin');
 
-        // Create a test premium user
-        $premium = User::factory()->create([
-            'name' => 'Premium User',
-            'email' => 'premium@optionrocket.com',
-            'email_verified_at' => now(),
-        ]);
+        // Create or retrieve a test premium user
+        $premium = User::firstOrCreate(
+            ['email' => 'premium@optionrocket.com'],
+            [
+                'name' => 'Premium User',
+                'email_verified_at' => now(),
+                'password' => bcrypt('password'), // Default password
+            ]
+        );
         $premium->assignRole('premium');
 
-        // Create a test free user
-        $free = User::factory()->create([
-            'name' => 'Free User',
-            'email' => 'free@optionrocket.com',
-            'email_verified_at' => now(),
-        ]);
+        // Create or retrieve a test free user
+        $free = User::firstOrCreate(
+            ['email' => 'free@optionrocket.com'],
+            [
+                'name' => 'Free User',
+                'email_verified_at' => now(),
+                'password' => bcrypt('password'), // Default password
+            ]
+        );
         $free->assignRole('free');
     }
 }
