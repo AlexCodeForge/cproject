@@ -29,35 +29,35 @@ Route::get('/', function () {
 
 // Use Livewire Volt for user dashboard
 Volt::route('dashboard', Dashboard::class)
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->name('dashboard');
 
 Volt::route('feed', Feed::class)
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->name('feed');
 
 Volt::route('pnl', Pnl::class)
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->name('pnl');
 
 Volt::route('alerts', Alerts::class)
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->name('alerts');
 
 Volt::route('chat', Chat::class)
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->name('chat');
 
 Volt::route('live', Live::class)
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->name('live');
 
 Volt::route('courses', Courses::class)
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->name('courses');
 
 Volt::route('events', Events::class)
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->name('events');
 
 Volt::route('profile', Profile::class)
@@ -74,7 +74,7 @@ Route::post('/billing/cancel', [App\Http\Controllers\BillingController::class, '
 Volt::route('/posts/{post:slug}', App\Livewire\UserPanel\Posts\ShowPost::class)->name('posts.show');
 
 // Admin Panel Routes
-Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
     Route::get('/', \App\Livewire\AdminPanel\Dashboard::class)->name('dashboard');
     Route::get('/users', UserManagement::class)->name('users');
     Route::get('/posts', PostManagement::class)->name('posts.index');

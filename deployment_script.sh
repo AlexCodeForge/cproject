@@ -62,31 +62,24 @@ if [ "$1" == "--restart" ]; then
 fi
 
 
-# Check if this is a fresh installation or an update
+# Check if an old installation exists
 if [ -d "$PROJECT_DIR" ]; then
-    # --- UPDATE PATH ---
-    print_info "Project directory found. Running update process..."
-    cd "${PROJECT_DIR}"
-    print_info "Pulling latest changes from GitHub..."
-    git pull origin main
+    print_info "Existing installation found. Removing it to ensure a clean state..."
+    # Backup .env if it exists
+    if [ -f "${PROJECT_DIR}/.env" ]; then
+        print_info "Backing up existing .env file..."
+        mv "${PROJECT_DIR}/.env" "/tmp/.env.option-rocket.bak"
+        print_success ".env file backed up to /tmp/.env.option-rocket.bak"
+    fi
 
-    print_info "Installing Composer and NPM dependencies..."
-    composer install --no-dev --optimize-autoloader
-    npm install
-    npm run build
-
-    print_info "Running migrations..."
-    php artisan migrate --force
-
-    restart_services
-
-    print_success "Update process finished successfully!"
-    exit 0
+    # Remove the old directory
+    rm -rf "${PROJECT_DIR}"
+    print_success "Previous installation removed."
 fi
 
 
 # --- FRESH INSTALLATION PATH ---
-print_info "No existing project found. Starting fresh installation..."
+print_info "Starting fresh installation..."
 
 # 1. System Update & Essential Packages
 print_info "Updating system and installing essential packages..."
@@ -100,7 +93,7 @@ apt-get install -y lsb-release ca-certificates apt-transport-https
 echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
 wget -qO - https://packages.sury.org/php/apt.gpg | apt-key add -
 apt-get update
-apt-get install -y php8.3-fpm php8.3-mysql php8.3-mbstring php8.3-xml php8.3-curl php8.3-dom php8.3-zip php8.3-bcmath php8.3-gd
+apt-get install -y php8.3-fpm php8.3-mysql php8.3-mbstring php8.3-xml php8.3-curl php8.3-dom php8.3-zip php8.3-bcmath php8.3-gd php8.3-sqlite3
 
 # 3. Install MariaDB (MySQL) and Create Database
 print_info "Installing and configuring MariaDB..."
@@ -129,19 +122,27 @@ apt-get install -y nodejs
 print_info "Cloning application from GitHub repository..."
 git clone "${GITHUB_REPO_URL}" "${PROJECT_DIR}"
 
+print_info "Setting git safe directory to avoid ownership errors..."
+git config --global --add safe.directory ${PROJECT_DIR}
+
 # 7. Configure Laravel Application
 print_info "Configuring Laravel application..."
 cd "${PROJECT_DIR}"
 
-# Only set up .env file if it doesn't exist, to protect secrets on subsequent runs
-if [ ! -f ".env" ]; then
-    print_info "Setting up .env file for the first time..."
+# Restore .env if backup exists, otherwise create a new one from example
+if [ -f "/tmp/.env.option-rocket.bak" ]; then
+    print_info "Restoring backed-up .env file..."
+    mv "/tmp/.env.option-rocket.bak" "${PROJECT_DIR}/.env"
+    print_success ".env file restored."
+else
+    print_info "Setting up .env file for the first time (no backup found)..."
     cp .env.example .env
 
     # Update .env file with production values
     sed -i "s/^APP_ENV=local/APP_ENV=production/" .env
     sed -i "s/^APP_DEBUG=true/APP_DEBUG=false/" .env
     sed -i "s/^APP_URL=.*/APP_URL=http:\/\/${SERVER_DOMAIN}/" .env
+    sed -i "s/^DB_CONNECTION=sqlite/DB_CONNECTION=mysql/" .env
     sed -i "s/^DB_DATABASE=.*/DB_DATABASE=${DB_NAME}/" .env
     sed -i "s/^DB_USERNAME=.*/DB_USERNAME=${DB_USER}/" .env
     sed -i "s/^DB_PASSWORD=.*/DB_PASSWORD=${DB_PASSWORD}/" .env
@@ -157,14 +158,24 @@ if [ ! -f ".env" ]; then
     echo "STRIPE_WEBHOOK_SECRET=your_webhook_secret_for_production" >> .env
     echo "MONTHLY_PLAN_ID=price_1RiTgBBBlYDJOOlgyqRTNpic" >> .env
     echo "YEARLY_PLAN_ID=price_1RiTfpBBlYDJOOlgKEgmWOjg" >> .env
-else
-    print_info ".env file already exists. Skipping creation to preserve secrets."
 fi
 
-print_info "Installing Composer and NPM dependencies..."
-composer install --no-dev --optimize-autoloader
+print_info "Installing Composer dependencies (including dev for seeding)..."
+composer install --optimize-autoloader
+
+print_info "Creating swap file for NPM build..."
+fallocate -l 2G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+
+print_info "Installing NPM dependencies and building assets..."
 npm install
 npm run build
+
+print_info "Removing swap file..."
+swapoff /swapfile
+rm /swapfile
 
 print_info "Running Laravel setup commands..."
 php artisan key:generate
@@ -213,7 +224,10 @@ server {
 }
 EOF
 
-ln -s /etc/nginx/sites-available/option-rocket /etc/nginx/sites-enabled/
+if [ ! -L /etc/nginx/sites-enabled/option-rocket ]; then
+    ln -s /etc/nginx/sites-available/option-rocket /etc/nginx/sites-enabled/
+fi
+
 unlink /etc/nginx/sites-enabled/default
 systemctl restart nginx
 
@@ -246,10 +260,32 @@ redirect_stderr=true
 stdout_logfile=${PROJECT_DIR}/storage/logs/worker.log
 EOF
 
+# Stripe Listener Supervisor Config
+cat > /etc/supervisor/conf.d/stripe-listen.conf <<EOF
+[program:stripe-listener]
+process_name=%(program_name)s
+command=/usr/local/bin/stripe listen --forward-to http://${SERVER_DOMAIN}/stripe/webhook
+autostart=true
+autorestart=true
+user=www-data
+redirect_stderr=true
+stdout_logfile=${PROJECT_DIR}/storage/logs/stripe.log
+EOF
+
 print_info "Starting Supervisor processes..."
 supervisorctl reread
 supervisorctl update
 supervisorctl start all
+
+# 10. Configure Firewall (UFW)
+print_info "Configuring Firewall (UFW)..."
+apt-get install -y ufw
+ufw allow 22/tcp  # SSH
+ufw allow 80/tcp  # HTTP/Nginx
+ufw allow 9090/tcp # Laravel Reverb
+ufw --force enable
+ufw status verbose
+
 
 # --- Final Instructions ---
 print_success "Deployment script finished successfully!"
@@ -262,7 +298,7 @@ echo ""
 echo "3. To setup Stripe CLI for testing on your VPS:"
 echo "   - Download it: 'wget https://github.com/stripe/stripe-cli/releases/download/v1.20.0/stripe_1.20.0_linux_x86_64.tar.gz' (check for latest version)"
 echo "   - Extract and install: 'tar -xvf stripe_1.20.0_linux_x86_64.tar.gz && sudo mv stripe /usr/local/bin/'"
-echo "   - Login: 'stripe login'"
-echo "   - Listen for events: 'stripe listen --forward-to http://${SERVER_DOMAIN}/stripe/webhook'"
+echo "   - Login ONCE: 'stripe login'"
+echo "   - The Stripe listener is now managed by Supervisor. Check its log with: 'tail -f ${PROJECT_DIR}/storage/logs/stripe.log'"
 echo ""
 print_success "Enjoy your freshly deployed Option-Rocket application!"

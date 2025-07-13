@@ -36,13 +36,16 @@ class CheckoutController extends Controller
             return back()->with('error', 'Pricing information not found for the selected plan.');
         }
 
-        Log::info('Redirecting user to Stripe Checkout.', ['user_id' => $request->user()->id, 'price_id' => $priceId]);
-
-        return $request->user()
+        $checkout = $request->user()
             ->newSubscription('default', $priceId)
             ->checkout([
                 'success_url' => route('dashboard'),
                 'cancel_url' => route('pricing'),
+                'client_reference_id' => $request->user()->id,
             ]);
+
+        Log::info('Redirecting user to Stripe Checkout.', ['user_id' => $request->user()->id, 'price_id' => $priceId]);
+
+        return redirect($checkout->url);
     }
 }

@@ -73,12 +73,24 @@ new #[Layout('layouts.app')] class extends Component
                     </h3>
                     @if(auth()->user()->subscribed('default'))
                         <p class="text-sm text-gray-600 dark:text-gray-400">You are subscribed to the Premium plan.</p>
+
+                        @if (auth()->user()->subscription('default')->onGracePeriod())
+                            <p class="mt-2 text-sm text-amber-600 dark:text-amber-400">
+                                Your subscription has been cancelled and will expire on: <strong>{{ auth()->user()->subscription_ends_at->format('F d, Y') }}</strong>.
+                            </p>
+                        @else
+                            @if (auth()->user()->subscription_ends_at)
+                                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                                    Your plan renews on: <strong>{{ auth()->user()->subscription_ends_at->format('F d, Y') }}</strong>.
+                                </p>
+                            @endif
                         <form method="POST" action="{{ route('billing.cancel') }}" class="mt-6">
                             @csrf
                             <x-danger-button>
                                 {{ __('Cancel Subscription') }}
                             </x-danger-button>
                         </form>
+                        @endif
                     @else
                         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                             You are not subscribed to any plan.
@@ -127,7 +139,13 @@ new #[Layout('layouts.app')] class extends Component
                                     <x-ionicon-diamond class="w-6 h-6 text-amber-600 dark:text-amber-400"></x-ionicon-diamond>
                                     Premium Plan
                                 </h4>
-                                {{-- <p class="text-slate-600 dark:text-gray-400 text-sm">Next payment: ...</p> --}}
+                                @if (auth()->user()->subscription_ends_at)
+                                    @if (auth()->user()->subscription('default')->onGracePeriod())
+                                        <p class="text-slate-600 dark:text-gray-400 text-sm">Expires: {{ auth()->user()->subscription_ends_at->format('F d, Y') }}</p>
+                                    @else
+                                        <p class="text-slate-600 dark:text-gray-400 text-sm">Renews: {{ auth()->user()->subscription_ends_at->format('F d, Y') }}</p>
+                                    @endif
+                                @endif
                             </div>
                             <div class="text-right">
                                 {{-- <p class="text-2xl font-bold text-slate-900 dark:text-white">$29</p>
