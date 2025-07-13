@@ -81,7 +81,6 @@
                     <th class="p-4">Estado (Stripe)</th>
                     <th class="p-4">Finaliza en</th>
                     <th class="p-4">Fecha de Creación</th>
-                    <th class="p-4">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -114,13 +113,10 @@
                          <td class="p-4 text-slate-800 dark:text-gray-300">
                             {{ $subscription->created_at->format('d/m/Y H:i') }}
                         </td>
-                        <td class="p-4">
-                            <a href="{{ route('admin.users') }}?search={{ $subscription->user->email }}" class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white">Ver Usuario</a>
-                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="p-4 text-center text-gray-500 dark:text-gray-400">
+                        <td colspan="5" class="p-4 text-center text-gray-500 dark:text-gray-400">
                             No se encontraron suscripciones.
                         </td>
                     </tr>

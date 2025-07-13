@@ -8,7 +8,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h3 class="font-semibold text-slate-600 dark:text-gray-400">Ingresos Mensuales (MRR)</h3>
-                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">$12,847</p>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">${{ number_format($monthlyRevenue, 0) }}</p>
                         <p class="text-sm text-green-600 dark:text-green-400 mt-1">↗ +18.3% vs mes anterior</p>
                     </div>
                     <div class="bg-green-100 dark:bg-green-900/30 p-3 rounded-lg">
@@ -21,7 +21,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h3 class="font-semibold text-slate-600 dark:text-gray-400">Usuarios Activos</h3>
-                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">1,247</p>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">{{ $activeUsers }}</p>
                         <p class="text-sm text-blue-600 dark:text-blue-400 mt-1">↗ +12.5% este mes</p>
                     </div>
                     <div class="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg">
@@ -34,7 +34,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h3 class="font-semibold text-slate-600 dark:text-gray-400">Suscriptores Premium</h3>
-                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">387</p>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">{{ $premiumSubscribers }}</p>
                         <p class="text-sm text-amber-600 dark:text-amber-400 mt-1">↗ +8.2% conversión</p>
                     </div>
                     <div class="bg-amber-100 dark:bg-amber-900/30 p-3 rounded-lg">
@@ -47,7 +47,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h3 class="font-semibold text-slate-600 dark:text-gray-400">Alertas Enviadas</h3>
-                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">2,156</p>
+                        <p class="text-3xl font-bold text-slate-900 dark:text-white mt-2">{{ $alertsSent }}</p>
                         <p class="text-sm text-purple-600 dark:text-purple-400 mt-1">↗ +24 hoy</p>
                     </div>
                     <div class="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-lg">
@@ -108,7 +108,7 @@
                                 <p class="text-sm text-slate-600 dark:text-gray-400">Últimas 24h</p>
                             </div>
                         </div>
-                        <span class="text-xl font-bold text-slate-900 dark:text-white">847</span>
+                        <span class="text-xl font-bold text-slate-900 dark:text-white">{{ $chatMessagesLast24h }}</span>
                     </div>
 
                     <div class="flex items-center justify-between">
@@ -121,7 +121,7 @@
                                 <p class="text-sm text-slate-600 dark:text-gray-400">Esta semana</p>
                             </div>
                         </div>
-                        <span class="text-xl font-bold text-slate-900 dark:text-white">23</span>
+                        <span class="text-xl font-bold text-slate-900 dark:text-white">{{ $postsThisWeek }}</span>
                     </div>
 
                     <div class="flex items-center justify-between">

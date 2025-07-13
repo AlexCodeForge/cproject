@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\UserProfile;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -29,6 +30,9 @@ new #[Layout('layouts.auth')] class extends Component
         $validated['password'] = Hash::make($validated['password']);
 
         event(new Registered($user = User::create($validated)));
+
+        // Create a user profile
+        $user->profile()->create([]);
 
         $user->assignRole('free');
 

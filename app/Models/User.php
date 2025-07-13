@@ -187,6 +187,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the URL for the user's profile photo.
+     *
+     * @return string
+     */
+    public function getProfilePhotoUrlAttribute(): string
+    {
+        return $this->getAvatarUrlAttribute();
+    }
+
+    /**
      * Get the URL for the user's avatar.
      *
      * @return string
