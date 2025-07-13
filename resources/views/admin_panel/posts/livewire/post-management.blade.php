@@ -1,8 +1,8 @@
 <div class="p-6">
     <div class="flex flex-wrap justify-between items-center mb-8">
         <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">Gestionar Publicaciones</h1>
-        <div class="flex items-center gap-4 ml-auto pt-2">
-            <div class="flex flex-wrap items-center gap-4">
+        <div class="flex items-end justify-end gap-4 ml-auto pt-2 w-full">
+            <div class="flex items-center gap-4">
                 <x-text-input wire:model.live.debounce.300ms="search" placeholder="Buscar publicación..." class="px-4 py-2 rounded-lg w-auto" />
                 <select wire:model.live="category" class="w-48 px-4 py-2 pr-10 rounded-lg border border-stone-300 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-400">
                     <option value="">Todas las Categorías</option>
@@ -22,10 +22,10 @@
                         <option value="{{ $key }}">{{ $value }}</option>
                     @endforeach
                 </select>
+                <button wire:click="createNewPost" class="bg-slate-700 dark:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-800 dark:hover:bg-gray-600 whitespace-nowrap" >
+                    Nueva Publicación
+                </button>
             </div>
-            <button wire:click="createNewPost" class="bg-slate-700 dark:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-800 dark:hover:bg-gray-600 whitespace-nowrap" >
-                Nueva Publicación
-            </button>
         </div>
     </div>
 

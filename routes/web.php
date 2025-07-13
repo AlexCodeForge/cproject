@@ -15,6 +15,7 @@ use App\Livewire\UserPanel\Events;
 use App\Livewire\UserPanel\Profile;
 use App\Livewire\UserPanel\Chat;
 use App\Livewire\AdminPanel\Chat\ChannelManagement;
+use App\Livewire\AdminPanel\Categories\CategoryManagement;
 use App\Livewire\AdminPanel\Posts\PostManagement;
 use App\Livewire\AdminPanel\Posts\CreatePost;
 use App\Livewire\AdminPanel\Posts\EditPost;
@@ -73,14 +74,17 @@ Route::post('/billing/cancel', [App\Http\Controllers\BillingController::class, '
 
 Volt::route('/posts/{post:slug}', App\Livewire\UserPanel\Posts\ShowPost::class)->name('posts.show');
 
-// Admin Routes - Protected by admin role
+// Admin Panel Routes
 Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->name('admin.')->group(function () {
-    Volt::route('/dashboard', AdminDashboard::class)->name('dashboard');
-    Volt::route('/users', UserManagement::class)->name('users');
-    Volt::route('/chat/channels', ChannelManagement::class)->name('chat.channels');
-    Volt::route('/posts', PostManagement::class)->name('posts.index');
-    Volt::route('/posts/create', CreatePost::class)->name('posts.create');
-    Volt::route('/posts/{post}/edit', EditPost::class)->name('posts.edit');
+    Route::get('/', \App\Livewire\AdminPanel\Dashboard::class)->name('dashboard');
+    Route::get('/users', UserManagement::class)->name('users');
+    Route::get('/posts', PostManagement::class)->name('posts.index');
+    Route::get('/chat', ChannelManagement::class)->name('chat.channels');
+    Route::get('/categories', CategoryManagement::class)->name('categories.index');
+
+    // Route for creating a post
+    Route::get('/posts/create', \App\Livewire\AdminPanel\Posts\CreatePost::class)->name('posts.create');
+    Route::get('/posts/{post}/edit', EditPost::class)->name('posts.edit');
 });
 
 require __DIR__.'/auth.php';
