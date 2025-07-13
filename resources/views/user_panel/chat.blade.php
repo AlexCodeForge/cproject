@@ -41,14 +41,26 @@
                     <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Joinable Channels</h2>
                     <nav class="space-y-2 h-48 overflow-y-auto scrollbar-hide">
                         @foreach($joinableChannels as $channel)
-                            <a href="#" wire:click.prevent="joinChannel({{ $channel->id }}); sidebarOpen = false"
+                            <a href="#"
+                               wire:click.prevent="joinChannel({{ $channel->id }}); sidebarOpen = false"
+                               wire:loading.attr="disabled"
+                               wire:loading.class="opacity-75 cursor-wait"
+                               wire:target="joinChannel({{ $channel->id }})"
                                @class([
                                    'flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors',
                                    'font-semibold text-amber-600 dark:text-amber-400 hover:bg-stone-200 dark:hover:bg-gray-600 hover:text-amber-700 dark:hover:text-amber-300' => $channel->type === 'premium',
                                    'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-600 hover:text-slate-800 dark:hover:text-gray-200' => $channel->type !== 'premium',
                                ])
                             >
-                                <ion-icon name="{{ $channel->type === 'premium' ? 'diamond' : 'add-circle-outline' }}" class="w-6 h-6"></ion-icon>
+                                <div wire:loading.remove wire:target="joinChannel({{ $channel->id }})">
+                                    <ion-icon name="{{ $channel->type === 'premium' ? 'diamond' : 'add-circle-outline' }}" class="w-6 h-6"></ion-icon>
+                                </div>
+                                <div wire:loading wire:target="joinChannel({{ $channel->id }})">
+                                    <svg class="animate-spin h-6 w-6 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
                                 <span># {{ $channel->name }}</span>
                             </a>
                         @endforeach

@@ -338,7 +338,10 @@
     </div>
 
     @livewireScripts
+    <livewire:components.modals.confirmation-modal />
+    <livewire:components.modals.success-modal />
+    <livewire:components.modals.error-modal />
+    <livewire:components.modals.premium-modal />
     @stack('scripts')
-    @stack('modals')
 </body>
 </html>

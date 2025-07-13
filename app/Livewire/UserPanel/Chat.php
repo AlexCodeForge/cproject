@@ -43,7 +43,9 @@ class Chat extends Component
 
     public function loadChannels(): void
     {
-        $this->channels = Auth::user()->chatChannels()
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $this->channels = $user->chatChannels()
             ->where('is_active', true)
             ->orderByDesc('last_message_at')
             ->get() ?? collect();
@@ -189,7 +191,16 @@ class Chat extends Component
     {
         $channel = ChatChannel::find($channelId);
         if ($channel && in_array($channel->type, ['public', 'premium'])) {
-            // Future enhancement: Check if user has premium role if channel is premium.
+            if ($channel->type === 'premium') {
+                /** @var \App\Models\User $user */
+                $user = Auth::user();
+                if (!$user->isPremium() && !$user->isAdmin()) {
+                    // Dispatch an event to show the premium modal.
+                    $this->dispatch('showPremiumModal', message: 'Debes tener una suscripción premium para unirte a este canal.');
+                    return;
+                }
+            }
+
             $channel->participants()->attach(Auth::id());
             $this->loadChannels();
             $this->changeChannel($channelId);
