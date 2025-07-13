@@ -6,7 +6,11 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\WithFileUploads;
 use App\Models\Post;
+use App\Models\User;
+use App\Notifications\NewPostPublished;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Validate;
 
@@ -135,8 +139,8 @@ class CreatePost extends Component
                 Log::info('Featured image uploaded.', ['path' => $featuredImagePath]);
             }
 
-            Post::create([
-                'user_id' => auth()->id(),
+            $post = Post::create([
+                'user_id' => Auth::id(),
                 'title' => $this->title,
                 'slug' => Str::slug($this->title), // Slug is generated in model, but can be set here too
                 'excerpt' => $this->excerpt,
@@ -153,6 +157,14 @@ class CreatePost extends Component
                 'difficulty_level' => $this->difficulty_level,
                 'post_category_id' => $this->category_id,
             ]);
+
+            if ($post->status === 'published') {
+                $usersToNotify = User::where('id', '!=', Auth::id())->get();
+                if ($usersToNotify->isNotEmpty()) {
+                    Notification::send($usersToNotify, new NewPostPublished($post));
+                    Log::info('Sent NewPostPublished notification to ' . $usersToNotify->count() . ' users.');
+                }
+            }
 
             $this->dispatch('showSuccessModal', message: 'Post created successfully!');
             Log::info('Post created successfully.', ['title' => $this->title]);

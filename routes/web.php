@@ -20,6 +20,10 @@ use App\Livewire\AdminPanel\Posts\PostManagement;
 use App\Livewire\AdminPanel\Posts\CreatePost;
 use App\Livewire\AdminPanel\Posts\EditPost;
 use App\Livewire\UserPanel\Posts\ShowPost;
+use App\Http\Controllers\BillingController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\NotificationController;
 
 
 //must change this when landing page is ready
@@ -90,6 +94,16 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     Route::get('/posts/create', \App\Livewire\AdminPanel\Posts\CreatePost::class)->name('posts.create');
     Route::get('/posts/{post}/edit', EditPost::class)->name('posts.edit');
 });
+
+Route::post('billing-portal', [BillingController::class, 'handleBillingPortalRequest'])->name('billing-portal');
+
+
+Route::prefix('notifications')->middleware(['auth'])->name('notifications.')->group(function () {
+    Route::get('/', [NotificationController::class, 'index'])->name('index');
+    Route::post('/{id}/read', [NotificationController::class, 'markAsRead'])->name('markAsRead');
+    Route::post('/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('markAllAsRead');
+});
+
 
 require __DIR__.'/auth.php';
 

@@ -224,10 +224,15 @@
                     <x-ionicon-home-outline class="w-6 h-6 flex-shrink-0" />
                     <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Usuario</span>
                 </a>
-                <button id="notifications-toggle" title="Notificaciones" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden">
+                <button id="notifications-toggle"
+                        title="Notificaciones"
+                        class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden"
+                        x-data="{ unreadCount: {{ auth()->check() ? auth()->user()->unreadNotifications()->count() : 0 }} }"
+                        @unread-notifications-count-updated.window="unreadCount = $event.detail.count"
+                        x-on:click="$dispatch('open-notifications-sidebar')">
                     <div class="relative">
                         <x-ionicon-notifications-outline class="w-6 h-6 flex-shrink-0" />
-                        <span class="absolute top-0 right-0 flex h-2.5 w-2.5">
+                        <span x-show="unreadCount > 0" class="absolute top-0 right-0 flex h-2.5 w-2.5" style="display: none;">
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
                         </span>
@@ -246,6 +251,9 @@
                 {{ $slot }}
             </main>
 
+            <!-- Page-wide overlay for modal-like elements -->
+            <div id="page-overlay" class="fixed inset-0 bg-black/30 z-20 hidden"></div>
+
             <!-- FOOTER -->
             <footer class="flex-shrink-0 bg-white dark:bg-gray-800 border-t border-stone-200 dark:border-gray-700 text-slate-600 dark:text-gray-400 py-2 px-4 sm:px-8">
                 <div class="container mx-auto flex items-center justify-between">
@@ -261,7 +269,7 @@
         <!-- =================================================================== -->
         <!-- COMPONENT: NOTIFICATIONS SIDEBAR (OVERLAY)                          -->
         <!-- =================================================================== -->
-        <x-notifications-sidebar />
+        <livewire:notifications-sidebar />
 
         <!-- MOBILE BOTTOM NAVIGATION -->
         <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-stone-200 dark:border-gray-700 flex justify-around py-2 z-10">

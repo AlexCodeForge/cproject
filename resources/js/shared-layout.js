@@ -69,26 +69,6 @@ function initializeSharedLayout() {
             applyTheme(newTheme);
         }, eventListeners);
     }
-
-    const notificationsToggle = document.getElementById('notifications-toggle');
-    const notificationsSidebar = document.getElementById('notifications-sidebar');
-    const closeNotifications = document.getElementById('close-notifications');
-    if (notificationsToggle && notificationsSidebar) {
-        addTrackedEventListener(notificationsToggle, 'click', (e) => {
-            e.stopPropagation();
-            notificationsSidebar.classList.remove('translate-x-full');
-        }, eventListeners);
-    }
-    if (closeNotifications && notificationsSidebar) {
-        addTrackedEventListener(closeNotifications, 'click', () => notificationsSidebar.classList.add('translate-x-full'), eventListeners);
-    }
-    if (notificationsSidebar) {
-        addTrackedEventListener(document, 'click', (e) => {
-            if (!notificationsSidebar.contains(e.target) && !e.target.closest('#notifications-toggle')) {
-                notificationsSidebar.classList.add('translate-x-full');
-            }
-        }, eventListeners);
-    }
 }
 
 document.addEventListener('DOMContentLoaded', initializeSharedLayout);
