@@ -64,3 +64,11 @@ If role changes are not happening as expected:
 1.  **Check the Logs**: The first place to look is `storage/logs/laravel.log`. Our webhook handlers have detailed logging.
 2.  **Look for Errors**: Specifically, search for `client_reference_id not found`. If you see this, it means the ID is not being passed correctly during checkout.
 3.  **Use Stripe CLI**: For local development, use the Stripe CLI to listen for and forward webhooks (`stripe listen --forward-to <your-local-url>/stripe/webhook`). This allows you to see the exact webhook payloads and HTTP status codes your application is returning, which is invaluable for debugging. A `500` status code indicates a server error in your webhook handler. 
+
+### The Complete Subscription Flow
+
+1.  **Initiate Checkout**: A user selects a plan and is redirected to Stripe's secure checkout page. We pass `'client_reference_id' => $user->id` during this step.
+2.  **Successful Payment & Redirect**: After a successful payment, Stripe redirects the user to our custom "Thank You" page (`/subscription-thank-you`), providing immediate positive feedback.
+3.  **Webhook: `checkout.session.completed`**: Almost simultaneously, Stripe sends this webhook. Our `WebhookController` catches it, finds the user via the `client_reference_id`, and assigns them the `premium` role.
+4.  **Webhook: Other Events**: The parent `CashierWebhookController` handles other events in the background, such as updating the local subscription status from `incomplete` to `active`.
+5.  **Cancellation (User-Initiated)**: If a user cancels via the profile page, Cashier sets the `ends_at` date. The user enjoys premium features until this date (grace period). 

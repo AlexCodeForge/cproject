@@ -71,6 +71,10 @@ Volt::route('/pricing', PricingPage::class)
 Route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'checkout'])->middleware(['auth'])->name('checkout');
 Route::post('/billing/cancel', [App\Http\Controllers\BillingController::class, 'cancel'])->middleware(['auth'])->name('billing.cancel');
 
+Route::get('/subscription-thank-you', function () {
+    return view('user_panel.subscription-thank-you');
+})->middleware(['auth', 'verified'])->name('subscription.thankyou');
+
 Volt::route('/posts/{post:slug}', App\Livewire\UserPanel\Posts\ShowPost::class)->name('posts.show');
 
 // Admin Panel Routes
