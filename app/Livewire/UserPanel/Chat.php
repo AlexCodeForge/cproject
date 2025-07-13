@@ -3,6 +3,7 @@
 namespace App\Livewire\UserPanel;
 
 use App\Events\NewChatMessage;
+use App\Events\ChatMessageDeleted;
 use App\Models\ChatChannel;
 use App\Models\ChatMessage;
 use App\Models\User;
@@ -10,6 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 #[Layout('layouts.app')]
@@ -23,6 +25,9 @@ class Chat extends Component
     public ?ChatMessage $replyingTo = null;
     public ?int $reactingTo = null;
     public array $availableReactions = ['👍', '❤️', '😂', '😮', '😢', '😡'];
+    public int $messagesPerPage = 50;
+    public int $messagesLoadedCount = 0;
+    public bool $hasMoreMessages = false;
 
     public function mount(): void
     {
@@ -38,7 +43,7 @@ class Chat extends Component
         }
 
         // Dispatch a scroll-to-bottom event after the component is mounted and channels are loaded
-        $this->dispatch('scroll-to-bottom');
+        $this->dispatch('scroll-chat-to-bottom');
     }
 
     public function loadChannels(): void
@@ -60,7 +65,7 @@ class Chat extends Component
     public function changeChannel(int $channelId): void
     {
         $this->activeChannel = ChatChannel::findOrFail($channelId);
-        $this->loadMessages();
+        $this->loadInitialMessages();
         $this->reactingTo = null;
         $this->replyingTo = null;
 
@@ -68,19 +73,50 @@ class Chat extends Component
         $this->dispatch('channel-changed', channelId: $channelId);
     }
 
-    public function loadMessages(): void
+    public function loadInitialMessages(): void
     {
-        if ($this->activeChannel) {
-            $this->chatMessages = $this->activeChannel->messages()
-                ->with(['user.profile', 'parentMessage.user'])
-                ->latest()
-                ->take(50)
-                ->get()
-                ->reverse()
-                ->values();
-        } else {
+        if (!$this->activeChannel) {
             $this->chatMessages = collect();
+            $this->messagesLoadedCount = 0;
+            $this->hasMoreMessages = false;
+            return;
         }
+
+        $query = $this->activeChannel->messages()->with(['user.profile', 'parentMessage.user']);
+        $totalMessages = $query->count();
+
+        $this->chatMessages = $query->latest()
+            ->take($this->messagesPerPage)
+            ->get()
+            ->reverse()
+            ->values();
+
+        $this->messagesLoadedCount = $this->chatMessages->count();
+        $this->hasMoreMessages = $this->messagesLoadedCount < $totalMessages;
+
+        $this->dispatch('scroll-chat-to-bottom');
+    }
+
+    public function loadMoreMessages(): void
+    {
+        if (!$this->activeChannel || !$this->hasMoreMessages) {
+            return;
+        }
+
+        $query = $this->activeChannel->messages()->with(['user.profile', 'parentMessage.user']);
+        $totalMessages = $query->count();
+
+        $newMessages = $query->latest()
+            ->skip($this->messagesLoadedCount)
+            ->take($this->messagesPerPage)
+            ->get()
+            ->reverse();
+
+        $this->chatMessages = $newMessages->concat($this->chatMessages)->values();
+        $this->messagesLoadedCount = $this->chatMessages->count();
+        $this->hasMoreMessages = $this->messagesLoadedCount < $totalMessages;
+
+        $this->dispatch('more-messages-loaded');
     }
 
     public function sendMessage(): void
@@ -131,7 +167,17 @@ class Chat extends Component
         $this->chatMessages->push($message);
 
         $this->reset(['messageText', 'replyingTo']);
-        $this->dispatch('new-message-added');
+        $this->dispatch('scroll-chat-to-bottom');
+    }
+
+    public function handleMessageDeleted($event): void
+    {
+        $messageId = $event['messageId'];
+
+        // Prevent echo from removing message from the user who deleted it
+        if ($this->chatMessages->contains('id', $messageId)) {
+            $this->chatMessages = $this->chatMessages->where('id', '!=', $messageId)->values();
+        }
     }
 
         public function handleNewMessage($event): void
@@ -164,17 +210,47 @@ class Chat extends Component
         Log::info('✅ Added new message to collection', ['id' => $messageData['id']]);
 
         // Dispatch event to scroll to the new message
-        $this->dispatch('new-message-added');
+        $this->dispatch('scroll-chat-to-bottom');
     }
 
     public function toggleReaction(int $messageId, string $reaction): void
     {
-        $message = ChatMessage::find($messageId);
+        $message = $this->chatMessages->firstWhere('id', $messageId);
+
         if ($message) {
-            $message->toggleReaction($reaction, Auth::id());
-            $this->loadMessages(); // Reload to show updated reactions
+            $dbMessage = ChatMessage::find($messageId);
+            $dbMessage->toggleReaction($reaction, Auth::id());
+
+            $updatedMessage = ChatMessage::with(['user.profile', 'parentMessage.user'])->find($messageId);
+
+            $this->chatMessages = $this->chatMessages->map(function ($msg) use ($messageId, $updatedMessage) {
+                if ($msg->id === $messageId) {
+                    return $updatedMessage;
+                }
+                return $msg;
+            });
         }
         $this->reactingTo = null;
+    }
+
+    #[On('confirmDeleteMessage')]
+    public function deleteMessage(int $messageId): void
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        if (!$user?->isAdmin()) {
+            return;
+        }
+
+        $message = ChatMessage::find($messageId);
+
+        if ($message) {
+            $channelId = $message->chat_channel_id;
+            $message->delete();
+            $this->chatMessages = $this->chatMessages->where('id', '!=', $messageId)->values();
+
+            broadcast(new ChatMessageDeleted($messageId, $channelId))->toOthers();
+        }
     }
 
     public function setReplyingTo(int $messageId): void

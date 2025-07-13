@@ -88,6 +88,18 @@
 
                         <!-- Messages area -->
                         <div id="chat-container" class="flex-1 p-6 space-y-6 overflow-y-auto bg-stone-50/30 dark:bg-gray-800/30  max-h-[calc(100vh-20rem)]">
+                           @if($hasMoreMessages)
+                               <div class="text-center">
+                                   <button
+                                       wire:click="loadMoreMessages"
+                                       @click="scrollTopBeforeLoad = document.getElementById('chat-container').scrollTop"
+                                       wire:loading.attr="disabled"
+                                       class="text-sm font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 transition-colors">
+                                       <span wire:loading.remove wire:target="loadMoreMessages">Cargar más mensajes</span>
+                                       <span wire:loading wire:target="loadMoreMessages">Cargando...</span>
+                                   </button>
+                               </div>
+                           @endif
                            @forelse($chatMessages as $message)
                                 <div class="flex items-start space-x-4 {{ $message->user_id === auth()->id() ? 'flex-row-reverse space-x-reverse' : '' }}">
                                     <img src="{{ $message->user->profile?->avatar_url }}" class="w-10 h-10 rounded-full" alt="{{ $message->user->name }}">
@@ -110,6 +122,18 @@
                                         <div class="mt-1 flex items-center {{ $message->user_id === auth()->id() ? 'justify-end' : '' }}">
                                             <button wire:click="setReplyingTo({{ $message->id }})" class="text-xs text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200">Reply</button>
                                             <button wire:click="setReactingTo({{ $message->id }})" class="ml-2 text-xs text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200">React</button>
+                                            @if(auth()->user()->isAdmin())
+                                                <button
+                                                    wire:click.prevent="$dispatch('showConfirmationModal', {
+                                                        title: 'Eliminar Mensaje',
+                                                        message: '¿Estás seguro de que quieres eliminar este mensaje? Esta acción no se puede deshacer.',
+                                                        confirmAction: 'confirmDeleteMessage',
+                                                        params: { messageId: {{ $message->id }} }
+                                                    })"
+                                                    class="ml-2 text-xs text-red-500 hover:text-red-700">
+                                                    Delete
+                                                </button>
+                                            @endif
                                         </div>
 
                                         @if($reactingTo === $message->id)
@@ -180,6 +204,8 @@
 <script>
 document.addEventListener('livewire:navigated', function() {
     const chatContainer = document.getElementById('chat-container');
+    let previousScrollHeight = 0;
+    let scrollTopBeforeLoad = 0;
 
     // If we are not on the chat page, do nothing.
     if (!chatContainer) {
@@ -197,9 +223,30 @@ document.addEventListener('livewire:navigated', function() {
 
     // Listen for events from Livewire
     if (typeof Livewire !== 'undefined') {
-        Livewire.on('new-message-added', () => {
-            // A little delay to allow DOM to update before scrolling
-            setTimeout(scrollToBottom, 100);
+        // Unified event to scroll chat to the bottom
+        Livewire.on('scroll-chat-to-bottom', () => {
+            // Using Alpine.nextTick ensures we wait for Livewire's DOM updates to complete
+            if (typeof Alpine !== 'undefined') {
+                Alpine.nextTick(() => scrollToBottom());
+            } else {
+                // Fallback for safety, in case Alpine isn't initialized
+                setTimeout(scrollToBottom, 150);
+            }
+        });
+
+        Livewire.on('more-messages-loaded', () => {
+            if (typeof Alpine !== 'undefined') {
+                Alpine.nextTick(() => {
+                    const newScrollHeight = chatContainer.scrollHeight;
+                    const scrollDifference = newScrollHeight - previousScrollHeight;
+
+                    if (scrollDifference > 0) {
+                        chatContainer.scrollTop = scrollTopBeforeLoad + scrollDifference;
+                    }
+
+                    previousScrollHeight = newScrollHeight;
+                });
+            }
         });
     }
 
@@ -240,6 +287,17 @@ document.addEventListener('livewire:navigated', function() {
                         console.error('❌ Error processing message:', error);
                     }
                 })
+                .listen('ChatMessageDeleted', (event) => {
+                    console.log('🗑️ Message deleted event received:', event);
+
+                    // Call Livewire method to handle the deleted message
+                    try {
+                        @this.call('handleMessageDeleted', event);
+                        console.log('✅ Deleted message processed successfully');
+                    } catch (error) {
+                        console.error('❌ Error processing deleted message:', error);
+                    }
+                })
                 .error((error) => {
                     console.error('❌ Echo channel error:', error);
                 });
@@ -255,12 +313,13 @@ document.addEventListener('livewire:navigated', function() {
         subscribeToChannel(currentChannelId);
     }
 
-    // Listen for channel changes from Livewire
+    // Listen for channel changes from Livewire to update Echo subscription
     if (typeof Livewire !== 'undefined') {
         Livewire.on('channel-changed', (event) => {
             console.log('🔄 Channel changed to:', event.channelId);
             subscribeToChannel(event.channelId);
-            setTimeout(scrollToBottom, 200); // Scroll down after loading new messages
+            previousScrollHeight = chatContainer.scrollHeight; // Reset on channel change
+            scrollTopBeforeLoad = 0;
         });
     }
 

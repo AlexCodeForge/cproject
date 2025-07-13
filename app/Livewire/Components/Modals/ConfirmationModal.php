@@ -25,7 +25,7 @@ class ConfirmationModal extends Component
 
     public function confirm()
     {
-        $this->dispatch($this->confirmAction, $this->confirmParams['channelId']);
+        $this->dispatch($this->confirmAction, ...$this->confirmParams);
         $this->closeModal();
     }
 
