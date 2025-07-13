@@ -1,37 +1,3 @@
-<?php
-
-use App\Models\ChatMessage;
-use App\Models\TradingAlert;
-use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
-use Illuminate\Support\Facades\Auth;
-
-new #[Layout('layouts.app')] class extends Component
-{
-    public $openPositions = 4;
-    public $dailyPnL = 1280.50;
-    public $newAlerts = 0;
-    public $unreadMessages = 0;
-
-    public function mount()
-    {
-        // Load user-specific dashboard data
-        $this->loadDashboardData();
-    }
-
-    private function loadDashboardData()
-    {
-        // Mock data for now - replace with real data later
-        $this->openPositions = 4;
-        $this->dailyPnL = 1280.50;
-
-        // TODO: Implement a more robust way to count new/unread items.
-        // This is a temporary implementation for the dashboard view.
-        $this->newAlerts = TradingAlert::where('status', 'active')->count();
-        $this->unreadMessages = ChatMessage::whereDate('created_at', today())->count();
-    }
-}; ?>
-
 <div>
     <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">Bienvenido, {{ Auth::user()->name }}</h1>
     <p class="text-slate-500 dark:text-gray-400 mb-8">Este es tu centro de operaciones.</p>
@@ -113,49 +79,36 @@ new #[Layout('layouts.app')] class extends Component
                 <div class="bg-blue-100 dark:bg-blue-900/50 p-2 rounded-lg">
                     <ion-icon name="newspaper" class="text-blue-600 dark:text-blue-400 text-xl"></ion-icon>
                 </div>
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Noticias del Mercado</h3>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Noticias Destacadas</h3>
             </div>
 
             <div class="space-y-4">
-                <article class="border-l-4 border-green-500 pl-4 py-2">
-                    <div class="flex items-start justify-between">
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-slate-900 dark:text-white text-sm mb-1">S&P 500 alcanza nuevos máximos históricos</h4>
-                            <p class="text-slate-600 dark:text-gray-400 text-xs mb-2">Los índices principales continúan su tendencia alcista impulsados por resultados corporativos positivos.</p>
-                            <span class="text-green-600 dark:text-green-400 text-xs font-semibold">+1.2%</span>
-                        </div>
-                        <span class="text-xs text-slate-400 dark:text-gray-500 ml-2">12:45</span>
-                    </div>
-                </article>
-
-                <article class="border-l-4 border-red-500 pl-4 py-2">
-                    <div class="flex items-start justify-between">
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-slate-900 dark:text-white text-sm mb-1">Bitcoin retrocede tras decisión de la Fed</h4>
-                            <p class="text-slate-600 dark:text-gray-400 text-xs mb-2">Las criptomonedas se ven afectadas por el cambio en la política monetaria.</p>
-                            <span class="text-red-600 dark:text-red-400 text-xs font-semibold">-3.7%</span>
-                        </div>
-                        <span class="text-xs text-slate-400 dark:text-gray-500 ml-2">11:30</span>
-                    </div>
-                </article>
-
-                <article class="border-l-4 border-blue-500 pl-4 py-2">
-                    <div class="flex items-start justify-between">
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-slate-900 dark:text-white text-sm mb-1">Petróleo WTI supera los $85 por barril</h4>
-                            <p class="text-slate-600 dark:text-gray-400 text-xs mb-2">Tensiones geopolíticas impulsan los precios del crudo a niveles no vistos en 6 meses.</p>
-                            <span class="text-blue-600 dark:text-blue-400 text-xs font-semibold">+2.8%</span>
-                        </div>
-                        <span class="text-xs text-slate-400 dark:text-gray-500 ml-2">10:15</span>
-                    </div>
-                </article>
+                @forelse ($featuredPosts as $post)
+                    <a href="{{ route('posts.show', $post->slug) }}" wire:navigate class="block">
+                        <article class="border-l-4 border-blue-500 pl-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-r-lg">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-slate-900 dark:text-white text-sm mb-1">{{ $post->title }}</h4>
+                                    @if($post->excerpt)
+                                    <p class="text-slate-600 dark:text-gray-400 text-xs mb-2">{{ Illuminate\Support\Str::limit($post->excerpt, 100) }}</p>
+                                    @endif
+                                </div>
+                                @if($post->published_at)
+                                <span class="text-xs text-slate-400 dark:text-gray-500 ml-2 whitespace-nowrap">{{ $post->published_at->diffForHumans() }}</span>
+                                @endif
+                            </div>
+                        </article>
+                    </a>
+                @empty
+                    <p class="text-slate-600 dark:text-gray-400 text-sm">No hay noticias destacadas en este momento.</p>
+                @endforelse
             </div>
 
             <div class="mt-6 pt-4 border-t border-stone-200 dark:border-gray-700">
-                <button class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-semibold flex items-center gap-1 transition-colors">
+                <a href="{{ route('feed') }}" wire:navigate class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-semibold flex items-center gap-1 transition-colors">
                     <span>Ver todas las noticias</span>
                     <ion-icon name="arrow-forward" class="text-xs"></ion-icon>
-                </button>
+                </a>
             </div>
         </div>
     </div>

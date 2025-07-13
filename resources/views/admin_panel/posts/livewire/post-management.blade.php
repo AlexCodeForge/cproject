@@ -1,9 +1,9 @@
 <div class="p-6">
-    <div class="flex justify-between items-center mb-8">
+    <div class="flex flex-wrap justify-between items-center mb-8">
         <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">Gestionar Publicaciones</h1>
-        <div class="flex items-center gap-4">
-            <div class="flex items-center space-x-4">
-                <x-text-input wire:model.live.debounce.300ms="search" placeholder="Buscar publicación..." class="px-4 py-2 rounded-lg" />
+        <div class="flex items-center gap-4 ml-auto pt-2">
+            <div class="flex flex-wrap items-center gap-4">
+                <x-text-input wire:model.live.debounce.300ms="search" placeholder="Buscar publicación..." class="px-4 py-2 rounded-lg w-auto" />
                 <select wire:model.live="category" class="w-48 px-4 py-2 pr-10 rounded-lg border border-stone-300 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-400">
                     <option value="">Todas las Categorías</option>
                     @foreach($categories as $cat)
@@ -16,8 +16,14 @@
                         <option value="{{ $stat }}">{{ ucfirst($stat) }}</option>
                     @endforeach
                 </select>
+                <select wire:model.live="featured" class="w-48 px-4 py-2 pr-10 rounded-lg border border-stone-300 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-400">
+                    <option value="">Todos (Destacados)</option>
+                    @foreach($availableFeatured as $key => $value)
+                        <option value="{{ $key }}">{{ $value }}</option>
+                    @endforeach
+                </select>
             </div>
-            <button wire:click="createNewPost" class="bg-slate-700 dark:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-800 dark:hover:bg-gray-600">
+            <button wire:click="createNewPost" class="bg-slate-700 dark:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-800 dark:hover:bg-gray-600 whitespace-nowrap" >
                 Nueva Publicación
             </button>
         </div>
@@ -121,8 +127,11 @@
                         <td class="p-4 text-slate-900 dark:text-white">{{ $post->user->name }}</td>
                         <td class="p-4 text-slate-900 dark:text-white">{{ $post->published_at ? $post->published_at->format('d M, Y') : 'N/A' }}</td>
                         <td class="p-4">
-                            <button wire:click="editPost({{ $post->id }})" class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white">Editar</button>
-                            {{-- Add delete button later --}}
+                            <div class="flex items-center gap-4 text-sm">
+                                <button wire:click="showPost('{{ $post->slug }}')" class="text-blue-500 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">Ver</button>
+                                <button wire:click="editPost({{ $post->id }})" class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white">Editar</button>
+                                <button wire:click="confirmDelete({{ $post->id }})" class="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300">Eliminar</button>
+                            </div>
                         </td>
                     </tr>
                 @empty
