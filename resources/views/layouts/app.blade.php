@@ -219,6 +219,10 @@
                         <x-ionicon-calendar-outline class="w-6 h-6 flex-shrink-0" />
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Eventos</span>
                     </a>
+                    <a href="{{ route('pricing') }}" class="nav-item {{ request()->routeIs('pricing') ? 'active bg-stone-200 dark:bg-gray-700 text-slate-800 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200' }} flex items-center p-3 rounded-xl overflow-hidden transition-all" wire:navigate>
+                        <x-ionicon-cash-outline class="w-6 h-6 flex-shrink-0" />
+                        <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Precios</span>
+                    </a>
                     <a href="{{ route('profile') }}" class="nav-item {{ request()->routeIs('profile') ? 'active bg-stone-200 dark:bg-gray-700 text-slate-800 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200' }} flex items-center p-3 rounded-xl overflow-hidden transition-all" wire:navigate>
                         <x-ionicon-person-outline class="w-6 h-6 flex-shrink-0" />
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Perfil</span>
@@ -318,6 +322,10 @@
             <a href="#" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2">
                 <x-ionicon-alert-circle-outline class="w-6 h-6" />
                 <span class="text-xs">Alertas</span>
+            </a>
+            <a href="{{ route('pricing') }}" class="mobile-nav-item flex flex-col items-center {{ request()->routeIs('pricing') ? 'text-slate-700 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400' }} p-2">
+                <x-ionicon-cash-outline class="w-6 h-6" />
+                <span class="text-xs {{ request()->routeIs('pricing') ? 'font-bold' : '' }}">Precios</span>
             </a>
             <a href="{{ route('profile') }}" class="mobile-nav-item flex flex-col items-center {{ request()->routeIs('profile') ? 'text-slate-700 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400' }} p-2">
                 <x-ionicon-person-outline class="w-6 h-6" />

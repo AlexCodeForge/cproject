@@ -69,7 +69,6 @@ Volt::route('/pricing', PricingPage::class)
     ->name('pricing');
 
 Route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'checkout'])->middleware(['auth'])->name('checkout');
-Route::post('/stripe/webhook', [App\Http\Controllers\WebhookController::class, 'handleWebhook'])->name('cashier.webhook');
 Route::post('/billing/cancel', [App\Http\Controllers\BillingController::class, 'cancel'])->middleware(['auth'])->name('billing.cancel');
 
 Volt::route('/posts/{post:slug}', App\Livewire\UserPanel\Posts\ShowPost::class)->name('posts.show');
@@ -81,6 +80,7 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->name('ad
     Route::get('/posts', PostManagement::class)->name('posts.index');
     Route::get('/chat', ChannelManagement::class)->name('chat.channels');
     Route::get('/categories', CategoryManagement::class)->name('categories.index');
+    Route::get('/pagos', \App\Livewire\AdminPanel\Pagos\PaymentManagement::class)->name('pagos.index');
 
     // Route for creating a post
     Route::get('/posts/create', \App\Livewire\AdminPanel\Posts\CreatePost::class)->name('posts.create');
@@ -108,4 +108,19 @@ Route::get('/email-preview', function () {
 
     // Render the Mailable
     return $mailable->render();
+});
+
+Route::get('/php-check', function () {
+    $extensions = [
+        'curl',
+        'dom',
+        'mbstring',
+        'openssl',
+        'json',
+    ];
+    $results = [];
+    foreach ($extensions as $extension) {
+        $results[$extension] = extension_loaded($extension);
+    }
+    return response()->json($results);
 });

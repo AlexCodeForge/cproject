@@ -11,6 +11,12 @@ layout('layouts.app');
         <div class="max-w-7xl mx-auto">
             <!-- Premium Header with enhanced styling -->
             <div class="text-center mb-12 relative">
+                @if (session('error'))
+                    <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <strong class="font-bold">Error!</strong>
+                        <span class="block sm:inline">{{ session('error') }}</span>
+                    </div>
+                @endif
                 <!-- Decorative background elements -->
                 <div class="absolute -top-20 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-gradient-to-r from-amber-200/30 to-orange-200/30 dark:from-amber-600/10 dark:to-orange-600/10 rounded-full blur-3xl"></div>
 
@@ -81,12 +87,13 @@ layout('layouts.app');
                         <p class="text-slate-600 dark:text-gray-300 mt-2">Desbloquea todo el potencial.</p>
 
                         <p class="my-6">
-                            <span id="price-display" class="text-5xl font-extrabold text-slate-900 dark:text-white">$29</span>
+                            <span id="price-display" class="text-5xl font-extrabold text-slate-900 dark:text-white">$28</span>
                             <span id="price-term" class="text-slate-500 dark:text-gray-400"> / mes</span>
                         </p>
 
                         <form action="{{ route('checkout') }}" method="POST">
                             @csrf
+                            <input type="hidden" name="plan_slug" value="premium">
                             <input type="hidden" name="plan" id="plan-input" value="monthly">
                             <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
                                 Mejorar a Premium
@@ -132,20 +139,24 @@ layout('layouts.app');
         const priceTerm = document.getElementById('price-term');
         const planInput = document.getElementById('plan-input');
 
+        const updatePlan = () => {
+            // Logic is inverted to match toggle behavior
+            if (billingToggle.checked) {
+                // Yearly Plan
+                priceDisplay.textContent = '$280';
+                priceTerm.textContent = ' / año';
+                planInput.value = 'yearly';
+            } else {
+                // Monthly Plan
+                priceDisplay.textContent = '$28';
+                priceTerm.textContent = ' / mes';
+                planInput.value = 'monthly';
+            }
+        };
+
         if (billingToggle) {
-            billingToggle.addEventListener('change', function() {
-                if (this.checked) {
-                    // Yearly
-                    priceDisplay.textContent = '$278';
-                    priceTerm.textContent = ' / año';
-                    planInput.value = 'yearly';
-                } else {
-                    // Monthly
-                    priceDisplay.textContent = '$29';
-                    priceTerm.textContent = ' / mes';
-                    planInput.value = 'monthly';
-                }
-            });
+            updatePlan();
+            billingToggle.addEventListener('change', updatePlan);
         }
     });
 </script>

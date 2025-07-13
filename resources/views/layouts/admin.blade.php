@@ -195,6 +195,10 @@
                         <x-ionicon-grid-outline class="w-6 h-6 flex-shrink-0" />
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Categorías</span>
                     </a>
+                    <a href="{{ route('admin.pagos.index') }}" class="nav-item {{ request()->routeIs('admin.pagos.index') ? 'active bg-stone-200 dark:bg-gray-700 text-slate-800 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200' }} flex items-center p-3 rounded-xl overflow-hidden transition-all" wire:navigate>
+                        <x-ionicon-cash-outline class="w-6 h-6 flex-shrink-0" />
+                        <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Pagos</span>
+                    </a>
                     <a href="#" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
                         <x-ionicon-megaphone-outline class="w-6 h-6 flex-shrink-0" />
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Alertas</span>
