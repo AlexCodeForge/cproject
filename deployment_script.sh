@@ -1,19 +1,24 @@
 #!/bin/bash
 #
-# Option-Rocket Deployment Script for Debian 12 x64
+# Option-Rocket Deployment & Management Script for Debian 12 x64
 #
 # This script automates the setup of a production-ready environment for the
-# Option-Rocket Laravel application, including Nginx, MariaDB, PHP,
-# Composer, Node.js, Laravel Reverb, and Supervisor for process management.
+# Option-Rocket Laravel application. It can be run for a fresh install,
+# or re-run to pull the latest updates and restart services.
+#
+# Usage:
+#   - For initial installation: sudo ./deployment_script.sh
+#   - To update and restart:   sudo ./deployment_script.sh
+#   - To only restart services: sudo ./deployment_script.sh --restart
 #
 
 # --- Script Configuration ---
 # !!! IMPORTANT: UPDATE THESE VARIABLES BEFORE RUNNING THE SCRIPT !!!
 
 # 1. Application & Domain
-GITHUB_REPO_URL="https://github.com/your-username/your-repo-name.git" # Your GitHub repository URL
+GITHUB_REPO_URL="https://github.com/AlexCodeForge/cproject.git" # Your GitHub repository URL
 PROJECT_DIR="/var/www/option-rocket"                                   # Directory to install the app
-SERVER_DOMAIN="your_domain.com"                                        # Your server's domain name or IP address
+SERVER_DOMAIN="45.76.11.18"                                        # Your server's domain name or IP address
 
 # 2. Database
 DB_NAME="option_rocket_db"
@@ -34,12 +39,54 @@ print_error() {
     exit 1
 }
 
+restart_services() {
+    print_info "Restarting services..."
+    systemctl restart php8.3-fpm
+    systemctl restart nginx
+    supervisorctl restart all
+    print_success "All services have been restarted."
+}
+
+
 # --- Script Execution ---
 
 # Ensure the script is run as root
 if [ "$(id -u)" -ne 0 ]; then
     print_error "This script must be run as root. Please use sudo."
 fi
+
+# Handle --restart flag
+if [ "$1" == "--restart" ]; then
+    restart_services
+    exit 0
+fi
+
+
+# Check if this is a fresh installation or an update
+if [ -d "$PROJECT_DIR" ]; then
+    # --- UPDATE PATH ---
+    print_info "Project directory found. Running update process..."
+    cd "${PROJECT_DIR}"
+    print_info "Pulling latest changes from GitHub..."
+    git pull origin main
+
+    print_info "Installing Composer and NPM dependencies..."
+    composer install --no-dev --optimize-autoloader
+    npm install
+    npm run build
+
+    print_info "Running migrations..."
+    php artisan migrate --force
+
+    restart_services
+
+    print_success "Update process finished successfully!"
+    exit 0
+fi
+
+
+# --- FRESH INSTALLATION PATH ---
+print_info "No existing project found. Starting fresh installation..."
 
 # 1. System Update & Essential Packages
 print_info "Updating system and installing essential packages..."
@@ -61,9 +108,9 @@ apt-get install -y mariadb-server
 systemctl start mariadb
 systemctl enable mariadb
 
-print_info "Creating database and user..."
-mysql -e "CREATE DATABASE ${DB_NAME};"
-mysql -e "CREATE USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
+print_info "Creating database and user (if they don't exist)..."
+mysql -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
+mysql -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
 mysql -e "GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'localhost';"
 mysql -e "FLUSH PRIVILEGES;"
 
@@ -80,35 +127,39 @@ apt-get install -y nodejs
 
 # 6. Clone Application from GitHub
 print_info "Cloning application from GitHub repository..."
-if [ -d "$PROJECT_DIR" ]; then
-    print_error "Project directory ${PROJECT_DIR} already exists. Please remove it or change the configuration."
-fi
 git clone "${GITHUB_REPO_URL}" "${PROJECT_DIR}"
 
 # 7. Configure Laravel Application
 print_info "Configuring Laravel application..."
 cd "${PROJECT_DIR}"
 
-print_info "Setting up .env file..."
-cp .env.example .env
+# Only set up .env file if it doesn't exist, to protect secrets on subsequent runs
+if [ ! -f ".env" ]; then
+    print_info "Setting up .env file for the first time..."
+    cp .env.example .env
 
-# Update .env file with production values
-sed -i "s/^APP_ENV=local/APP_ENV=production/" .env
-sed -i "s/^APP_DEBUG=true/APP_DEBUG=false/" .env
-sed -i "s/^APP_URL=.*/APP_URL=http:\/\/${SERVER_DOMAIN}/" .env
-sed -i "s/^DB_DATABASE=.*/DB_DATABASE=${DB_NAME}/" .env
-sed -i "s/^DB_USERNAME=.*/DB_USERNAME=${DB_USER}/" .env
-sed -i "s/^DB_PASSWORD=.*/DB_PASSWORD=${DB_PASSWORD}/" .env
-# Set Reverb variables
-sed -i "s/^REVERB_APP_ID=.*/REVERB_APP_ID=\$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 8)/" .env
-sed -i "s/^REVERB_APP_KEY=.*/REVERB_APP_KEY=\$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)/" .env
-sed -i "s/^REVERB_APP_SECRET=.*/REVERB_APP_SECRET=\$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32)/" .env
-sed -i "s/^REVERB_HOST=.*/REVERB_HOST=\"0.0.0.0\"/" .env
-sed -i "s/^REVERB_PORT=.*/REVERB_PORT=9090/" .env
-# Set Stripe variables (remind user to set these)
-echo "STRIPE_KEY=your_stripe_key" >> .env
-echo "STRIPE_SECRET=your_stripe_secret" >> .env
-echo "STRIPE_WEBHOOK_SECRET=your_webhook_secret_for_production" >> .env
+    # Update .env file with production values
+    sed -i "s/^APP_ENV=local/APP_ENV=production/" .env
+    sed -i "s/^APP_DEBUG=true/APP_DEBUG=false/" .env
+    sed -i "s/^APP_URL=.*/APP_URL=http:\/\/${SERVER_DOMAIN}/" .env
+    sed -i "s/^DB_DATABASE=.*/DB_DATABASE=${DB_NAME}/" .env
+    sed -i "s/^DB_USERNAME=.*/DB_USERNAME=${DB_USER}/" .env
+    sed -i "s/^DB_PASSWORD=.*/DB_PASSWORD=${DB_PASSWORD}/" .env
+    # Set Reverb variables
+    sed -i "s/^REVERB_APP_ID=.*/REVERB_APP_ID=\$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 8)/" .env
+    sed -i "s/^REVERB_APP_KEY=.*/REVERB_APP_KEY=\$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)/" .env
+    sed -i "s/^REVERB_APP_SECRET=.*/REVERB_APP_SECRET=\$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32)/" .env
+    sed -i "s/^REVERB_HOST=.*/REVERB_HOST=\"0.0.0.0\"/" .env
+    sed -i "s/^REVERB_PORT=.*/REVERB_PORT=9090/" .env
+    # Add placeholders for Stripe variables
+    echo "STRIPE_KEY=your_stripe_key" >> .env
+    echo "STRIPE_SECRET=your_stripe_secret" >> .env
+    echo "STRIPE_WEBHOOK_SECRET=your_webhook_secret_for_production" >> .env
+    echo "MONTHLY_PLAN_ID=price_1RiTgBBBlYDJOOlgyqRTNpic" >> .env
+    echo "YEARLY_PLAN_ID=price_1RiTfpBBlYDJOOlgKEgmWOjg" >> .env
+else
+    print_info ".env file already exists. Skipping creation to preserve secrets."
+fi
 
 print_info "Installing Composer and NPM dependencies..."
 composer install --no-dev --optimize-autoloader
@@ -203,7 +254,7 @@ supervisorctl start all
 # --- Final Instructions ---
 print_success "Deployment script finished successfully!"
 echo -e "\n--- NEXT STEPS ---\n"
-echo "1. IMPORTANT: SSH into your server and edit the .env file with your real Stripe keys:"
+echo "1. IMPORTANT: If this was a fresh install, SSH into your server and edit the .env file with your real Stripe keys:"
 echo "   sudo nano ${PROJECT_DIR}/.env"
 echo ""
 echo "2. Your application should be available at: http://${SERVER_DOMAIN}"
