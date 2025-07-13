@@ -137,10 +137,14 @@
                                 <div class="bg-white dark:bg-gray-700/50 rounded-lg shadow-sm overflow-x-auto">
                                     <ul class="divide-y divide-stone-200 dark:divide-gray-700">
                                         @foreach ($selectedCategory->posts as $post)
-                                            <li class="p-4">{{ $post->title }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+                                            <li class="p-4">
+                                                <a href="{{ route('posts.show', $post->slug) }}" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">
+                                                    {{ $post->title }}
+                                                </a>
+                                            </li>
+                                         @endforeach
+                                     </ul>
+                                 </div>
                             @else
                                 <p class="text-slate-500 dark:text-gray-400">No hay posts en esta categoría.</p>
                             @endif
@@ -184,16 +188,7 @@
                             @error('description') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                             <div>
-                                <label for="color" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
-                                <input type="color" id="color" wire:model.defer="color" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
-                                @error('color') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
-                            </div>
-                            <div>
-                                <label for="icon" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Icono (ej: 'home-outline')</label>
-                                <input type="text" id="icon" wire:model.defer="icon" placeholder="home-outline" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
-                                @error('icon') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
-                            </div>
+
                         </div>
 
                         <div>
@@ -202,12 +197,19 @@
                             @error('sort_order') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
                         </div>
 
-                        <div>
-                            <label for="is_active" class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <input type="checkbox" id="is_active" wire:model.defer="is_active" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:checked:bg-indigo-600 dark:checked:border-indigo-600">
-                                <span class="ml-2">Categoría Activa</span>
-                            </label>
-                            @error('is_active') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="grid place-item-center">
+                                <label for="is_active" class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    <input type="checkbox" id="is_active" wire:model.defer="is_active" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:checked:bg-indigo-600 dark:checked:border-indigo-600">
+                                    <span class="ml-2">Categoría Activa</span>
+                                </label>
+                                @error('is_active') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="grid place-item-center">
+                                <label for="color" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
+                                <input type="color" id="color" wire:model.defer="color" class="mt-1 w-10 h-10 p-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 cursor-pointer">
+                                @error('color') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                            </div>
                         </div>
                     </div>
                     <div class="px-6 py-4 bg-stone-100 dark:bg-gray-700/50 flex justify-end flex-shrink-0">

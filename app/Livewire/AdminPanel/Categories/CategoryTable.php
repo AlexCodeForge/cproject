@@ -22,7 +22,6 @@ class CategoryTable extends Component
     public $name = '';
     public $description = '';
     public $color = '#FFFFFF';
-    public $icon = '';
     public $is_active = true;
     public $sort_order = 0;
 
@@ -37,7 +36,6 @@ class CategoryTable extends Component
             'name' => 'required|string|max:255|unique:post_categories,name,' . ($this->editingCategory ? $this->editingCategory->id : 'NULL'),
             'description' => 'nullable|string',
             'color' => 'nullable|string|max:7',
-            'icon' => 'nullable|string|max:255',
             'is_active' => 'boolean',
             'sort_order' => 'nullable|integer',
         ];
@@ -52,7 +50,6 @@ class CategoryTable extends Component
             'name.max' => 'El nombre no debe exceder los 255 caracteres.',
             'description.string' => 'La descripción debe ser texto.',
             'color.max' => 'El color no debe exceder los 7 caracteres.',
-            'icon.max' => 'El ícono no debe exceder los 255 caracteres.',
             'is_active.boolean' => 'El campo activo debe ser verdadero o falso.',
             'sort_order.integer' => 'El orden debe ser un número.',
         ];
@@ -60,12 +57,11 @@ class CategoryTable extends Component
 
     public function create()
     {
-        $this->reset(['name', 'description', 'color', 'icon', 'is_active', 'sort_order']);
+        $this->reset(['name', 'description', 'color', 'is_active', 'sort_order']);
         $this->editingCategory = new PostCategory(['is_active' => true, 'color' => '#FFFFFF', 'sort_order' => 0]);
         $this->name = '';
         $this->description = '';
         $this->color = '#FFFFFF';
-        $this->icon = '';
         $this->is_active = true;
         $this->sort_order = 0;
         $this->showCategoryModal = true;
@@ -77,7 +73,6 @@ class CategoryTable extends Component
         $this->name = $category->name;
         $this->description = $category->description;
         $this->color = $category->color;
-        $this->icon = $category->icon;
         $this->is_active = $category->is_active;
         $this->sort_order = $category->sort_order;
         $this->showCategoryModal = true;
@@ -96,7 +91,6 @@ class CategoryTable extends Component
             'name' => $this->name,
             'description' => $this->description,
             'color' => $this->color,
-            'icon' => $this->icon,
             'is_active' => $this->is_active,
             'sort_order' => $this->sort_order,
         ]);
@@ -105,7 +99,7 @@ class CategoryTable extends Component
 
         $this->showCategoryModal = false;
         $this->dispatch('showSuccessModal', 'La categoría ha sido guardada correctamente.');
-        $this->reset('name', 'description', 'color', 'icon', 'is_active', 'sort_order', 'editingCategory');
+        $this->reset('name', 'description', 'color', 'is_active', 'sort_order', 'editingCategory');
     }
 
     public function render()
