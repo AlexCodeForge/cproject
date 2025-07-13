@@ -77,9 +77,14 @@ new #[Layout('layouts.app')] class extends Component
                                     Tu plan se renueva el: <strong>{{ auth()->user()->subscription_ends_at->format('d F, Y') }}</strong>.
                                 </p>
                             @endif
-                        <form method="POST" action="{{ route('billing.cancel') }}" class="mt-6">
+                        <form id="cancel-subscription-form" method="POST" action="{{ route('billing.cancel') }}" class="mt-6">
                             @csrf
-                            <x-danger-button>
+                            <x-danger-button type="button" x-data=""
+                                x-on:click.prevent="$dispatch('showConfirmationModal', {
+                                    title: 'Confirmar Cancelación',
+                                    message: '¿Estás seguro de que quieres cancelar tu suscripción? Esta acción es irreversible.',
+                                    confirmAction: 'confirm-cancel-subscription'
+                                })">
                                 {{ __('Cancelar Suscripción') }}
                             </x-danger-button>
                         </form>
@@ -134,6 +139,14 @@ new #[Layout('layouts.app')] class extends Component
                     </div>
                 </div>
                 @endif
+
+                <script>
+                    document.addEventListener('livewire:initialized', () => {
+                        Livewire.on('confirm-cancel-subscription', () => {
+                            document.getElementById('cancel-subscription-form').submit();
+                        });
+                    });
+                </script>
 
                 <!-- Estadísticas de Cuenta -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-6">
