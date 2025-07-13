@@ -78,7 +78,7 @@
                         <div id="chat-container" class="flex-1 p-6 space-y-6 overflow-y-auto bg-stone-50/30 dark:bg-gray-800/30  max-h-[calc(100vh-20rem)]">
                            @forelse($chatMessages as $message)
                                 <div class="flex items-start space-x-4 {{ $message->user_id === auth()->id() ? 'flex-row-reverse space-x-reverse' : '' }}">
-                                    <img src="{{ $message->user->profile?->avatar ? asset('storage/' . $message->user->profile->avatar) : 'https://placehold.co/40x40/e2e8f0/94a3b8?text='.strtoupper(substr($message->user->name, 0, 2)) }}" class="w-10 h-10 rounded-full" alt="{{ $message->user->name }}">
+                                    <img src="{{ $message->user->profile?->avatar_url }}" class="w-10 h-10 rounded-full" alt="{{ $message->user->name }}">
                                     <div>
                                         <p class="font-semibold text-slate-900 dark:text-white {{ $message->user_id === auth()->id() ? 'text-right' : '' }}">
                                             {{ $message->user->name }}

@@ -48,6 +48,21 @@ class UserProfile extends Model
     ];
 
     /**
+     * Get the URL for the user's avatar.
+     *
+     * @return string
+     */
+    public function getAvatarUrlAttribute(): string
+    {
+        if ($this->avatar) {
+            return asset('storage/' . $this->avatar);
+        }
+
+        $name = $this->user->name;
+        return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=7F9CF5&background=EBF4FF';
+    }
+
+    /**
      * Get the user that owns the profile.
      */
     public function user(): BelongsTo

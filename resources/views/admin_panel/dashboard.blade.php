@@ -12,7 +12,7 @@
                         <p class="text-sm text-green-600 dark:text-green-400 mt-1">↗ +18.3% vs mes anterior</p>
                     </div>
                     <div class="bg-green-100 dark:bg-green-900/30 p-3 rounded-lg">
-                        <ion-icon name="trending-up" class="text-2xl text-green-600 dark:text-green-400"></ion-icon>
+                        <x-ionicon-trending-up class="w-6 h-6 text-2xl text-green-600 dark:text-green-400"></x-ionicon-trending-up>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                         <p class="text-sm text-blue-600 dark:text-blue-400 mt-1">↗ +12.5% este mes</p>
                     </div>
                     <div class="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg">
-                        <ion-icon name="people" class="text-2xl text-blue-600 dark:text-blue-400"></ion-icon>
+                        <x-ionicon-people class="w-6 h-6 text-2xl text-blue-600 dark:text-blue-400"></x-ionicon-people>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                         <p class="text-sm text-amber-600 dark:text-amber-400 mt-1">↗ +8.2% conversión</p>
                     </div>
                     <div class="bg-amber-100 dark:bg-amber-900/30 p-3 rounded-lg">
-                        <ion-icon name="diamond" class="text-2xl text-amber-600 dark:text-amber-400"></ion-icon>
+                        <x-ionicon-diamond class="w-6 h-6 text-2xl text-amber-600 dark:text-amber-400"></x-ionicon-diamond>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                         <p class="text-sm text-purple-600 dark:text-purple-400 mt-1">↗ +24 hoy</p>
                     </div>
                     <div class="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-lg">
-                        <ion-icon name="notifications" class="text-2xl text-purple-600 dark:text-purple-400"></ion-icon>
+                        <x-ionicon-notifications class="w-6 h-6 text-2xl text-purple-600 dark:text-purple-400"></x-ionicon-notifications>
                     </div>
                 </div>
             </div>
@@ -101,7 +101,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg">
-                                <ion-icon name="chatbubbles" class="text-blue-600 dark:text-blue-400"></ion-icon>
+                                <x-ionicon-chatbubbles class="w-6 h-6 text-blue-600 dark:text-blue-400"></x-ionicon-chatbubbles>
                             </div>
                             <div>
                                 <p class="font-medium text-slate-900 dark:text-white">Mensajes en Chat</p>
@@ -114,7 +114,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="bg-green-100 dark:bg-green-900/30 p-2 rounded-lg">
-                                <ion-icon name="document-text" class="text-green-600 dark:text-green-400"></ion-icon>
+                                <x-ionicon-document-text class="w-6 h-6 text-green-600 dark:text-green-400"></x-ionicon-document-text>
                             </div>
                             <div>
                                 <p class="font-medium text-slate-900 dark:text-white">Posts Publicados</p>
@@ -127,7 +127,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="bg-purple-100 dark:bg-purple-900/30 p-2 rounded-lg">
-                                <ion-icon name="play-circle" class="text-purple-600 dark:text-purple-400"></ion-icon>
+                                <x-ionicon-play-circle class="w-6 h-6 text-purple-600 dark:text-purple-400"></x-ionicon-play-circle>
                             </div>
                             <div>
                                 <p class="font-medium text-slate-900 dark:text-white">Clases en Vivo</p>
@@ -140,7 +140,7 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="bg-amber-100 dark:bg-amber-900/30 p-2 rounded-lg">
-                                <ion-icon name="star" class="text-amber-600 dark:text-amber-400"></ion-icon>
+                                <x-ionicon-star class="w-6 h-6 text-amber-600 dark:text-amber-400"></x-ionicon-star>
                             </div>
                             <div>
                                 <p class="font-medium text-slate-900 dark:text-white">Valoración Media</p>
@@ -158,19 +158,19 @@
             <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Acciones Rápidas</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <button class="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-200 hover:shadow-lg">
-                    <ion-icon name="flash" class="text-xl"></ion-icon>
+                    <x-ionicon-flash class="w-6 h-6 text-xl"></x-ionicon-flash>
                     <span class="font-medium">Enviar Alerta</span>
                 </button>
                 <button class="flex items-center gap-3 p-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg transition-all duration-200 hover:shadow-lg">
-                    <ion-icon name="add-circle" class="text-xl"></ion-icon>
+                    <x-ionicon-add-circle class="w-6 h-6 text-xl"></x-ionicon-add-circle>
                     <span class="font-medium">Nuevo Post</span>
                 </button>
                 <button class="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg transition-all duration-200 hover:shadow-lg">
-                    <ion-icon name="videocam" class="text-xl"></ion-icon>
+                    <x-ionicon-videocam class="w-6 h-6 text-xl"></x-ionicon-videocam>
                     <span class="font-medium">Clase en Vivo</span>
                 </button>
                 <button class="flex items-center gap-3 p-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-lg transition-all duration-200 hover:shadow-lg">
-                    <ion-icon name="analytics" class="text-xl"></ion-icon>
+                    <x-ionicon-analytics class="w-6 h-6 text-xl"></x-ionicon-analytics>
                     <span class="font-medium">Ver Reportes</span>
                 </button>
             </div>

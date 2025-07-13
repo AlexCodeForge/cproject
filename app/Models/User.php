@@ -139,4 +139,18 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return 'free';
     }
+
+    /**
+     * Get the URL for the user's avatar.
+     *
+     * @return string
+     */
+    public function getAvatarUrlAttribute(): string
+    {
+        if ($this->profile && $this->profile->avatar) {
+            return asset('storage/' . $this->profile->avatar);
+        }
+
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+    }
 }

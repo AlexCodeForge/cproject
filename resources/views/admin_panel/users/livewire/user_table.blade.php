@@ -85,7 +85,7 @@
                 @forelse ($users as $user)
                     <tr class="border-b border-stone-200 dark:border-gray-700 hover:bg-stone-50 dark:hover:bg-gray-700/50">
                         <td class="p-4 flex items-center gap-3">
-                            <img class="w-10 h-10 rounded-full" src="{{ $user->profile_photo_url }}" alt="">
+                            <img class="w-10 h-10 rounded-full" src="{{ $user->avatar_url }}" alt="">
                             <div>
                                 <p class="font-semibold text-slate-900 dark:text-white">{{ $user->name }}</p>
                                 <p class="text-slate-500 dark:text-gray-400 text-xs">{{ $user->email }}</p>
@@ -144,7 +144,7 @@
                         <div class="p-6 bg-stone-100 dark:bg-gray-700/50 flex-shrink-0">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
-                                    <img class="h-16 w-16 rounded-full" src="{{ $selectedUser->profile_photo_url }}" alt="{{ $selectedUser->name }}">
+                                    <img class="h-16 w-16 rounded-full" src="{{ $selectedUser->avatar_url }}" alt="{{ $selectedUser->name }}">
                                     <div class="ml-4">
                                         <h2 class="text-2xl font-bold text-slate-900 dark:text-white">{{ $selectedUser->name }}</h2>
                                         <p class="text-sm text-slate-500 dark:text-gray-400">{{ $selectedUser->email }}</p>
