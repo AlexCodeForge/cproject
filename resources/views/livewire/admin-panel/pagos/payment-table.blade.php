@@ -81,6 +81,7 @@
                     <th class="p-4">Estado (Stripe)</th>
                     <th class="p-4">Fecha de Creación</th>
                     <th class="p-4">Finaliza en</th>
+                    <th class="p-4">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -112,6 +113,18 @@
                         </td>
                         <td class="p-4 text-slate-800 dark:text-gray-300">
                             {{ $subscription->dynamic_ends_at ? $subscription->dynamic_ends_at->format('d/m/Y') : 'N/A' }}
+                        </td>
+                        <td class="p-4">
+                            @if ($subscription->active() && !$subscription->canceled())
+                                <button wire:click="$dispatch('showConfirmationModal', {
+                                    title: 'Confirmar Cancelación',
+                                    message: '¿Estás seguro que quieres cancelar la suscripción de {{ $subscription->user->name }}?',
+                                    confirmAction: 'cancelSubscription',
+                                    params: [{{ $subscription->id }}]
+                                })" class="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-semibold">
+                                    Cancelar
+                                </button>
+                            @endif
                         </td>
                     </tr>
                 @empty

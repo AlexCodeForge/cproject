@@ -5,6 +5,7 @@ namespace App\Livewire\AdminPanel\Pagos;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Laravel\Cashier\Subscription;
+use Livewire\Attributes\On;
 
 class PaymentTable extends Component
 {
@@ -12,6 +13,18 @@ class PaymentTable extends Component
 
     public $search = '';
     public $status = '';
+
+    #[On('cancelSubscription')]
+    public function cancelSubscription($subscriptionId)
+    {
+        $subscription = Subscription::find($subscriptionId);
+        if ($subscription && $subscription->active() && !$subscription->canceled()) {
+            $subscription->cancel();
+            $this->dispatch('showSuccessModal', 'Suscripción cancelada exitosamente.');
+        } else {
+            session()->flash('error', 'No se pudo cancelar la suscripción.');
+        }
+    }
 
     public function render()
     {
