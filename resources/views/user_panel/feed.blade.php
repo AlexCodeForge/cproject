@@ -45,7 +45,7 @@ new #[Layout('layouts.app')] class extends Component
                          'bg-white dark:bg-gray-700 text-slate-600 dark:text-gray-300 border border-stone-200 dark:border-gray-600': activeCategory !== 'premium'
                      }"
                      class="feed-filter-btn px-4 py-2 rounded-full text-sm whitespace-nowrap flex items-center gap-1">
-                 <x-ionicon-diamond class="w-4 h-4" />
+                 <x-ionicon-rocket-outline class="w-4 h-4" />
                  Premium
              </button>
              @foreach ($posts->unique('category.name')->filter(fn($p) => $p->category) as $postCategory)
@@ -61,7 +61,7 @@ new #[Layout('layouts.app')] class extends Component
                         }"
                         class="feed-filter-btn px-4 py-2 rounded-full text-sm whitespace-nowrap">
                     <template x-if="{{ $isPremiumCategory ? 'true' : 'false' }}">
-                        <x-ionicon-diamond class="w-4 h-4" />
+                        <x-ionicon-rocket-outline class="w-4 h-4" />
                     </template>
                     {{ $postCategory->category->name }}
                 </button>
@@ -98,7 +98,7 @@ new #[Layout('layouts.app')] class extends Component
                             @if ($post->is_premium && !(auth()->check() && auth()->user()->subscribed('default')))
                                 <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
                                     <div class="bg-amber-400 text-amber-900 font-bold py-2 px-4 text-sm rounded-full flex items-center gap-2 shadow-lg">
-                                        <x-ionicon-diamond class="w-5 h-5" />
+                                        <x-ionicon-rocket-outline class="w-5 h-5" />
                                         <span>Premium</span>
                                     </div>
                                 </div>
@@ -113,7 +113,7 @@ new #[Layout('layouts.app')] class extends Component
                                               'text-slate-500 dark:text-gray-400': !{{ $post->is_premium ? 'true' : 'false' }}
                                           }">{{ $post->category?->name }}</span>
                                     @if ($post->is_premium)
-                                        <x-ionicon-diamond class="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                                        <x-ionicon-rocket-outline class="w-4 h-4 text-amber-600 dark:text-amber-400" />
                                     @endif
                                 </div>
                                 <h3 class="text-xl font-bold my-2 text-slate-900 dark:text-white group-hover:text-amber-600">{{ $post->title }}</h3>
