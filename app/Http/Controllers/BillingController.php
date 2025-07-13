@@ -8,8 +8,13 @@ class BillingController extends Controller
 {
     public function cancel(Request $request)
     {
-        $request->user()->subscription('default')->cancel();
+        $subscription = $request->user()->subscriptions()->active()->first();
 
-        return back()->with('success', 'Your subscription has been cancelled.');
+        if ($subscription) {
+            $subscription->cancel();
+            return back()->with('success', 'Your subscription has been cancelled.');
+        }
+
+        return back()->with('error', 'No active subscription found to cancel.');
     }
 }

@@ -42,22 +42,62 @@ class WebhookController extends CashierWebhookController
         Log::info('Handling checkout.session.completed webhook.');
         $session = $payload['data']['object'];
 
-        // Use the client_reference_id to find the user.
-        // Cashier automatically sets this to the user's ID.
+        if (isset($session['subscription'])) {
+            try {
+                $stripeSubscription = \Stripe\Subscription::retrieve($session['subscription']);
+
+                if (isset($session['client_reference_id'])) {
+                    $user = User::find($session['client_reference_id']);
+
+                    if ($user) {
+                        // Correctly get the price object from the subscription items
+                        $price = $stripeSubscription->items->data[0]->price;
+
+                        $user->subscriptions()->updateOrCreate(
+                            ['stripe_id' => $stripeSubscription->id],
+                            [
+                                // This is the fix: use 'type' column instead of 'name'
+                                'type' => $price->nickname ?? 'default',
+                                'stripe_status' => $stripeSubscription->status,
+                                'stripe_price' => $price->id,
+                                'quantity' => $stripeSubscription->quantity,
+                                'trial_ends_at' => null,
+                                'ends_at' => null,
+                            ]
+                        );
+
+                        Log::info('User found, assigning premium role.', ['user_id' => $user->id]);
+                        $user->removeRole('free');
+                        $user->assignRole('premium');
+                        Log::info('Premium role assigned and subscription synced.', ['user_id' => $user->id]);
+
+                        return new Response('Webhook Handled', 200);
+                    }
+                }
+            } catch (\Exception $e) {
+                Log::error('Error processing checkout.session.completed webhook: ' . $e->getMessage(), [
+                    'session_id' => $session['id'],
+                    'exception' => $e
+                ]);
+                return new Response('Webhook Error: ' . $e->getMessage(), 500);
+            }
+        }
+
+        // Fallback for non-subscription checkouts or if something goes wrong
         if (empty($session['client_reference_id'])) {
-            Log::error('client_reference_id not found in checkout.session.completed webhook.', ['session_id' => $session['id']]);
+            Log::error('client_reference_id not found in webhook.', ['session_id' => $session['id']]);
             return new Response('Webhook Error: Missing client_reference_id', 400);
         }
 
         $user = User::find($session['client_reference_id']);
 
         if ($user) {
-            Log::info('User found via client_reference_id, assigning premium role.', ['user_id' => $user->id]);
+            Log::info('User found (no subscription sync), assigning premium role.', ['user_id' => $user->id]);
             $user->removeRole('free');
             $user->assignRole('premium');
             Log::info('Premium role assigned.', ['user_id' => $user->id]);
         } else {
-            Log::warning('User not found for completed checkout session using client_reference_id.', [
+            Log::warning('User not found for completed checkout session.', [
                 'client_reference_id' => $session['client_reference_id']
             ]);
         }

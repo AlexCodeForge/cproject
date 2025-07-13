@@ -15,6 +15,7 @@ use App\Models\Post;
 use App\Models\ChatChannel;
 use Laravel\Sanctum\HasApiTokens;
 use Carbon\Carbon;
+use App\Models\ChatMessage;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -29,6 +30,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
         'subscription_ends_at',
+        'sent_messages_count',
+        'pending_notifications_count',
     ];
 
     /**
@@ -59,7 +62,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getSubscriptionEndsAtAttribute()
     {
-        $subscription = $this->subscription('default');
+        $subscription = $this->subscriptions()->active()->first();
 
         if (!$subscription) {
             return null;
@@ -84,6 +87,26 @@ class User extends Authenticatable implements MustVerifyEmail
 
         // Return null if there's no active subscription.
         return null;
+    }
+
+    /**
+     * Get the count of messages sent by the user.
+     *
+     * @return int
+     */
+    public function getSentMessagesCountAttribute(): int
+    {
+        return $this->chatMessages()->count();
+    }
+
+    /**
+     * Get the count of unread notifications for the user.
+     *
+     * @return int
+     */
+    public function getPendingNotificationsCountAttribute(): int
+    {
+        return $this->unreadNotifications()->count();
     }
 
     /**
@@ -152,6 +175,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function chatChannels()
     {
         return $this->belongsToMany(ChatChannel::class, 'chat_participants');
+    }
+
+    /**
+     * Get the chat messages sent by the user.
+     */
+    public function chatMessages()
+    {
+        return $this->hasMany(ChatMessage::class);
     }
 
     /**

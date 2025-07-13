@@ -29,6 +29,22 @@ class PaymentTable extends Component
 
         $subscriptions = $query->latest()->paginate(15);
 
+        // Dynamically add the end date to each subscription for display
+        $subscriptions->getCollection()->transform(function ($subscription) {
+            if ($subscription->active() && !$subscription->canceled()) {
+                try {
+                    $stripeSubscription = $subscription->asStripeSubscription();
+                    $subscription->dynamic_ends_at = \Carbon\Carbon::createFromTimestamp($stripeSubscription->current_period_end);
+                } catch (\Exception $e) {
+                    $subscription->dynamic_ends_at = null; // Handle API errors
+                }
+            } else {
+                // For canceled or other statuses, use the existing ends_at
+                $subscription->dynamic_ends_at = $subscription->ends_at;
+            }
+            return $subscription;
+        });
+
         // Stats
         $totalSubscriptions = Subscription::count();
         $activeSubscriptions = Subscription::where('stripe_status', 'active')->count();

@@ -79,8 +79,8 @@
                     <th class="p-4">Usuario</th>
                     <th class="p-4">Plan (Tipo)</th>
                     <th class="p-4">Estado (Stripe)</th>
-                    <th class="p-4">Finaliza en</th>
                     <th class="p-4">Fecha de Creación</th>
+                    <th class="p-4">Finaliza en</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,10 +108,10 @@
                             </span>
                         </td>
                         <td class="p-4 text-slate-800 dark:text-gray-300">
-                            {{ $subscription->ends_at ? $subscription->ends_at->format('d/m/Y') : 'N/A' }}
+                            {{ $subscription->created_at->format('d/m/Y') }}
                         </td>
-                         <td class="p-4 text-slate-800 dark:text-gray-300">
-                            {{ $subscription->created_at->format('d/m/Y H:i') }}
+                        <td class="p-4 text-slate-800 dark:text-gray-300">
+                            {{ $subscription->dynamic_ends_at ? $subscription->dynamic_ends_at->format('d/m/Y') : 'N/A' }}
                         </td>
                     </tr>
                 @empty

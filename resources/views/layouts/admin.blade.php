@@ -179,10 +179,7 @@
                         <x-ionicon-trending-up-outline class="w-6 h-6 flex-shrink-0" />
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">P&L</span>
                     </a>
-                    <a href="#" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
-                        <x-ionicon-cash-outline class="w-6 h-6 flex-shrink-0" />
-                        <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Pagos</span>
-                    </a>
+
                     <a href="{{ route('admin.chat.channels') }}" class="nav-item {{ request()->routeIs('admin.chat.channels') ? 'active bg-stone-200 dark:bg-gray-700 text-slate-800 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200' }} flex items-center p-3 rounded-xl overflow-hidden transition-all" wire:navigate>
                         <x-ionicon-chatbubble-ellipses-outline class="w-6 h-6 flex-shrink-0" />
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Chat Channels</span>
@@ -284,10 +281,6 @@
             <a href="#" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2">
                 <x-ionicon-trending-up-outline class="w-6 h-6" />
                 <span class="text-xs">P&L</span>
-            </a>
-            <a href="#" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2">
-                <x-ionicon-cash-outline class="w-6 h-6" />
-                <span class="text-xs">Pagos</span>
             </a>
             <a href="{{ route('dashboard') }}" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2" wire:navigate>
                 <x-ionicon-home-outline class="w-6 h-6" />

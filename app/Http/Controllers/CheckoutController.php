@@ -37,7 +37,7 @@ class CheckoutController extends Controller
         }
 
         $checkout = $request->user()
-            ->newSubscription('default', $priceId)
+            ->newSubscription($planSlug, $priceId)
             ->checkout([
                 'success_url' => route('subscription.thankyou'),
                 'cancel_url' => route('pricing'),

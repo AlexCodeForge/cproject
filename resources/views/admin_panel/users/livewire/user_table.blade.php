@@ -108,9 +108,7 @@
                         <td class="p-4">
                             <button wire:click="viewUser({{ $user->id }})" class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white">Ver</button>
                             @if (!$user->email_verified_at)
-                                <button wire:click="toggleUserStatus({{ $user->id }})" class="ml-4 text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white">
-                                    Verificar
-                                </button>
+                                <!-- Removed button for email verification -->
                             @endif
                         </td>
                     </tr>
@@ -183,23 +181,26 @@
                             </div>
                             <!-- Right Column -->
                             <div class="md:col-span-2 space-y-4">
-                                <div>
-                                    <h3 class="font-semibold text-slate-600 dark:text-gray-300">Biografía</h3>
-                                    <p class="text-slate-900 dark:text-white">{{ $selectedUser->profile?->bio ?: 'No disponible' }}</p>
-                                </div>
+                                <!-- Subscription information will be updated after investigating the data structure. -->
                                 <div>
                                     <h3 class="font-semibold text-slate-600 dark:text-gray-300">Suscripción</h3>
-                                    <p class="text-slate-900 dark:text-white">{{ $selectedUser->subscriptions->first()?->name ?? 'Sin Suscripción' }}</p>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-slate-600 dark:text-gray-300">Publicaciones Recientes</h3>
-                                    <ul class="list-disc list-inside text-slate-900 dark:text-white">
-                                        @forelse($selectedUser->posts->take(3) as $post)
-                                            <li>{{ $post->title }}</li>
-                                        @empty
-                                            <li>Sin publicaciones recientes.</li>
-                                        @endforelse
-                                    </ul>
+                                    @if ($selectedUser->subscriptions->isNotEmpty())
+                                        @php
+                                            $subscription = $selectedUser->subscriptions->first();
+                                            $plan = App\Models\SubscriptionPlan::where('stripe_monthly_price_id', $subscription->stripe_price)
+                                                                  ->orWhere('stripe_yearly_price_id', $subscription->stripe_price)
+                                                                  ->first();
+                                            $planName = $plan ? $plan->name : 'N/A';
+                                            $orderDate = $subscription->created_at ? $subscription->created_at->format('d M, Y') : 'N/A';
+                                            $expiryDate = $subscription->ends_at ? $subscription->ends_at->format('d M, Y') : ($selectedUser->getSubscriptionEndsAtAttribute() ? $selectedUser->getSubscriptionEndsAtAttribute()->format('d M, Y') : 'N/A');
+                                        @endphp
+                                        <p class="text-slate-900 dark:text-white">Plan: {{ $planName }}</p>
+                                        <p class="text-slate-900 dark:text-white">Inicio: {{ $orderDate }}</p>
+                                        <p class="text-slate-900 dark:text-white">Termina: {{ $expiryDate }}</p>
+                                        <p class="text-slate-900 dark:text-white">Estado: {{ ucfirst($subscription->stripe_status) }}</p>
+                                    @else
+                                        <p class="text-slate-900 dark:text-white">Sin Suscripción</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>
