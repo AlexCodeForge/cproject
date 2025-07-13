@@ -20,9 +20,6 @@ new #[Layout('layouts.app')] class extends Component
             <div class="flex flex-col sm:flex-row items-center gap-8">
                 <div class="flex-shrink-0 relative">
                     <img src="{{ auth()->user()->profile?->avatar_url ?? auth()->user()->avatar_url }}" class="w-32 h-32 rounded-full border-4 border-slate-200 dark:border-gray-600" alt="Avatar de Usuario">
-                    <button class="absolute bottom-2 right-2 bg-slate-700 dark:bg-gray-600 text-white p-2 rounded-full hover:bg-slate-800 dark:hover:bg-gray-500 transition-colors">
-                        <x-ionicon-camera class="w-6 h-6"></x-ionicon-camera>
-                    </button>
                 </div>
                 <div class="flex-grow text-center sm:text-left">
                     <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">{{ auth()->user()->name }}</h1>
@@ -30,7 +27,7 @@ new #[Layout('layouts.app')] class extends Component
                     <div class="mt-4 flex justify-center sm:justify-start gap-4 flex-wrap">
                         @if(auth()->user()->subscribed('default'))
                             <span class="bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
-                                <x-ionicon-diamond class="w-6 h-6"></x-ionicon-diamond>Premium
+                                <x-ionicon-rocket-outline class="w-6 h-6"></x-ionicon-rocket-outline>Premium
                             </span>
                         @endif
                         <span class="bg-stone-100 dark:bg-gray-700 text-stone-800 dark:text-gray-300 text-xs font-semibold px-3 py-1 rounded-full">Miembro desde: {{ auth()->user()->created_at->format('d F, Y') }}</span>
@@ -94,7 +91,7 @@ new #[Layout('layouts.app')] class extends Component
                             No estás suscrito a ningún plan.
                         </p>
                         <a href="{{ route('pricing') }}" class="w-full mt-4 text-center p-3 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold transition-colors flex items-center justify-center gap-2">
-                            <x-ionicon-diamond-outline class="w-6 h-6"></x-ionicon-diamond-outline>
+                            <x-ionicon-rocket-outline class="w-6 h-6"></x-ionicon-rocket-outline>
                             Ver Planes de Precios
                         </a>
                     @endif
@@ -121,7 +118,7 @@ new #[Layout('layouts.app')] class extends Component
                         <div class="flex items-center justify-between">
                             <div>
                                 <h4 class="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                                    <x-ionicon-diamond class="w-6 h-6 text-amber-600 dark:text-amber-400"></x-ionicon-diamond>
+                                    <x-ionicon-rocket-outline class="w-6 h-6 text-amber-600 dark:text-amber-400"></x-ionicon-rocket-outline>
                                     Plan Premium
                                 </h4>
                                 @if (auth()->user()->subscription_ends_at)

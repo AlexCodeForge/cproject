@@ -345,11 +345,13 @@
 
     </div>
 
-    @livewireScripts
+    <!-- Modals -->
     <livewire:components.modals.confirmation-modal />
-    <livewire:components.modals.success-modal />
     <livewire:components.modals.error-modal />
+    <livewire:components.modals.success-modal />
     <livewire:components.modals.premium-modal />
+
+    @livewireScripts
     @stack('scripts')
 </body>
 </html>
