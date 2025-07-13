@@ -106,6 +106,26 @@ class WebhookController extends CashierWebhookController
     }
 
     /**
+     * Handle customer subscription updated.
+     *
+     * @param  array  $payload
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function handleCustomerSubscriptionUpdated(array $payload): Response
+    {
+        Log::info('Handling customer.subscription.updated webhook.');
+
+        // Let Cashier do its default sync logic first.
+        parent::handleCustomerSubscriptionUpdated($payload);
+
+        // You can add any additional custom logic here if needed.
+        // For now, we'll just log that it was handled.
+        Log::info('Parent handler for customer.subscription.updated executed.');
+
+        return new Response('Webhook Handled', 200);
+    }
+
+    /**
      * Handle customer subscription deleted.
      *
      * @param  array  $payload
@@ -114,27 +134,42 @@ class WebhookController extends CashierWebhookController
     protected function handleCustomerSubscriptionDeleted(array $payload): Response
     {
         Log::info('Handling customer.subscription.deleted webhook.');
-        $subscription_id = $payload['data']['object']['id'];
 
-        $subscription = \Laravel\Cashier\Subscription::where('stripe_id', $subscription_id)->first();
+        $user = $this->getUserByStripeId($payload['data']['object']['customer']);
 
-        if ($subscription) {
-            // Mark the subscription as canceled in the database.
-            // This sets the `ends_at` timestamp to now.
-            $subscription->markAsCanceled();
+        if ($user) {
+            $subscriptionId = $payload['data']['object']['id'];
 
-            // Also explicitly update the status for clarity in the database.
-            $subscription->update(['stripe_status' => 'canceled']);
+            $user->subscriptions->filter(function ($subscription) use ($subscriptionId) {
+                return $subscription->stripe_id === $subscriptionId;
+            })->each(function ($subscription) use ($user) {
+                Log::info('Marking local subscription as canceled.', ['subscription_id' => $subscription->id, 'user_id' => $user->id]);
 
-            $user = $subscription->user;
-            if ($user) {
-                Log::info('Subscription deleted, changing user role to free.', ['user_id' => $user->id]);
+                $subscription->markAsCanceled();
+
+                Log::info('Subscription definitely canceled, changing user role to free.', ['user_id' => $user->id]);
                 $user->removeRole('premium');
                 $user->assignRole('free');
-            }
-            Log::info('Local subscription record updated to canceled.', ['subscription_id' => $subscription->id]);
+            });
+
+            return new Response('Webhook Handled', 200);
         }
 
-        return new Response('Webhook Handled', 200);
+        Log::warning('User not found for customer.subscription.deleted webhook.', [
+            'customer_id' => $payload['data']['object']['customer'],
+        ]);
+
+        return new Response('Webhook Handled but user not found', 200);
+    }
+
+    /**
+     * Get the user for the given Stripe customer ID.
+     *
+     * @param  string|null  $stripeId
+     * @return \Laravel\Cashier\Billable|null
+     */
+    protected function getUserByStripeId($stripeId)
+    {
+        return \Laravel\Cashier\Cashier::findBillable($stripeId);
     }
 }
