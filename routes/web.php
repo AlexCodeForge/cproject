@@ -80,7 +80,7 @@ Route::get('/subscription-thank-you', function () {
     return view('user_panel.subscription-thank-you');
 })->middleware(['auth'])->name('subscription.thankyou');
 
-Volt::route('/posts/{post:slug}', App\Livewire\UserPanel\Posts\ShowPost::class)->name('posts.show');
+Volt::route('/posts/{post:slug}', App\Livewire\UserPanel\Posts\ShowPost::class)->name('posts.show')->middleware(['auth']);
 
 // Admin Panel Routes
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {

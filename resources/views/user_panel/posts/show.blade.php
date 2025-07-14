@@ -93,7 +93,7 @@
                         <div class="max-h-60 overflow-hidden blur-sm select-none">
                             {!! $post->content !!}
                         </div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-white dark:from-gray-800 via-white/80 dark:via-gray-800/80 to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-white/70 dark:from-gray-800/70 via-white/40 dark:via-gray-800/40 to-transparent"></div>
                         <div class="absolute inset-0 flex items-center justify-center">
                             <div class="text-center p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl max-w-md mx-auto">
                                 <x-ionicon-rocket-outline class="w-12 h-12 mx-auto text-amber-500" />

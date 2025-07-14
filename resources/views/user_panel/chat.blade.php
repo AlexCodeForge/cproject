@@ -125,7 +125,7 @@
                         {{-- Message item --}}
                         <div class="flex items-start gap-4 group @if($message->user_id == auth()->id()) flex-row-reverse @endif">
                              {{-- Avatar --}}
-                            <img src="{{ $message->user->profile->avatar_url ?? 'https://ui-avatars.com/api/?name='.urlencode($message->user->name) }}" alt="{{ $message->user->name }}" class="w-10 h-10 rounded-full shadow-md">
+                            <img src="{{ $message->user->profile->avatar_url ?? 'https://ui-avatars.com/api/?name='.urlencode($message->user->name) }}" alt="{{ $message->user->name }}" class="w-10 h-10 rounded-full shadow-md object-cover">
 
                             <div class="flex flex-col @if($message->user_id == auth()->id()) items-end @else items-start @endif">
                                 {{-- User Name & Timestamp --}}
@@ -171,10 +171,15 @@
                                         <x-ionicon-arrow-undo-outline class="w-5 h-5 text-gray-600 dark:text-gray-400"/>
                                     </button>
                                     @if(auth()->user()->isAdmin())
-                                        <button wire:click="$dispatch('showConfirmationModal', { messageId: {{ $message->id }} })" class="p-1 rounded-full hover:bg-gray-300 dark:hover:bg-gray-700">
+                                        <button wire:click="$dispatch('showConfirmationModal', {
+                                            title: 'Eliminar Mensaje',
+                                            message: '¿Estás seguro de que quieres eliminar este mensaje? Esta acción no se puede deshacer.',
+                                            confirmAction: 'confirmDeleteMessage',
+                                            params: { messageId: {{ $message->id }} }
+                                        })" class="p-1 rounded-full hover:bg-gray-300 dark:hover:bg-gray-700">
                                             <x-ionicon-trash-outline class="w-5 h-5 text-red-500"/>
                                         </button>
-                                    @endif
+                                     @endif
                                 </div>
                                 {{-- Reaction palette --}}
                                 @if($reactingTo === $message->id)
@@ -283,12 +288,6 @@
                             this.$nextTick(() => {
                                 chatMessages.scrollTop = chatMessages.scrollHeight - oldScrollHeight;
                             });
-                        }
-                    });
-
-                    this.$wire.on('showConfirmationModal', (data) => {
-                        if (confirm('¿Estás seguro de que quieres borrar este mensaje?')) {
-                            this.$wire.call('deleteMessage', data.messageId);
                         }
                     });
 

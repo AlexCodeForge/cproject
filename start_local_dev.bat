@@ -11,7 +11,7 @@ START cmd /k "cd /d "%~dp0" && php artisan serve"
 ECHO Laravel dev server started in a new window.
 
 REM Start Laravel Reverb server
-START cmd /k "cd /d "%~dp0" && php artisan reverb:start --port=9090"
+START cmd /k "cd /d "%~dp0" && php artisan reverb:start --port=9090 --debug"
 ECHO Laravel Reverb server started in a new window.
 
 REM Start Stripe CLI Webhook Listener
