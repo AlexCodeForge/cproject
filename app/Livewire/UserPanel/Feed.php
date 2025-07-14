@@ -4,21 +4,54 @@ namespace App\Livewire\UserPanel;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
-use App\Models\Post; // Import the Post model
+use App\Models\Post;
+use App\Models\PostCategory;
+use Livewire\Attributes\Url;
 
 #[Layout('layouts.app')]
 class Feed extends Component
 {
-    public $posts; // Declare a public property to hold the posts
+    #[Url(as: 'q', except: '')]
+    public $searchTerm = '';
 
-    public function mount()
+    #[Url(except: 'all')]
+    public string $activeCategory = 'all';
+
+    public function filterByCategory(string $categoryName)
     {
-        // Fetch all published posts and eager load their categories
-        $this->posts = Post::published()->with('category')->get();
+        $this->activeCategory = $categoryName;
     }
 
     public function render()
     {
-        return view('user_panel.feed');
+        $posts = Post::published()
+            ->with('category')
+            ->when($this->searchTerm, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('title', 'like', '%' . $this->searchTerm . '%')
+                      ->orWhere('excerpt', 'like', '%' . $this->searchTerm . '%')
+                      ->orWhere('content', 'like', '%' . $this->searchTerm . '%');
+                });
+            })
+            ->when($this->activeCategory !== 'all', function ($query) {
+                if ($this->activeCategory === 'premium') {
+                    $query->where('is_premium', true);
+                } else {
+                    $query->whereHas('category', function ($q) {
+                        $q->where('name', $this->activeCategory);
+                    });
+                }
+            })
+            ->orderBy('published_at', 'desc')
+            ->get();
+
+        $categories = PostCategory::whereHas('posts', function($query) {
+            $query->published();
+        })->get();
+
+        return view('user_panel.feed', [
+            'posts' => $posts,
+            'categories' => $categories
+        ]);
     }
 }

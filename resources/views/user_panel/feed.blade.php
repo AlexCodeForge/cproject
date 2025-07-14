@@ -1,69 +1,70 @@
-<?php
-
-use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
-use App\Models\Post;
-
-new #[Layout('layouts.app')] class extends Component
-{
-    public $posts;
-
-    public function mount()
-    {
-        $this->posts = Post::published()->with('category')->latest()->get();
-    }
-}; ?>
-
 <div>
     <section id="feed" class="section active" x-data="{
         viewMode: 'list', // 'list' or 'grid'
-        activeCategory: 'all', // Stores the currently active category filter
+        searchOpen: false,
         toggleView(mode) {
             this.viewMode = mode;
         }
     }">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">Feed de Noticias</h1>
-            <div class="flex items-center gap-2">
-                <button id="feed-list-view"
-                        @click="toggleView('list')"
-                        :class="viewMode === 'list' ? 'bg-stone-200 dark:bg-gray-700 text-slate-700 dark:text-white' : 'text-slate-500 dark:text-gray-400'"
-                        class="p-2 rounded-lg"><x-ionicon-list-outline class="w-6 h-6" /></button>
-                <button id="feed-grid-view"
-                        @click="toggleView('grid')"
-                        :class="viewMode === 'grid' ? 'bg-stone-200 dark:bg-gray-700 text-slate-700 dark:text-white' : 'text-slate-500 dark:text-gray-400'"
-                        class="p-2 rounded-lg"><x-ionicon-grid-outline class="w-6 h-6" /></button>
+            <div class="flex items-center gap-4">
+                 <div x-show="searchOpen"
+                      x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-x-2" x-transition:enter-end="opacity-100 translate-x-0"
+                      x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 -translate-x-2"
+                      @focusout="if (!event.currentTarget.contains(event.relatedTarget)) { searchOpen = false }"
+                      class="relative" x-cloak>
+                    <input x-ref="searchInput" type="text" wire:model.live.debounce.300ms="searchTerm" placeholder="Buscar..." class="w-64 bg-stone-100 dark:bg-gray-700 border-transparent rounded-lg focus:ring-slate-500 focus:border-slate-500 pl-10 pr-10">
+                    <x-ionicon-search-outline class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <button type="button" x-show="$wire.searchTerm" x-transition @click="$wire.set('searchTerm', '')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-gray-300" aria-label="Clear search" x-cloak>
+                        <x-ionicon-close-circle-outline class="w-5 h-5" />
+                    </button>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button @click="searchOpen = !searchOpen; if (searchOpen) { $nextTick(() => $refs.searchInput.focus()) }" class="p-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700">
+                        <x-ionicon-search-outline class="w-6 h-6"/>
+                    </button>
+                    <div class="w-px h-6 bg-slate-200 dark:bg-gray-600"></div>
+                    <button id="feed-list-view"
+                            @click="toggleView('list')"
+                            :class="viewMode === 'list' ? 'bg-stone-200 dark:bg-gray-700 text-slate-700 dark:text-white' : 'text-slate-500 dark:text-gray-400'"
+                            class="p-2 rounded-lg"><x-ionicon-list-outline class="w-6 h-6" /></button>
+                    <button id="feed-grid-view"
+                            @click="toggleView('grid')"
+                            :class="viewMode === 'grid' ? 'bg-stone-200 dark:bg-gray-700 text-slate-700 dark:text-white' : 'text-slate-500 dark:text-gray-400'"
+                            class="p-2 rounded-lg"><x-ionicon-grid-outline class="w-6 h-6" /></button>
+                </div>
             </div>
         </div>
         <div id="feed-filters" class="flex items-center gap-2 mb-8 overflow-x-auto pb-2">
-             <button @click="activeCategory = 'all'"
-                     :class="{'bg-slate-700 text-white': activeCategory === 'all', 'bg-white dark:bg-gray-700 text-slate-600 dark:text-gray-300 border border-stone-200 dark:border-gray-600': activeCategory !== 'all'}"
+             <button wire:click="filterByCategory('all')"
+                     :class="{'bg-slate-700 text-white': @js($activeCategory) === 'all', 'bg-white dark:bg-gray-700 text-slate-600 dark:text-gray-300 border border-stone-200 dark:border-gray-600': @js($activeCategory) !== 'all'}"
                      class="feed-filter-btn px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap">Todos</button>
-             <button @click="activeCategory = 'premium'"
+             <button wire:click="filterByCategory('premium')"
                      :class="{
-                         'bg-gradient-to-r from-amber-400 to-orange-400 text-amber-900 border-2 border-amber-300 shadow-md hover:shadow-lg transition-all duration-200': activeCategory === 'premium',
-                         'bg-white dark:bg-gray-700 text-slate-600 dark:text-gray-300 border border-stone-200 dark:border-gray-600': activeCategory !== 'premium'
+                         'bg-gradient-to-r from-amber-400 to-orange-400 text-amber-900 border-2 border-amber-300 shadow-md hover:shadow-lg transition-all duration-200': @js($activeCategory) === 'premium',
+                         'bg-white dark:bg-gray-700 text-slate-600 dark:text-gray-300 border border-stone-200 dark:border-gray-600': @js($activeCategory) !== 'premium'
                      }"
                      class="feed-filter-btn px-4 py-2 rounded-full text-sm whitespace-nowrap flex items-center gap-1">
                  <x-ionicon-rocket-outline class="w-4 h-4" />
                  Premium
              </button>
-             @foreach ($posts->unique('category.name')->filter(fn($p) => $p->category) as $postCategory)
+             @foreach ($categories as $category)
                 @php
-                    $isPremiumCategory = in_array($postCategory->category->name, ['Premium', 'Análisis Premium']);
+                    $isPremiumCategory = in_array($category->name, ['Premium', 'Análisis Premium']);
                 @endphp
-                <button @click="activeCategory = '{{ $postCategory->category->name }}'"
+                <button wire:click="filterByCategory('{{ $category->name }}')"
                         :class="{
-                            'bg-slate-700 text-white': activeCategory === '{{ $postCategory->category->name }}' && !{{ $isPremiumCategory ? 'true' : 'false' }},
-                            'bg-white dark:bg-gray-700 text-slate-600 dark:text-gray-300 border border-stone-200 dark:border-gray-600': activeCategory !== '{{ $postCategory->category->name }}' && !{{ $isPremiumCategory ? 'true' : 'false' }},
+                            'bg-slate-700 text-white': @js($activeCategory) === '{{ $category->name }}' && !{{ $isPremiumCategory ? 'true' : 'false' }},
+                            'bg-white dark:bg-gray-700 text-slate-600 dark:text-gray-300 border border-stone-200 dark:border-gray-600': @js($activeCategory) !== '{{ $category->name }}' && !{{ $isPremiumCategory ? 'true' : 'false' }},
                             'bg-gradient-to-r from-amber-400 to-orange-400 text-amber-900 border-2 border-amber-300 shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-1': {{ $isPremiumCategory ? 'true' : 'false' }},
-                            'font-bold': activeCategory === '{{ $postCategory->category->name }}' && {{ $isPremiumCategory ? 'true' : 'false' }}
+                            'font-bold': @js($activeCategory) === '{{ $category->name }}' && {{ $isPremiumCategory ? 'true' : 'false' }}
                         }"
                         class="feed-filter-btn px-4 py-2 rounded-full text-sm whitespace-nowrap">
                     <template x-if="{{ $isPremiumCategory ? 'true' : 'false' }}">
                         <x-ionicon-rocket-outline class="w-4 h-4" />
                     </template>
-                    {{ $postCategory->category->name }}
+                    {{ $category->name }}
                 </button>
              @endforeach
         </div>
@@ -73,12 +74,10 @@ new #[Layout('layouts.app')] class extends Component
                 'space-y-8': viewMode === 'list',
                 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8': viewMode === 'grid'
              }">
-            @foreach ($posts as $post)
+            @forelse ($posts as $post)
                 <a href="{{ route('posts.show', $post->slug) }}"
                    wire:navigate
                    class="block rounded-xl transition-all duration-300"
-                   data-category="{{ $post->category?->name }}"
-                   x-show="activeCategory === 'all' || activeCategory === '{{ $post->category?->name }}' || (activeCategory === 'premium' && {{ $post->is_premium ? 'true' : 'false' }})"
                    x-transition:enter="transition ease-out duration-300"
                    x-transition:enter-start="opacity-0 transform scale-95"
                    x-transition:enter-end="opacity-100 transform scale-100"
@@ -125,7 +124,13 @@ new #[Layout('layouts.app')] class extends Component
                         </div>
                     </article>
                 </a>
-            @endforeach
+            @empty
+                <div class="col-span-full text-center py-16">
+                    <x-ionicon-sad-outline class="w-16 h-16 mx-auto text-gray-400"/>
+                    <h3 class="text-xl font-semibold text-slate-700 dark:text-gray-300 mt-4">No se encontraron resultados</h3>
+                    <p class="text-slate-500 dark:text-gray-400 mt-2">Intenta ajustar tu búsqueda o filtros.</p>
+                </div>
+            @endforelse
         </div>
     </section>
 </div>
