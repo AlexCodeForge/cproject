@@ -196,7 +196,7 @@
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">P&L</span>
                     </a>
                     <a href="#" class="nav-item flex items-center p-3 rounded-xl overflow-hidden text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all">
-                        <x-ionicon-alert-circle-outline class="w-6 h-6 flex-shrink-0" />
+                        <x-ionicon-rocket-outline class="w-6 h-6 flex-shrink-0" />
                         <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Alertas</span>
                     </a>
                     <a href="{{ route('chat') }}" class="nav-item {{ request()->routeIs('chat') ? 'active bg-stone-200 dark:bg-gray-700 text-slate-800 dark:text-gray-200' : 'text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200' }} flex items-center p-3 rounded-xl overflow-hidden transition-all" wire:navigate>
@@ -318,7 +318,7 @@
                 <span class="text-xs">P&L</span>
             </a>
             <a href="#" class="mobile-nav-item flex flex-col items-center text-slate-500 dark:text-gray-400 p-2">
-                <x-ionicon-alert-circle-outline class="w-6 h-6" />
+                <x-ionicon-rocket-outline class="w-6 h-6" />
                 <span class="text-xs">Alertas</span>
             </a>
             @auth

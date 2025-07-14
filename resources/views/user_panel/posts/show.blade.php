@@ -9,7 +9,7 @@
     <article class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
         @if($post->featured_image)
             <div class="relative">
-                <img src="{{ $post->featured_image_url }}" alt="{{ $post->title }}" class="w-full h-64 sm:h-80 md:h-96 object-cover">
+                <img src="{{ $post->featured_image_url }}" alt="{{ $post->title }}" class="w-full object-contain">
                 @if ($post->is_premium)
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
                 @endif
