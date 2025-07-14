@@ -1,3 +1,15 @@
+@import 'trix/dist/trix.css';
+
+.trix-content ul {
+    list-style-type: disc;
+    margin-left: 1rem;
+}
+
+.trix-content ol {
+    list-style-type: decimal;
+    margin-left: 1rem;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

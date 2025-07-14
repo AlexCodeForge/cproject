@@ -60,7 +60,20 @@
                     <!-- Content -->
                     <div>
                         <x-input-label for="content" value="Contenido" />
-                        <textarea wire:model="content" id="content" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 dark:focus:ring-indigo-600" rows="10" required></textarea>
+                        <div wire:ignore
+                             class="mt-1"
+                             x-data
+                             x-init="
+                                let editor = $refs.trix;
+                                editor.addEventListener('trix-change', event => {
+                                    console.log('Trix content changed, syncing with Livewire:', event.target.value);
+                                    $wire.set('content', event.target.value)
+                                });
+                             ">
+                            <input id="content" value="{{ $content }}" type="hidden">
+                            <trix-editor x-ref="trix" input="content"
+                                         class="trix-content min-h-96 block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600"></trix-editor>
+                        </div>
                         <x-input-error :messages="$errors->get('content')" class="mt-2" />
                     </div>
                 </div>

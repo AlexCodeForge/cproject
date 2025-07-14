@@ -10,6 +10,12 @@
 
 import './echo';
 import './shared-layout';
+import.meta.glob([
+    '../images/**',
+    '../fonts/**',
+]);
+
+import 'trix';
 
 // Add debugging for Echo connection
 console.log('🚀 App.js loaded');
