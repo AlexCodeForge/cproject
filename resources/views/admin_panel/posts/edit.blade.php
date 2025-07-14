@@ -62,42 +62,52 @@
                         <x-input-label for="content" value="Contenido" />
                         <div wire:ignore
                              class="mt-1"
-                             x-data
+                             x-data="{ content: @entangle('content') }"
                              x-init="
-                                let editor = $refs.trix;
-                                editor.addEventListener('trix-change', event => {
-                                    $wire.set('content', event.target.value)
-                                });
-
-                                editor.addEventListener('trix-attachment-add', function(event) {
-                                    let attachment = event.attachment;
-                                    if (attachment.file) {
-                                        let formData = new FormData();
-                                        formData.append('attachment', attachment.file);
-
-                                        fetch('{{ route('admin.trix.upload') }}', {
-                                            method: 'POST',
-                                            body: formData,
-                                            headers: {
-                                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                $('#summernote').summernote({
+                                    placeholder: 'Escribe tu contenido aquí...',
+                                    tabsize: 2,
+                                    height: 300,
+                                    toolbar: [
+                                        ['style', ['style']],
+                                        ['font', ['bold', 'underline', 'clear']],
+                                        ['color', ['color']],
+                                        ['para', ['ul', 'ol', 'paragraph']],
+                                        ['table', ['table']],
+                                        ['insert', ['link', 'picture', 'video']],
+                                        ['view', ['fullscreen', 'codeview', 'help']]
+                                    ],
+                                    callbacks: {
+                                        onChange: function(contents, $editable) {
+                                            @this.set('content', contents);
+                                        },
+                                        onImageUpload: function(files) {
+                                            let file = files[0];
+                                            let reader = new FileReader();
+                                            reader.onloadend = function() {
+                                                let formData = new FormData();
+                                                formData.append('file', file);
+                                                formData.append('_token', '{{ csrf_token() }}');
+                                                fetch('{{ route('admin.summernote.upload') }}', {
+                                                    method: 'POST',
+                                                    body: formData,
+                                                })
+                                                .then(response => response.json())
+                                                .then(result => {
+                                                    $('#summernote').summernote('insertImage', result.url);
+                                                })
+                                                .catch(error => {
+                                                    console.error('Summernote upload error:', error);
+                                                });
                                             }
-                                        })
-                                        .then(response => response.json())
-                                        .then(result => {
-                                            attachment.setAttributes({
-                                                url: result.url,
-                                                href: result.url
-                                            });
-                                        })
-                                        .catch(error => {
-                                            console.error('Trix upload error:', error);
-                                        });
+                                            reader.readAsDataURL(file);
+                                        }
                                     }
                                 });
+                                // Load existing content into Summernote
+                                $('#summernote').summernote('code', content);
                              ">
-                            <input id="content" value="{{ $content }}" type="hidden">
-                            <trix-editor x-ref="trix" input="content"
-                                         class="trix-content min-h-96 block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600"></trix-editor>
+                            <textarea id="summernote" wire:model.defer="content" class="hidden"></textarea>
                         </div>
                         <x-input-error :messages="$errors->get('content')" class="mt-2" />
                     </div>

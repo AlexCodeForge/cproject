@@ -144,7 +144,6 @@ class EditPost extends Component
 
             $this->post->update([
                 'title' => $this->title,
-                'slug' => Str::slug($this->title),
                 'excerpt' => $this->excerpt,
                 'content' => $this->content,
                 'featured_image' => $featuredImagePath,

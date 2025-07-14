@@ -78,7 +78,7 @@ Route::post('/billing/cancel', [App\Http\Controllers\BillingController::class, '
 
 Route::get('/subscription-thank-you', function () {
     return view('user_panel.subscription-thank-you');
-})->middleware(['auth', 'verified'])->name('subscription.thankyou');
+})->middleware(['auth'])->name('subscription.thankyou');
 
 Volt::route('/posts/{post:slug}', App\Livewire\UserPanel\Posts\ShowPost::class)->name('posts.show');
 
@@ -97,6 +97,9 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
 
     // Trix image upload
     Route::post('/trix-upload', [TrixUploadController::class, 'store'])->name('trix.upload');
+
+    // Summernote image upload
+    Route::post('/summernote-upload', [TrixUploadController::class, 'summernoteStore'])->name('summernote.upload');
 });
 
 Route::post('billing-portal', [BillingController::class, 'handleBillingPortalRequest'])->name('billing-portal');

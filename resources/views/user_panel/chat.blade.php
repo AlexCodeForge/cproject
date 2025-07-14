@@ -1,443 +1,334 @@
-<div x-data="{ sidebarOpen: false, rightSidebarOpen: false }">
-    <section id="chat" class="section active">
-        <div class="h-full flex flex-col max-w-full mx-auto sm:px-0">
-            <div class="flex-1 lg:grid lg:grid-cols-[auto_1fr_auto] bg-white dark:bg-gray-900 shadow-sm min-h-[calc(100vh-10rem)] relative overflow-hidden">
-                <!-- Backdrop for mobile -->
-                <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden" x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"></div>
-
-                <!-- Left Sidebar with channels -->
-                <div
-                    :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen }"
-                    class="fixed inset-y-0 left-0 w-80 bg-white dark:bg-gray-800 p-6 border-r border-stone-200 dark:border-gray-700 flex flex-col z-40 lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out"
-                >
-                    <div class="flex justify-between items-center lg:hidden mb-4">
-                        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Chats</h2>
-                        <button @click="sidebarOpen = false">
-                            <x-ionicon-close-outline class="w-6 h-6 text-slate-500 dark:text-gray-400" />
-                        </button>
-                    </div>
-
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Chat</h2>
-                        <button class="text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <div class="relative mb-4">
-                        <input type="text" placeholder="Search Contact" class="w-full pl-10 pr-4 py-2 rounded-lg bg-stone-100 dark:bg-gray-700 text-slate-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-slate-500 border border-transparent">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div class="flex-1 flex flex-col overflow-y-auto -mr-6 pr-6">
-                        <h3 class="text-xs font-bold uppercase text-slate-500 dark:text-gray-400 mb-2">Recent Chats</h3>
-                        <nav class="flex-1 space-y-1">
-                            @foreach($channels as $channel)
-                                <a href="#" wire:click.prevent="changeChannel({{ $channel->id }}); sidebarOpen = false"
-                                   class="flex items-center space-x-3 p-3 rounded-lg transition-colors cursor-pointer {{ $activeChannel && $activeChannel->id === $channel->id ? 'bg-blue-500 text-white' : 'hover:bg-stone-100 dark:hover:bg-gray-700' }}">
-                                    <div class="relative">
-                                        <div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-gray-600 flex items-center justify-center">
-                                            <ion-icon name="{{ $channel->type === 'premium' ? 'diamond' : ($channel->icon ?? 'chatbox-ellipses-outline') }}" class="w-6 h-6 {{ $activeChannel && $activeChannel->id === $channel->id ? 'text-white' : 'text-slate-500 dark:text-gray-400' }}"></ion-icon>
-                                        </div>
-                                        <span class="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-green-500 border-2 border-white dark:border-gray-800"></span>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <div class="flex justify-between items-center">
-                                            <p class="font-semibold text-sm truncate {{ $activeChannel && $activeChannel->id === $channel->id ? 'text-white' : 'text-slate-900 dark:text-white' }}">{{ $channel->name }}</p>
-                                            <span class="text-xs {{ $activeChannel && $activeChannel->id === $channel->id ? 'text-blue-200' : 'text-slate-400 dark:text-gray-500' }}"></span>
-                                        </div>
-                                        <p class="text-sm truncate {{ $activeChannel && $activeChannel->id === $channel->id ? 'text-blue-100' : 'text-slate-500 dark:text-gray-400' }}">{{ $channel->description ?? 'Channel' }}</p>
-                                    </div>
-                                </a>
-                            @endforeach
-                        </nav>
-
-                        <hr class="my-4 border-stone-200 dark:border-gray-600">
-
-                        <h3 class="text-xs font-bold uppercase text-slate-500 dark:text-gray-400 mb-2">Joinable Channels</h3>
-                        <nav class="flex-1 space-y-1">
-                             @foreach($joinableChannels as $channel)
-                                <a href="#"
-                                   wire:click.prevent="joinChannel({{ $channel->id }}); sidebarOpen = false"
-                                   wire:loading.attr="disabled"
-                                   wire:loading.class="opacity-75 cursor-wait"
-                                   wire:target="joinChannel({{ $channel->id }})"
-                                   class="flex items-center space-x-3 p-3 rounded-lg transition-colors cursor-pointer hover:bg-stone-100 dark:hover:bg-gray-700">
-                                    <div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-gray-600 flex items-center justify-center">
-                                        <div wire:loading.remove wire:target="joinChannel({{ $channel->id }})">
-                                            <ion-icon name="{{ $channel->type === 'premium' ? 'diamond' : 'add-circle-outline' }}" class="w-6 h-6 text-slate-500 dark:text-gray-400"></ion-icon>
-                                        </div>
-                                        <div wire:loading wire:target="joinChannel({{ $channel->id }})">
-                                            <svg class="animate-spin h-6 w-6 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="font-semibold text-sm truncate {{ $channel->type === 'premium' ? 'text-amber-600 dark:text-amber-400' : 'text-slate-900 dark:text-white' }}">{{ $channel->name }}</p>
-                                        <p class="text-sm truncate text-slate-500 dark:text-gray-400">{{ $channel->description ?? 'Join this channel' }}</p>
-                                    </div>
-                                </a>
-                            @endforeach
-                        </nav>
-                    </div>
-                </div>
-
-                <!-- Main chat area -->
-                <div class="flex flex-col bg-stone-50 dark:bg-gray-800/50">
-                    @if($activeChannel)
-                        <!-- Chat header -->
-                        <div class="p-4 border-b border-stone-200 dark:border-gray-700 flex justify-between items-center bg-white dark:bg-gray-800">
-                            <div class="flex items-center space-x-3">
-                                <button @click="sidebarOpen = true" class="lg:hidden text-slate-500 dark:text-gray-400">
-                                    <x-ionicon-menu-outline class="w-6 h-6" />
-                                </button>
-                                <div class="relative">
-                                    <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-gray-600 flex items-center justify-center">
-                                       <ion-icon name="{{ $activeChannel->type === 'premium' ? 'diamond' : ($activeChannel->icon ?? 'chatbox-ellipses-outline') }}" class="w-5 h-5 text-slate-500 dark:text-gray-400"></ion-icon>
-                                    </div>
-                                    <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-white dark:border-gray-800"></span>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-slate-900 dark:text-white"># {{ $activeChannel->name }}</h3>
-                                    <p class="text-sm text-slate-500 dark:text-gray-400">{{ $activeChannel->description }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Messages area -->
-                        <div id="chat-container" class="flex-3 p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-20rem)]">
-                           @if($hasMoreMessages)
-                               <div class="text-center">
-                                   <button
-                                       wire:click="loadMoreMessages"
-                                       @click="scrollTopBeforeLoad = document.getElementById('chat-container').scrollTop"
-                                       wire:loading.attr="disabled"
-                                       class="text-sm font-semibold text-slate-600 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 transition-colors">
-                                       <span wire:loading.remove wire:target="loadMoreMessages">Cargar más mensajes</span>
-                                       <span wire:loading wire:target="loadMoreMessages">Cargando...</span>
-                                   </button>
-                               </div>
-                           @endif
-                           @forelse($chatMessages as $message)
-                                <div class="flex items-start gap-3 {{ $message->user_id === auth()->id() ? 'flex-row-reverse' : '' }}">
-                                    <img src="{{ $message->user->profile?->avatar_url }}" class="w-10 h-10 rounded-full" alt="{{ $message->user->name }}">
-                                    <div class="flex flex-col gap-1 w-full max-w-md">
-                                        <div class="flex items-center gap-2 {{ $message->user_id === auth()->id() ? 'flex-row-reverse' : '' }}">
-                                            <p class="font-semibold text-sm text-slate-900 dark:text-white">
-                                                {{ $message->user->name }}
-                                            </p>
-                                            <span class="text-xs text-slate-400 dark:text-gray-500" title="{{ $message->created_at ? $message->created_at->format('Y-m-d g:i a') : 'Unknown time' }}">
-                                                {{ $message->human_readable_created_at ?? 'Just now' }}
-                                            </span>
-                                        </div>
-                                        @if($message->parentMessage)
-                                            <div class="text-xs text-slate-500 dark:text-gray-400 border-l-2 border-slate-300 dark:border-gray-500 pl-2 ml-2 mb-1 {{ $message->user_id === auth()->id() ? 'text-right border-l-0 border-r-2' : '' }}">
-                                                Replying to <strong>{{ $message->parentMessage->user->name }}</strong>:
-                                                <em>{{ Str::limit($message->parentMessage->message, 40) }}</em>
-                                            </div>
-                                        @endif
-                                        <div class="p-3 rounded-lg shadow-sm {{ $message->user_id === auth()->id() ? 'bg-blue-500 text-white rounded-br-none' : 'bg-white dark:bg-gray-700 rounded-bl-none border border-stone-200 dark:border-gray-600' }}">
-                                            <p>{{ $message->message }}</p>
-                                        </div>
-                                         <div class="mt-1 flex items-center gap-2 {{ $message->user_id === auth()->id() ? 'justify-end' : '' }}">
-                                            <button wire:click="setReplyingTo({{ $message->id }})" class="text-xs text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200">Reply</button>
-                                            <button wire:click="setReactingTo({{ $message->id }})" class="text-xs text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200">React</button>
-                                            @if(auth()->user()->isAdmin())
-                                                <button
-                                                    wire:click.prevent="$dispatch('showConfirmationModal', {
-                                                        title: 'Eliminar Mensaje',
-                                                        message: '¿Estás seguro de que quieres eliminar este mensaje? Esta acción no se puede deshacer.',
-                                                        confirmAction: 'confirmDeleteMessage',
-                                                        params: { messageId: {{ $message->id }} }
-                                                    })"
-                                                    class="text-xs text-red-500 hover:text-red-700">
-                                                    Delete
-                                                </button>
-                                            @endif
-                                        </div>
-
-                                        @if($reactingTo === $message->id)
-                                            <div class="mt-2 flex space-x-2">
-                                                @foreach($availableReactions as $reaction)
-                                                    <button wire:click="toggleReaction({{ $message->id }}, '{{ $reaction }}')" class="p-1 rounded-full hover:bg-stone-200 dark:hover:bg-gray-600">{{ $reaction }}</button>
-                                                @endforeach
-                                                <button wire:click="setReactingTo(null)" class="text-red-500 hover:text-red-700 font-bold">[x]</button>
-                                            </div>
-                                        @endif
-
-                                        @if($message->reactions)
-                                            <div class="mt-2 flex space-x-2 {{ $message->user_id === auth()->id() ? 'justify-end' : '' }}">
-                                                @foreach($message->reactions as $reaction => $userIds)
-                                                    @if(count($userIds) > 0)
-                                                        <div class="bg-stone-200 dark:bg-gray-600 rounded-full px-2 py-1 text-xs flex items-center">
-                                                            <span>{{ $reaction }}</span>
-                                                            <span class="ml-1 font-bold">{{ count($userIds) }}</span>
-                                                        </div>
-                                                    @endif
-                                                @endforeach
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="text-center text-slate-500 dark:text-gray-400 py-8">
-                                    <p>No messages in this channel yet.</p>
-                                    <p>Be the first to say something!</p>
-                                </div>
-                            @endforelse
-                        </div>
-
-                        <!-- Message input -->
-                        <div class="p-4 bg-white dark:bg-gray-800 border-t border-stone-200 dark:border-gray-700">
-                            @if($replyingTo)
-                                <div class="mb-2 p-2 bg-stone-200 dark:bg-gray-600 rounded-lg text-sm text-slate-700 dark:text-gray-300">
-                                    Replying to <strong>{{ $replyingTo->user->name }}</strong>: <em>{{ Str::limit($replyingTo->message, 50) }}</em>
-                                    <button wire:click="cancelReply" class="ml-2 text-red-500 hover:text-red-700 font-bold">[x]</button>
-                                </div>
-                            @endif
-                            <form wire:submit.prevent="sendMessage">
-                                <div class="flex items-center space-x-3">
-                                    <div class="flex-1">
-                                        <div class="relative">
-                                            <input type="text" wire:model="messageText" placeholder="Type a message" class="w-full bg-stone-100 dark:bg-gray-700 border-transparent rounded-lg pl-4 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
-                                        </div>
-                                    </div>
-                                    <button type="submit" class="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600">
-                                        <x-ionicon-paper-plane-outline class="w-5 h-5" />
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    @else
-                        <div class="flex-1 flex items-center justify-center text-slate-500 dark:text-gray-400">
-                            <div class="text-center">
-                                <button @click="sidebarOpen = true" class="lg:hidden text-slate-500 dark:text-gray-400 mb-4">
-                                    <x-ionicon-menu-outline class="w-8 h-8 mx-auto" />
-                                    <span class="text-sm">View Channels</span>
-                                </button>
-                                <p class="text-lg">Select a channel to start chatting.</p>
-                            </div>
-                        </div>
-                    @endif
-                </div>
-                 <!-- Right Sidebar for Media/Files -->
-                <div x-show="rightSidebarOpen" @click.away="rightSidebarOpen = false"
-                     x-transition:enter="transition ease-in-out duration-300"
-                     x-transition:enter-start="translate-x-full"
-                     x-transition:enter-end="translate-x-0"
-                     x-transition:leave="transition ease-in-out duration-300"
-                     x-transition:leave-start="translate-x-0"
-                     x-transition:leave-end="translate-x-full"
-                     class="fixed inset-y-0 right-0 w-80 bg-white dark:bg-gray-800 border-l border-stone-200 dark:border-gray-700 p-6 flex-col z-30 transform lg:relative lg:inset-auto lg:transform-none"
-                     style="display: none;"
-                >
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Media</h3>
-                        <button @click="rightSidebarOpen = false" class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200">
-                            <x-ionicon-close-outline class="w-6 h-6"/>
-                        </button>
-                    </div>
-                    <div class="flex-1 overflow-y-auto -mr-6 pr-6">
-                        <div class="mb-6">
-                            <div class="flex justify-between items-center mb-2">
-                                <h4 class="font-semibold text-slate-800 dark:text-gray-200">Media (36)</h4>
-                                <a href="#" class="text-sm text-blue-500 font-semibold">Show All</a>
-                            </div>
-                            <div class="grid grid-cols-3 gap-2">
-                                <!-- Placeholder Images -->
-                                <img src="https://via.placeholder.com/150" class="rounded-lg aspect-square object-cover">
-                                <img src="https://via.placeholder.com/150" class="rounded-lg aspect-square object-cover">
-                                <img src="https://via.placeholder.com/150" class="rounded-lg aspect-square object-cover">
-                                <img src="https://via.placeholder.com/150" class="rounded-lg aspect-square object-cover">
-                                <img src="https://via.placeholder.com/150" class="rounded-lg aspect-square object-cover">
-                                <img src="https://via.placeholder.com/150" class="rounded-lg aspect-square object-cover">
-                            </div>
-                        </div>
-                        <div>
-                             <h4 class="font-semibold text-slate-800 dark:text-gray-200 mb-2">Files (12)</h4>
-                            <ul class="space-y-3">
-                                <!-- Placeholder Files -->
-                                <li class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 rounded-lg bg-red-100 dark:bg-red-900/50 flex items-center justify-center">
-                                        <x-ionicon-document-text-outline class="w-6 h-6 text-red-500"/>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="font-semibold text-sm text-slate-800 dark:text-gray-200">service-task.pdf</p>
-                                        <p class="text-xs text-slate-500 dark:text-gray-400">2MB, 2 Dec 2024</p>
-                                    </div>
-                                </li>
-                                <li class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900/50 flex items-center justify-center">
-                                        <x-ionicon-image-outline class="w-6 h-6 text-green-500"/>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="font-semibold text-sm text-slate-800 dark:text-gray-200">homepage-design.fig</p>
-                                        <p class="text-xs text-slate-500 dark:text-gray-400">3MB, 2 Dec 2024</p>
-                                    </div>
-                                </li>
-                                <li class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
-                                        <x-ionicon-code-slash-outline class="w-6 h-6 text-blue-500"/>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="font-semibold text-sm text-slate-800 dark:text-gray-200">about-us.html</p>
-                                        <p class="text-xs text-slate-500 dark:text-gray-400">1MB, 2 Dec 2024</p>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+<div x-data="chatComponent()" x-init="init($wire, {{ $activeChannel?->id ?? 'null' }})">
+    <div class="flex h-[calc(100vh-theme(space.16))]">
+        {{-- Left Sidebar --}}
+        <aside class="w-80 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 flex flex-col">
+            {{-- Channels Header --}}
+            <div class="p-4 border-b border-gray-200 dark:border-gray-800 space-y-4">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">Canales</h2>
+                <div class="relative">
+                    <input wire:model.live.debounce.300ms="search" type="text" placeholder="Buscar canal..." class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <x-ionicon-search-outline class="w-5 h-5 text-gray-400"/>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+
+            {{-- Channels List --}}
+            <div class="flex-grow overflow-y-auto">
+                {{-- User's Channels --}}
+                <div class="p-2 space-y-1">
+                    <h3 class="px-3 text-sm font-semibold text-gray-500 uppercase tracking-wider">Tus Canales</h3>
+                    <ul class="mt-1 space-y-1">
+                        @forelse($channelsForDisplay as $channel)
+                            <li>
+                                <a href="#" wire:click.prevent="changeChannel({{ $channel->id }})"
+                                   class="flex items-center justify-between px-3 py-2.5 rounded-lg text-base font-medium transition-colors duration-150
+                                          @if($activeChannel && $activeChannel->id == $channel->id)
+                                              @if($channel->type === 'premium')
+                                                  bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold shadow-lg
+                                              @else
+                                                  bg-blue-500 text-white shadow-md
+                                              @endif
+                                          @else
+                                              text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800
+                                          @endif">
+                                    <div class="flex items-center">
+                                        <span>{{ $channel->name }}</span>
+                                        @if($channel->type === 'premium')
+                                            <x-ionicon-rocket class="w-4 h-4 ml-2 {{ ($activeChannel && $activeChannel->id == $channel->id) ? 'text-white' : 'text-yellow-500' }}"/>
+                                        @endif
+                                    </div>
+                                    {{-- Maybe show unread count later --}}
+                                </a>
+                            </li>
+                        @empty
+                             <li class="px-3 py-2 text-sm text-gray-500">
+                                @if(empty($search))
+                                    No estás en ningún canal.
+                                @else
+                                    No se encontraron canales.
+                                @endif
+                            </li>
+                        @endforelse
+                    </ul>
+                </div>
+
+                {{-- Joinable Channels --}}
+                <div class="p-2 mt-4 space-y-1">
+                    <h3 class="px-3 text-sm font-semibold text-gray-500 uppercase tracking-wider">Canales para unirse</h3>
+                    <ul class="mt-1 space-y-1">
+                        @forelse($joinableChannelsForDisplay as $channel)
+                            <li>
+                                <a href="#" wire:click.prevent="joinChannel({{ $channel->id }})" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-150">
+                                    <div class="flex items-center">
+                                        <span>{{ $channel->name }}</span>
+                                        @if($channel->type === 'premium')
+                                            <x-ionicon-rocket class="w-4 h-4 text-yellow-500 ml-2"/>
+                                        @endif
+                                    </div>
+                                    <x-ionicon-add-circle-outline class="w-6 h-6 text-gray-400"/>
+                                </a>
+                            </li>
+                        @empty
+                            <li class="px-3 py-2 text-sm text-gray-500">No hay más canales para unirse.</li>
+                        @endforelse
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        {{-- Main Chat Area --}}
+        <main class="flex-1 flex flex-col bg-white dark:bg-gray-800 relative">
+             <div wire:loading.flex wire:target="changeChannel, joinChannel, leaveChannel" class="absolute inset-0 bg-white/80 dark:bg-gray-900/80 items-center justify-center z-20 backdrop-blur-sm">
+                <x-ionicon-sync class="w-16 h-16 text-blue-500 animate-spin"/>
+            </div>
+
+            @if($activeChannel)
+                {{-- Chat Header --}}
+                <header class="flex-shrink-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between p-4">
+                    <div class="flex-grow">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">#{{ $activeChannel->name }}</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ $activeChannel->description }}</p>
+                    </div>
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <x-ionicon-ellipsis-vertical class="w-6 h-6 text-gray-500 dark:text-gray-400"/>
+                        </button>
+                        <div x-show="open" @click.away="open = false"
+                             x-transition:enter="transition ease-out duration-100"
+                             x-transition:enter-start="transform opacity-0 scale-95"
+                             x-transition:enter-end="transform opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-75"
+                             x-transition:leave-start="transform opacity-100 scale-100"
+                             x-transition:leave-end="transform opacity-0 scale-95"
+                             class="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-10"
+                             style="display: none;">
+                            <a href="#" wire:click.prevent="leaveChannel({{ $activeChannel->id }})" class="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <x-ionicon-log-out-outline class="w-5 h-5 mr-2"/>
+                                Salir del Canal
+                            </a>
+                        </div>
+                    </div>
+                </header>
+
+                {{-- Messages --}}
+                <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-100 dark:bg-gray-900">
+                    @if($hasMoreMessages)
+                        <div class="text-center">
+                            <button wire:click="loadMoreMessages" wire:loading.attr="disabled" class="text-sm font-medium text-blue-600 hover:underline">
+                                Cargar mensajes anteriores
+                            </button>
+                        </div>
+                    @endif
+
+                    @forelse($chatMessages as $message)
+                        {{-- Message item --}}
+                        <div class="flex items-start gap-4 group @if($message->user_id == auth()->id()) flex-row-reverse @endif">
+                             {{-- Avatar --}}
+                            <img src="{{ $message->user->profile->avatar_url ?? 'https://ui-avatars.com/api/?name='.urlencode($message->user->name) }}" alt="{{ $message->user->name }}" class="w-10 h-10 rounded-full shadow-md">
+
+                            <div class="flex flex-col @if($message->user_id == auth()->id()) items-end @else items-start @endif">
+                                {{-- User Name & Timestamp --}}
+                                <div class="flex items-center gap-2">
+                                    <span class="font-semibold text-sm text-gray-900 dark:text-gray-100">{{ $message->user->name }}</span>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">{{ $message->created_at->format('g:i A') }}</span>
+                                </div>
+
+                                {{-- Reply --}}
+                                @if($message->parentMessage)
+                                    <div class="text-xs text-gray-600 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 p-1.5 rounded-t-lg mt-1 border-l-2 border-blue-500">
+                                        <p class="font-bold">{{ $message->parentMessage->user->name }}</p>
+                                        <p class="pl-1">{{ Str::limit($message->parentMessage->message, 50) }}</p>
+                                    </div>
+                                @endif
+
+                                {{-- Message Bubble --}}
+                                <div class="relative bg-white dark:bg-gray-700 p-3 rounded-lg shadow-sm @if($message->user_id == auth()->id()) rounded-tr-none @else rounded-tl-none @endif max-w-xl">
+                                    <p class="text-base text-gray-800 dark:text-gray-200" style="white-space: pre-wrap;">{!! nl2br(e($message->message)) !!}</p>
+                                </div>
+
+                                {{-- Reactions on message --}}
+                                @if ($message->reactions && count($message->reactions) > 0)
+                                    <div class="mt-2 flex gap-1">
+                                        @foreach ($message->reactions as $reaction => $users)
+                                            <button wire:click="toggleReaction({{ $message->id }}, '{{ $reaction }}')"
+                                                    class="px-2 py-0.5 border rounded-full text-xs flex items-center gap-1 transition-colors
+                                                           @if(in_array(auth()->id(), $users)) bg-blue-100 border-blue-300 dark:bg-blue-800 dark:border-blue-600 @else bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 @endif">
+                                                <span class="text-sm">{{ $reaction }}</span>
+                                                <span class="text-xs font-semibold">{{ count($users) }}</span>
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                             {{-- Message Actions --}}
+                            <div class="relative opacity-0 group-hover:opacity-100 transition-opacity self-center">
+                                <div class="flex items-center gap-1 bg-gray-200 dark:bg-gray-800 p-1 rounded-full shadow-md">
+                                    <button @click="$wire.setReactingTo({{ $message->id }})" class="p-1 rounded-full hover:bg-gray-300 dark:hover:bg-gray-700">
+                                        <x-ionicon-happy class="w-5 h-5 text-gray-600 dark:text-gray-400"/>
+                                    </button>
+                                    <button wire:click="setReplyingTo({{ $message->id }})" class="p-1 rounded-full hover:bg-gray-300 dark:hover:bg-gray-700">
+                                        <x-ionicon-arrow-undo-outline class="w-5 h-5 text-gray-600 dark:text-gray-400"/>
+                                    </button>
+                                    @if(auth()->user()->isAdmin())
+                                        <button wire:click="$dispatch('showConfirmationModal', { messageId: {{ $message->id }} })" class="p-1 rounded-full hover:bg-gray-300 dark:hover:bg-gray-700">
+                                            <x-ionicon-trash-outline class="w-5 h-5 text-red-500"/>
+                                        </button>
+                                    @endif
+                                </div>
+                                {{-- Reaction palette --}}
+                                @if($reactingTo === $message->id)
+                                    <div x-show="$wire.reactingTo === {{ $message->id }}" @click.away="$wire.setReactingTo(null)" class="absolute z-10 bottom-full mb-1 flex gap-1 bg-white dark:bg-gray-800 border dark:border-gray-600 rounded-full p-1 shadow-lg">
+                                        @foreach($availableReactions as $reaction)
+                                            <button wire:click="toggleReaction({{ $message->id }}, '{{ $reaction }}')" class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 text-lg">{{ $reaction }}</button>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center text-gray-500 py-8">
+                            No hay mensajes en este canal. ¡Sé el primero en saludar!
+                        </div>
+                    @endforelse
+                </div>
+
+                {{-- Message Input --}}
+                <div class="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
+                    {{-- Replying to state --}}
+                    @if($replyingTo)
+                        <div class="relative bg-gray-100 dark:bg-gray-700 p-2 rounded-t-lg text-sm mb-2">
+                            <button wire:click="cancelReply" class="absolute top-1 right-1 p-1">
+                                <x-ionicon-close class="w-4 h-4 text-gray-500"/>
+                            </button>
+                            <p class="font-semibold text-gray-800 dark:text-gray-200">Respondiendo a {{ $replyingTo->user->name }}</p>
+                            <p class="text-gray-600 dark:text-gray-400 truncate">{{ $replyingTo->message }}</p>
+                        </div>
+                    @endif
+                    <form wire:submit.prevent="sendMessage" class="flex items-end gap-3">
+                        <div class="relative flex-grow">
+                            <div wire:loading.flex wire:target="sendMessage" class="absolute inset-0 bg-white/50 dark:bg-black/50 items-center justify-center rounded-lg z-10">
+                                <x-ionicon-sync class="w-8 h-8 text-blue-500 animate-spin"/>
+                            </div>
+                            <textarea
+                                wire:model="messageText"
+                                id="message-input"
+                                rows="1"
+                                class="block w-full resize-none border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-lg shadow-sm scrollbar-hide p-3"
+                                placeholder="Escribe tu mensaje..."
+                                @keydown.enter.prevent="if ($event.shiftKey) { return; } else { $wire.sendMessage(); }"
+                                x-data="{}"
+                                x-init="
+                                    $el.style.height = 'auto';
+                                    $el.style.height = $el.scrollHeight + 'px';
+                                    $watch('$wire.messageText', (value) => {
+                                        $el.style.height = 'auto';
+                                        $nextTick(() => { $el.style.height = $el.scrollHeight + 'px' });
+                                    });
+                                "
+                                @input="$el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px';"
+                            ></textarea>
+                        </div>
+                        <button type="submit" class="flex-shrink-0 p-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors" :disabled="$wire.messageText.trim() === ''">
+                             <x-ionicon-rocket-outline class="w-6 h-6"/>
+                        </button>
+                    </form>
+                </div>
+            @else
+                <div class="flex-1 flex items-center justify-center text-gray-500 dark:text-gray-400">
+                    <div class="text-center">
+                        <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        <h3 class="mt-2 text-lg font-medium text-gray-900 dark:text-gray-100">Selecciona un canal</h3>
+                        <p class="mt-1 text-sm text-gray-500">O únete a uno para empezar a chatear.</p>
+                    </div>
+                </div>
+            @endif
+        </main>
+    </div>
+
+    @push('scripts')
+    <script>
+        function chatComponent() {
+            return {
+                wire: null,
+                activeChannelId: null,
+                init(wire, activeChannelId) {
+                    this.wire = wire;
+                    this.activeChannelId = activeChannelId;
+                    this.initEcho();
+                    this.setupScroll();
+
+                    document.addEventListener('livewire:navigated', () => {
+                         this.leaveEchoChannel();
+                         this.initEcho();
+                         this.setupScroll();
+                    });
+
+                    this.$wire.on('channel-changed', (event) => {
+                        this.leaveEchoChannel();
+                        this.activeChannelId = event.channelId;
+                        this.initEcho();
+                        this.scrollToBottom();
+                    });
+
+                    this.$wire.on('scroll-chat-to-bottom', () => {
+                        this.scrollToBottom();
+                    });
+
+                    this.$wire.on('more-messages-loaded', () => {
+                        const chatMessages = document.getElementById('chat-messages');
+                        if(chatMessages) {
+                            const oldScrollHeight = chatMessages.scrollHeight;
+                            // Wait for DOM to update
+                            this.$nextTick(() => {
+                                chatMessages.scrollTop = chatMessages.scrollHeight - oldScrollHeight;
+                            });
+                        }
+                    });
+
+                    this.$wire.on('showConfirmationModal', (data) => {
+                        if (confirm('¿Estás seguro de que quieres borrar este mensaje?')) {
+                            this.$wire.call('deleteMessage', data.messageId);
+                        }
+                    });
+
+                },
+                initEcho() {
+                    if (window.Echo && this.activeChannelId) {
+                        console.log(`Joining channel: chat.${this.activeChannelId}`);
+                        window.Echo.private(`chat.${this.activeChannelId}`)
+                            .listen('NewChatMessage', (e) => {
+                                console.log('Received NewChatMessage:', e);
+                                this.wire.call('handleNewMessage', e);
+                            })
+                            .listen('ChatMessageDeleted', (e) => {
+                                console.log('Received ChatMessageDeleted:', e);
+                                this.wire.call('handleMessageDeleted', e);
+                            });
+                    }
+                },
+                leaveEchoChannel() {
+                     if (window.Echo && this.activeChannelId) {
+                        window.Echo.leave(`chat.${this.activeChannelId}`);
+                        console.log(`Left channel: chat.${this.activeChannelId}`);
+                    }
+                },
+                setupScroll() {
+                    const chatMessages = document.getElementById('chat-messages');
+                    if (chatMessages) {
+                        this.scrollToBottom();
+                    }
+                },
+                scrollToBottom() {
+                    const chatMessages = document.getElementById('chat-messages');
+                    if (chatMessages) {
+                        this.$nextTick(() => {
+                           chatMessages.scrollTop = chatMessages.scrollHeight;
+                        });
+                    }
+                }
+            }
+        }
+    </script>
+    @endpush
 </div>
-
-<script>
-document.addEventListener('livewire:navigated', function() {
-    const chatContainer = document.getElementById('chat-container');
-    let previousScrollHeight = 0;
-    let scrollTopBeforeLoad = 0;
-
-    // If we are not on the chat page, do nothing.
-    if (!chatContainer) {
-        return;
-    }
-
-    function scrollToBottom() {
-        if (chatContainer) {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-    }
-
-    // Scroll to bottom on initial load or navigation
-    scrollToBottom();
-
-    // Listen for events from Livewire
-    if (typeof Livewire !== 'undefined') {
-        // Unified event to scroll chat to the bottom
-        Livewire.on('scroll-chat-to-bottom', () => {
-            // Using Alpine.nextTick ensures we wait for Livewire's DOM updates to complete
-            if (typeof Alpine !== 'undefined') {
-                Alpine.nextTick(() => scrollToBottom());
-            } else {
-                // Fallback for safety, in case Alpine isn't initialized
-                setTimeout(scrollToBottom, 150);
-            }
-        });
-
-        Livewire.on('more-messages-loaded', () => {
-            if (typeof Alpine !== 'undefined') {
-                Alpine.nextTick(() => {
-                    const newScrollHeight = chatContainer.scrollHeight;
-                    const scrollDifference = newScrollHeight - previousScrollHeight;
-
-                    if (scrollDifference > 0) {
-                        chatContainer.scrollTop = scrollTopBeforeLoad + scrollDifference;
-                    }
-
-                    previousScrollHeight = newScrollHeight;
-                });
-            }
-        });
-    }
-
-    let currentChannelId = @json($activeChannel?->id);
-    let currentEchoChannel = null;
-
-    // Function to subscribe to a channel
-    function subscribeToChannel(channelId) {
-        if (!channelId) {
-            console.log('❌ No channel ID provided');
-            return;
-        }
-
-        // Leave current channel if exists
-        if (currentEchoChannel) {
-            console.log(`📤 Leaving channel: chat.${currentChannelId}`);
-            try {
-                window.Echo.leave(`chat.${currentChannelId}`);
-            } catch (error) {
-                console.error('❌ Error leaving channel:', error);
-            }
-        }
-
-        // Subscribe to new channel
-        currentChannelId = channelId;
-        console.log(`📥 Subscribing to channel: chat.${channelId}`);
-
-        try {
-            currentEchoChannel = window.Echo.private(`chat.${channelId}`)
-                .listen('NewChatMessage', (event) => {
-                    console.log('📨 New message received:', event.message?.message);
-
-                    // Call Livewire method to handle the message
-                    try {
-                        @this.call('handleNewMessage', event);
-                        console.log('✅ Message processed successfully');
-                    } catch (error) {
-                        console.error('❌ Error processing message:', error);
-                    }
-                })
-                .listen('ChatMessageDeleted', (event) => {
-                    console.log('🗑️ Message deleted event received:', event);
-
-                    // Call Livewire method to handle the deleted message
-                    try {
-                        @this.call('handleMessageDeleted', event);
-                        console.log('✅ Deleted message processed successfully');
-                    } catch (error) {
-                        console.error('❌ Error processing deleted message:', error);
-                    }
-                })
-                .error((error) => {
-                    console.error('❌ Echo channel error:', error);
-                });
-
-            console.log(`✅ Successfully subscribed to channel: chat.${channelId}`);
-        } catch (error) {
-            console.error('❌ Failed to subscribe to channel:', error);
-        }
-    }
-
-    // Subscribe to initial channel
-    if (currentChannelId) {
-        subscribeToChannel(currentChannelId);
-    }
-
-    // Listen for channel changes from Livewire to update Echo subscription
-    if (typeof Livewire !== 'undefined') {
-        Livewire.on('channel-changed', (event) => {
-            console.log('🔄 Channel changed to:', event.channelId);
-            subscribeToChannel(event.channelId);
-            previousScrollHeight = chatContainer.scrollHeight; // Reset on channel change
-            scrollTopBeforeLoad = 0;
-        });
-    }
-
-    // This function will be called when we navigate away from the page
-    const cleanup = () => {
-        if (currentEchoChannel && currentChannelId) {
-            console.log(`📤 Leaving channel on navigation: chat.${currentChannelId}`);
-            try {
-                window.Echo.leave(`chat.${currentChannelId}`);
-            } catch (error) {
-                console.error('❌ Error leaving channel on navigation:', error);
-            }
-        }
-        // Important: remove the listener to avoid memory leaks
-        document.removeEventListener('livewire:navigating', cleanup);
-    };
-
-    // Add the cleanup listener for when we navigate away
-    document.addEventListener('livewire:navigating', cleanup);
-});
-</script>

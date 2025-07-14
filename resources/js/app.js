@@ -15,8 +15,6 @@ import.meta.glob([
     '../fonts/**',
 ]);
 
-import 'trix';
-
 // Add debugging for Echo connection
 console.log('🚀 App.js loaded');
 console.log('🔗 Echo instance:', window.Echo);

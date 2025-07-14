@@ -46,9 +46,19 @@ class Post extends Model
     {
         parent::boot();
 
-        static::creating(function ($post) {
-            $post->slug = Str::slug($post->title);
-        });
+        $createSlug = function ($post) {
+            $slug = Str::slug($post->title);
+            $originalSlug = $slug;
+            $count = 1;
+            while (static::where('slug', $slug)->where('id', '!=', $post->id)->exists()) {
+                $slug = "{$originalSlug}-{$count}";
+                $count++;
+            }
+            $post->slug = $slug;
+        };
+
+        static::creating($createSlug);
+        static::updating($createSlug);
     }
 
     public function user()

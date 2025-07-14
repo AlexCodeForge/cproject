@@ -3,22 +3,33 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TrixUploadController extends Controller
 {
     public function store(Request $request)
     {
         $request->validate([
-            'attachment' => 'required|image|max:2048', // 2MB Max
+            'attachment' => 'required|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        if ($request->hasFile('attachment')) {
-            $path = $request->file('attachment')->store('trix-attachments', 'public_real');
-            $url = asset('storage/' . $path);
+        $path = $request->file('attachment')->store('public/trix-attachments');
 
-            return response()->json(['url' => $url]);
-        }
+        return response()->json([
+            'url' => Storage::url($path),
+        ]);
+    }
 
-        return response()->json(['error' => 'File not found.'], 422);
+    public function summernoteStore(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $path = $request->file('file')->store('posts/content', 'public');
+
+        return response()->json([
+            'url' => Storage::url($path),
+        ]);
     }
 }

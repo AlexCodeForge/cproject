@@ -28,6 +28,7 @@ class Chat extends Component
     public int $messagesPerPage = 50;
     public int $messagesLoadedCount = 0;
     public bool $hasMoreMessages = false;
+    public string $search = '';
 
     public function mount(): void
     {
@@ -303,7 +304,23 @@ class Chat extends Component
 
     public function render()
     {
-        return view('user_panel.chat');
+        $channelsForDisplay = $this->channels;
+        $joinableChannelsForDisplay = $this->joinableChannels;
+
+        if (!empty($this->search)) {
+            $searchTerm = strtolower($this->search);
+            $channelsForDisplay = $this->channels->filter(function ($channel) use ($searchTerm) {
+                return str_contains(strtolower($channel->name), $searchTerm);
+            });
+            $joinableChannelsForDisplay = $this->joinableChannels->filter(function ($channel) use ($searchTerm) {
+                return str_contains(strtolower($channel->name), $searchTerm);
+            });
+        }
+
+        return view('user_panel.chat', [
+            'channelsForDisplay' => $channelsForDisplay,
+            'joinableChannelsForDisplay' => $joinableChannelsForDisplay,
+        ]);
     }
 
     /**

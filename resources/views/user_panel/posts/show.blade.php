@@ -16,7 +16,39 @@
             </div>
         @endif
 
-        <div class="p-6 sm:p-8 lg:p-10">
+        <div class="p-6 sm:p-8 lg:p-10 relative">
+            @if(auth()->check() && auth()->user()->hasRole('admin'))
+            <div class="absolute top-4 right-4">
+                <x-dropdown align="right" width="48">
+                    <x-slot name="trigger">
+                        <button class="inline-flex items-center justify-center p-2 rounded-full text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-700 focus:text-gray-500 transition duration-150 ease-in-out">
+                            <x-ionicon-ellipsis-vertical class="h-6 w-6" />
+                        </button>
+                    </x-slot>
+
+                    <x-slot name="content">
+                        <x-dropdown-link :href="route('admin.posts.edit', $post)">
+                            {{ __('Editar Post') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link href="#" wire:click.prevent="toggleFeatured">
+                            {{ $post->is_featured ? __('Marcar como no Destacado') : __('Marcar como Destacado') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link href="#" wire:click.prevent="toggleArchived">
+                             {{ $post->status === 'archived' ? __('Desarchivar Post') : __('Archivar Post') }}
+                        </x-dropdown-link>
+
+                        <div class="border-t border-gray-200 dark:border-gray-600"></div>
+
+                        <x-dropdown-link href="#" wire:click.prevent="confirmDelete" class="text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 dark:text-red-500">
+                            {{ __('Eliminar Post') }}
+                        </x-dropdown-link>
+                    </x-slot>
+                </x-dropdown>
+            </div>
+            @endif
+
             <header class="mb-6">
                 @if($post->category)
                     <a href="#" class="inline-block text-sm font-bold uppercase tracking-wider mb-2"
@@ -57,25 +89,10 @@
 
             <div class="prose dark:prose-invert prose-lg max-w-none text-slate-700 dark:text-gray-300 leading-relaxed">
                 @if ($post->is_premium && !(auth()->check() && auth()->user()->subscribed('default')))
-                    <div class="relative min-h-[500px]">
-                        @php
-                            $plainContent = strip_tags($post->content);
-                            $unblurredLength = 150; // Display first 150 characters unblurred
-                            $unblurredText = mb_substr($plainContent, 0, $unblurredLength);
-                            $blurredRemainingText = mb_substr($plainContent, $unblurredLength);
-                        @endphp
-
-                        {{-- Unblurred teaser --}}
-                        <div class="pb-2"> {{-- Add a small padding bottom to separate from blurred text --}}
-                            {!! nl2br(e($unblurredText)) !!}
+                    <div class="relative">
+                        <div class="max-h-60 overflow-hidden blur-sm select-none">
+                            {!! $post->content !!}
                         </div>
-
-                        {{-- Blurred remaining content --}}
-                        <div class="blur-sm select-none">
-                            {!! nl2br(e($blurredRemainingText)) !!}
-                        </div>
-
-                        {{-- Gradient overlay and premium card (these are absolutely positioned on top) --}}
                         <div class="absolute inset-0 bg-gradient-to-t from-white dark:from-gray-800 via-white/80 dark:via-gray-800/80 to-transparent"></div>
                         <div class="absolute inset-0 flex items-center justify-center">
                             <div class="text-center p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl max-w-md mx-auto">

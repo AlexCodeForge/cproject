@@ -142,7 +142,6 @@ class CreatePost extends Component
             $post = Post::create([
                 'user_id' => Auth::id(),
                 'title' => $this->title,
-                'slug' => Str::slug($this->title), // Slug is generated in model, but can be set here too
                 'excerpt' => $this->excerpt,
                 'content' => $this->content,
                 'featured_image' => $featuredImagePath,
