@@ -117,7 +117,6 @@ class CreatePost extends Component
     public function save()
     {
         Log::info('Attempting to save new post.', ['title' => $this->title, 'status' => $this->status]);
-        Log::info('Trix content received:', ['content' => $this->content]);
 
         // Convert comma-separated tags string to an array
         if (!empty($this->tags) && is_string($this->tags)) {

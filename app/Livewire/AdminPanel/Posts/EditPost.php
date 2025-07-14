@@ -128,7 +128,6 @@ class EditPost extends Component
     public function update()
     {
         Log::info('Attempting to update post.', ['post_id' => $this->post->id, 'title' => $this->title]);
-        Log::info('Trix content received for update:', ['content' => $this->content]);
 
         if (is_string($this->tags)) {
             $this->tags = array_filter(array_map('trim', explode(',', $this->tags)));

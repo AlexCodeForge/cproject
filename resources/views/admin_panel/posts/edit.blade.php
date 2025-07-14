@@ -66,8 +66,33 @@
                              x-init="
                                 let editor = $refs.trix;
                                 editor.addEventListener('trix-change', event => {
-                                    console.log('Trix content changed (edit form), syncing with Livewire:', event.target.value);
                                     $wire.set('content', event.target.value)
+                                });
+
+                                editor.addEventListener('trix-attachment-add', function(event) {
+                                    let attachment = event.attachment;
+                                    if (attachment.file) {
+                                        let formData = new FormData();
+                                        formData.append('attachment', attachment.file);
+
+                                        fetch('{{ route('admin.trix.upload') }}', {
+                                            method: 'POST',
+                                            body: formData,
+                                            headers: {
+                                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                            }
+                                        })
+                                        .then(response => response.json())
+                                        .then(result => {
+                                            attachment.setAttributes({
+                                                url: result.url,
+                                                href: result.url
+                                            });
+                                        })
+                                        .catch(error => {
+                                            console.error('Trix upload error:', error);
+                                        });
+                                    }
                                 });
                              ">
                             <input id="content" value="{{ $content }}" type="hidden">

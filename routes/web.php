@@ -24,6 +24,7 @@ use App\Http\Controllers\BillingController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\TrixUploadController;
 
 
 //must change this when landing page is ready
@@ -93,6 +94,9 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     // Route for creating a post
     Route::get('/posts/create', \App\Livewire\AdminPanel\Posts\CreatePost::class)->name('posts.create');
     Route::get('/posts/{post}/edit', EditPost::class)->name('posts.edit');
+
+    // Trix image upload
+    Route::post('/trix-upload', [TrixUploadController::class, 'store'])->name('trix.upload');
 });
 
 Route::post('billing-portal', [BillingController::class, 'handleBillingPortalRequest'])->name('billing-portal');
