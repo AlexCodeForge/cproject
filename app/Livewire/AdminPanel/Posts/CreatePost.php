@@ -169,7 +169,7 @@ class CreatePost extends Component
             $this->dispatch('showSuccessModal', message: 'Post created successfully!');
             Log::info('Post created successfully.', ['title' => $this->title]);
 
-            return $this->redirect(route('admin.posts.index'), navigate: true);
+            $this->dispatch('post-created');
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Ensure $e->errors() is always a collection before flattening and converting to array
             $this->dispatch('showErrorModal', message: collect($e->errors())->flatten()->toArray(), title: 'Validation Error');

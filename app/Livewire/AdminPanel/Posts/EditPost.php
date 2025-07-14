@@ -163,7 +163,7 @@ class EditPost extends Component
             $this->dispatch('showSuccessModal', message: 'Post updated successfully!');
             Log::info('Post updated successfully.', ['post_id' => $this->post->id]);
 
-            return $this->redirect(route('admin.posts.index'), navigate: true);
+            $this->dispatch('post-updated');
         } catch (\Exception $e) {
             Log::error('Error updating post.', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             $this->dispatch('showErrorModal', message: 'Error updating post: ' . $e->getMessage(), title: 'Post Update Error');

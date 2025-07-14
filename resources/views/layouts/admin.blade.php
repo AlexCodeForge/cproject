@@ -293,6 +293,27 @@
     <livewire:components.modals.confirmation-modal />
     <livewire:components.modals.success-modal />
     <livewire:components.modals.error-modal />
+    <script>
+        document.addEventListener('livewire:navigated', () => {
+            // Re-initialize any JS that needs to run on page load/navigation
+            // For example, if you use a tooltip library:
+            // initTooltips();
+        });
+
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('post-created', (event) => {
+                setTimeout(() => {
+                    window.location.href = "{{ route('admin.posts.index') }}";
+                }, 2000); // 2-second delay
+            });
+
+            Livewire.on('post-updated', (event) => {
+                setTimeout(() => {
+                    window.location.href = "{{ route('admin.posts.index') }}";
+                }, 2000); // 2-second delay
+            });
+        });
+    </script>
     @stack('scripts')
     @stack('modals')
 </body>

@@ -94,7 +94,7 @@
             </div>
 
             @if(!empty($post->tags))
-                <footer class="mt-8 pt-6 border-t border-stone-200 dark:border-gray-700">
+                <footer class="mt-8 pt-6 border-t border-stone-200 dark:border-gray-700 min-h-min">
                     <div class="flex flex-wrap gap-2">
                         @foreach($post->tags as $tag)
                             <span class="inline-block bg-stone-100 dark:bg-gray-700 text-slate-600 dark:text-gray-300 text-xs font-semibold px-3 py-1.5 rounded-full">#{{ $tag }}</span>

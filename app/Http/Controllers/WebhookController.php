@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierWebhookController;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SubscriptionSuccessNotification;
+use App\Notifications\UserSubscribedAdminNotification;
 
 class WebhookController extends CashierWebhookController
 {
@@ -70,6 +73,17 @@ class WebhookController extends CashierWebhookController
                         $user->removeRole('free');
                         $user->assignRole('premium');
                         Log::info('Premium role assigned and subscription synced.', ['user_id' => $user->id]);
+
+                        // Send success notification
+                        Notification::send($user, new SubscriptionSuccessNotification($user));
+                        Log::info('Sent SubscriptionSuccessNotification to user.', ['user_id' => $user->id]);
+
+                        // Notify admins
+                        $admins = User::whereHas('roles', fn($query) => $query->where('name', 'admin'))->get();
+                        if ($admins->isNotEmpty()) {
+                            Notification::send($admins, new UserSubscribedAdminNotification($user));
+                            Log::info('Sent UserSubscribedAdminNotification to admins.', ['count' => $admins->count()]);
+                        }
 
                         return new Response('Webhook Handled', 200);
                     }
