@@ -219,10 +219,7 @@
 
             <!-- Sidebar bottom controls -->
             <div class="flex flex-col space-y-2 px-4 flex-shrink-0 pt-4 border-t border-stone-200 dark:border-gray-700">
-                <button id="theme-toggle" title="Cambiar Tema" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden">
-                    <x-ionicon-moon-outline class="w-6 h-6 flex-shrink-0" />
-                    <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Tema</span>
-                </button>
+                <livewire:components.theme-toggle />
                 <a href="{{ route('dashboard') }}" title="Modo Usuario" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden" wire:navigate>
                     <x-ionicon-home-outline class="w-6 h-6 flex-shrink-0" />
                     <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Usuario</span>

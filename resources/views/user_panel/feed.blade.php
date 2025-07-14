@@ -85,14 +85,14 @@ new #[Layout('layouts.app')] class extends Component
                    x-transition:leave="transition ease-in duration-200"
                    x-transition:leave-start="opacity-100 transform scale-100"
                    x-transition:leave-end="opacity-0 transform scale-95">
-                    <article class="feed-item flex rounded-xl shadow-sm hover:shadow-lg h-full cursor-pointer overflow-hidden"
+                    <article class="feed-item flex rounded-xl shadow-sm hover:shadow-lg cursor-pointer overflow-hidden"
                              :class="{
-                                'flex-col sm:flex-row': viewMode === 'list',
-                                'flex-col sm:flex-col': viewMode === 'grid',
+                                'flex-col sm:flex-row h-72': viewMode === 'list',
+                                'flex-col h-112': viewMode === 'grid',
                                 'bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 dark:hover:border-gray-600': !{{ $post->is_premium ? 'true' : 'false' }},
                                 'bg-stone-50 dark:bg-gray-700/50 border-2 border-amber-300/40 dark:border-amber-700/50 dark:hover:border-amber-700/50': {{ $post->is_premium ? 'true' : 'false' }}
                              }">
-                        <div class="relative z-0" :class="viewMode === 'list' ? 'sm:w-1/3 feed-image' : 'w-full h-48'">
+                        <div class="relative z-0 flex-shrink-0" :class="viewMode === 'list' ? 'w-64 h-full feed-image' : 'w-full h-48'">
                             <img src="{{ $post->featured_image_url }}" alt="{{ $post->title }}" class="w-full h-full object-cover"
                                  onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/888888?text=Image';">
                             @if ($post->is_premium && !(auth()->check() && auth()->user()->subscribed('default')))
@@ -104,7 +104,7 @@ new #[Layout('layouts.app')] class extends Component
                                 </div>
                             @endif
                         </div>
-                        <div class="p-6 flex flex-col justify-between" :class="viewMode === 'list' ? 'sm:w-2/3' : 'w-full'">
+                        <div class="p-6 flex flex-col justify-between" :class="viewMode === 'list' ? 'flex-grow h-full' : 'w-full flex-grow h-64'">
                             <div>
                                 <div class="flex items-center gap-2 mb-3">
                                     <span class="text-xs font-bold uppercase"
@@ -116,8 +116,8 @@ new #[Layout('layouts.app')] class extends Component
                                         <x-ionicon-rocket-outline class="w-4 h-4 text-amber-600 dark:text-amber-400" />
                                     @endif
                                 </div>
-                                <h3 class="text-xl font-bold my-2 text-slate-900 dark:text-white group-hover:text-amber-600">{{ $post->title }}</h3>
-                                <p class="text-slate-600 text-sm dark:text-gray-300 leading-relaxed">{{ $post->excerpt }}</p>
+                                <h3 class="text-xl font-bold my-2 text-slate-900 dark:text-white group-hover:text-amber-600 line-clamp-2">{{ $post->title }}</h3>
+                                <p class="text-slate-600 text-sm dark:text-gray-300 leading-relaxed line-clamp-3">{{ $post->excerpt }}</p>
                             </div>
                             <div class="text-xs text-slate-400 dark:text-gray-500 mt-4">
                                 <span>{{ $post->published_at->diffForHumans() }}</span>

@@ -52,23 +52,11 @@ function initializeSharedLayout() {
         }, eventListeners);
     }
 
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        const themeIcon = themeToggle.querySelector('ion-icon');
-        const applyTheme = (theme) => {
-            document.documentElement.classList.toggle('dark', theme === 'dark');
-            if (themeIcon) {
-                themeIcon.setAttribute('name', theme === 'dark' ? 'sunny-outline' : 'moon-outline');
-            }
-        };
-        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        applyTheme(currentTheme);
-        addTrackedEventListener(themeToggle, 'click', () => {
-            const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-            localStorage.setItem('theme', newTheme);
-            applyTheme(newTheme);
-        }, eventListeners);
-    }
+    // Listen for theme-toggled event from Livewire component
+    window.addEventListener('theme-toggled', event => {
+        // console.log('Theme toggled event received:', event.detail);
+        document.documentElement.classList.toggle('dark', event.detail[0] === 'dark');
+    });
 }
 
 document.addEventListener('DOMContentLoaded', initializeSharedLayout);
