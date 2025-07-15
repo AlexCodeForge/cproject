@@ -219,6 +219,7 @@ class Chat extends Component
             'user_id'           => Auth::id(),
             'message'           => '', // Voice notes have no text content
             'voice_note_id'     => $voiceNote->id,
+            'parent_message_id' => $this->replyingTo?->id,
         ]);
 
         $message->load(['user.profile', 'voiceNote']);
@@ -239,7 +240,7 @@ class Chat extends Component
         $this->chatMessages->push($messageWithRelations);
 
         // 7. Reset state and scroll
-        $this->reset('tempVoiceNoteFile');
+        $this->reset(['tempVoiceNoteFile', 'replyingTo']);
         $this->dispatch('scroll-chat-to-bottom');
     }
 
@@ -304,6 +305,41 @@ class Chat extends Component
             });
         }
         $this->reactingTo = null;
+    }
+
+    public function findAndShowMessage(int $messageId)
+    {
+        if ($this->chatMessages->contains('id', $messageId)) {
+            $this->dispatch('scroll-to-message', messageId: $messageId);
+            return;
+        }
+
+        $targetMessage = ChatMessage::where('chat_channel_id', $this->activeChannel->id)->find($messageId);
+
+        if (!$targetMessage || !$this->activeChannel || $this->chatMessages->isEmpty()) {
+            return;
+        }
+
+        $oldestLoadedMessage = $this->chatMessages->first();
+
+        $messagesToLoad = ChatMessage::with(['user.profile', 'parentMessage.user', 'voiceNote'])
+            ->where('chat_channel_id', $this->activeChannel->id)
+            ->where('created_at', '<', $oldestLoadedMessage->created_at)
+            ->where('created_at', '>=', $targetMessage->created_at)
+            ->orderBy('created_at')
+            ->get();
+
+        if ($messagesToLoad->isNotEmpty()) {
+            $this->chatMessages = $messagesToLoad->concat($this->chatMessages)->values();
+            $this->messagesLoadedCount = $this->chatMessages->count();
+
+            $earliestMessageLoaded = $this->chatMessages->first();
+            $this->hasMoreMessages = ChatMessage::where('chat_channel_id', $this->activeChannel->id)
+                ->where('created_at', '<', $earliestMessageLoaded->created_at)
+                ->exists();
+        }
+
+        $this->dispatch('scroll-to-message', messageId: $messageId);
     }
 
     #[On('confirmDeleteMessage')]

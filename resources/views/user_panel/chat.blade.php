@@ -126,7 +126,7 @@
 
                     @forelse($chatMessages as $message)
                         {{-- Message item --}}
-                        <div wire:key="message-{{ $message->id }}" class="flex items-start gap-4 group @if($message->user_id == auth()->id()) flex-row-reverse @endif">
+                        <div id="message-{{ $message->id }}" wire:key="message-{{ $message->id }}" class="flex items-start gap-4 group @if($message->user_id == auth()->id()) flex-row-reverse @endif">
                              {{-- Avatar --}}
                             <img src="{{ $message->user->profile->avatar_url ?? 'https://ui-avatars.com/api/?name='.urlencode($message->user->name) }}" alt="{{ $message->user->name }}" class="w-10 h-10 rounded-full shadow-md object-cover">
 
@@ -139,10 +139,19 @@
 
                                 {{-- Reply --}}
                                 @if($message->parentMessage)
-                                    <div class="text-xs text-gray-600 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 p-1.5 rounded-t-lg mt-1 border-l-2 border-blue-500">
-                                        <p class="font-bold">{{ $message->parentMessage->user->name }}</p>
-                                        <p class="pl-1">{{ Str::limit($message->parentMessage->message, 50) }}</p>
-                                    </div>
+                                    <a href="#" wire:click.prevent="findAndShowMessage({{ $message->parentMessage->id }})" class="block w-full cursor-pointer group/reply">
+                                        <div class="text-xs text-gray-600 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 p-1.5 rounded-t-lg mt-1 border-l-2 border-blue-500 group-hover/reply:bg-gray-300 dark:group-hover/reply:bg-gray-600 transition-colors">
+                                            <p class="font-bold">{{ $message->parentMessage->user->name }}</p>
+                                            @if ($message->parentMessage->voiceNote)
+                                                <div class="flex items-center text-gray-600 dark:text-gray-400">
+                                                    <x-ionicon-mic-outline class="w-4 h-4 mr-1"/>
+                                                    <span>Nota de voz</span>
+                                                </div>
+                                            @else
+                                                <p class="pl-1">{{ Str::limit($message->parentMessage->message, 50) }}</p>
+                                            @endif
+                                        </div>
+                                    </a>
                                 @endif
 
                                 {{-- Message Bubble --}}
@@ -226,84 +235,80 @@
                                 <x-ionicon-close class="w-4 h-4 text-gray-500"/>
                             </button>
                             <p class="font-semibold text-gray-800 dark:text-gray-200">Respondiendo a {{ $replyingTo->user->name }}</p>
-                            <p class="text-gray-600 dark:text-gray-400 truncate">{{ $replyingTo->message }}</p>
+                            @if ($replyingTo->voiceNote)
+                                <div class="flex items-center text-gray-600 dark:text-gray-400">
+                                    <x-ionicon-mic-outline class="w-4 h-4 mr-1"/>
+                                    <span>Nota de voz</span>
+                                </div>
+                            @else
+                                <p class="text-gray-600 dark:text-gray-400 truncate">{{ $replyingTo->message }}</p>
+                            @endif
                         </div>
                     @endif
-                    <div class="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
-                        {{-- Replying to state --}}
-                        @if($replyingTo)
-                            <div class="relative bg-gray-100 dark:bg-gray-700 p-2 rounded-t-lg text-sm mb-2">
-                                <button wire:click="cancelReply" class="absolute top-1 right-1 p-1">
-                                    <x-ionicon-close class="w-4 h-4 text-gray-500"/>
-                                </button>
-                                <p class="font-semibold text-gray-800 dark:text-gray-200">Respondiendo a {{ $replyingTo->user->name }}</p>
-                                <p class="text-gray-600 dark:text-gray-400 truncate">{{ $replyingTo->message }}</p>
+                    <form wire:submit.prevent="sendMessage" class="flex items-end gap-3">
+                        <div class="relative flex-grow">
+                            <div wire:loading.flex wire:target="sendMessage" class="absolute inset-0 bg-white/50 dark:bg-black/50 items-center justify-center rounded-lg z-10">
+                                <x-ionicon-sync class="w-8 h-8 text-blue-500 animate-spin"/>
                             </div>
-                        @endif
-                        <form wire:submit.prevent="sendMessage" class="flex items-end gap-3">
-                            <div class="relative flex-grow">
-                                <div wire:loading.flex wire:target="sendMessage" class="absolute inset-0 bg-white/50 dark:bg-black/50 items-center justify-center rounded-lg z-10">
-                                    <x-ionicon-sync class="w-8 h-8 text-blue-500 animate-spin"/>
-                                </div>
-                                <textarea
-                                    wire:model="messageText"
-                                    id="message-input"
-                                    rows="1"
-                                    class="block w-full resize-none border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-lg shadow-sm scrollbar-hide p-3 disabled:opacity-75"
-                                    placeholder="Escribe tu mensaje..."
-                                    @keydown.enter.prevent="if (!$event.shiftKey && $wire.messageText.trim() !== '') { $wire.sendMessage() }"
-                                    wire:loading.attr="disabled"
-                                    x-data="{}"
-                                    x-init="
+                            <textarea
+                                wire:model="messageText"
+                                id="message-input"
+                                rows="1"
+                                class="block w-full resize-none border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-lg shadow-sm scrollbar-hide p-3 disabled:opacity-75"
+                                placeholder="Escribe tu mensaje..."
+                                @keydown.enter.prevent="if (!$event.shiftKey && $wire.messageText.trim() !== '') { $wire.sendMessage() }"
+                                wire:loading.attr="disabled"
+                                :disabled="isUploading"
+                                x-init="
+                                    $el.style.height = 'auto';
+                                    $el.style.height = $el.scrollHeight + 'px';
+                                    $watch('$wire.messageText', (value) => {
                                         $el.style.height = 'auto';
-                                        $el.style.height = $el.scrollHeight + 'px';
-                                        $watch('$wire.messageText', (value) => {
-                                            $el.style.height = 'auto';
-                                            $nextTick(() => { $el.style.height = $el.scrollHeight + 'px' });
-                                        });
-                                    "
-                                    @input="$el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px';"
-                                ></textarea>
-                            </div>
+                                        $nextTick(() => { $el.style.height = $el.scrollHeight + 'px' });
+                                    });
+                                "
+                                @input="$el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px';"
+                            ></textarea>
+                        </div>
 
-                            <div class="flex-shrink-0 flex items-center gap-2">
+                        <div class="flex-shrink-0 flex items-center gap-2">
                                                                 <!-- Send Button -->
-                                <button type="submit"
-                                        :disabled="$wire.messageText.trim() === '' || isUploading"
+                            <button type="submit"
+                                    :disabled="$wire.messageText.trim() === '' || isUploading"
+                                    wire:loading.attr="disabled"
+                                    class="p-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors">
+                                 <x-ionicon-rocket-outline class="w-6 h-6"/>
+                            </button>
+                            <!-- Record Button Container -->
+                            <div class="relative">
+                                <!-- Record Button -->
+                                <button type="button"
+                                        x-show="!isUploading"
+                                        @mousedown.prevent="startRecording()"
+                                        @mouseup.prevent="stopRecording()"
+                                        @touchstart.passive.prevent="startRecording()"
+                                        @touchend.passive.prevent="stopRecording()"
                                         wire:loading.attr="disabled"
-                                        class="p-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors">
-                                     <x-ionicon-rocket-outline class="w-6 h-6"/>
+                                        :disabled="isUploading"
+                                        :class="{ 'bg-red-500 text-white animate-pulse': isRecording }"
+                                        class="p-3 rounded-full bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors disabled:opacity-50">
+                                    <x-ionicon-mic-outline class="w-6 h-6"/>
                                 </button>
-                                <!-- Record Button Container -->
-                                <div class="relative">
-                                    <!-- Record Button -->
-                                    <button type="button"
-                                            x-show="!isUploading"
-                                            @mousedown.prevent="startRecording()"
-                                            @mouseup.prevent="stopRecording()"
-                                            @touchstart.passive.prevent="startRecording()"
-                                            @touchend.passive.prevent="stopRecording()"
-                                            wire:loading.attr="disabled"
-                                            :class="{ 'bg-red-500 text-white animate-pulse': isRecording }"
-                                            class="p-3 rounded-full bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors disabled:opacity-50">
-                                        <x-ionicon-mic-outline class="w-6 h-6"/>
-                                    </button>
 
-                                    <!-- Uploading Spinner -->
-                                    <div x-show="isUploading" style="display: none;" class="p-3 rounded-full bg-yellow-500 text-white">
-                                         <x-ionicon-sync class="w-6 h-6 animate-spin"/>
-                                    </div>
-
-                                    <!-- Recording Tooltip -->
-                                    <div x-show="isRecording" x-transition style="display: none;" class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md whitespace-nowrap">
-                                        Grabando...
-                                    </div>
+                                <!-- Uploading Spinner -->
+                                <div x-show="isUploading" style="display: none;" class="p-3 rounded-full bg-yellow-500 text-white">
+                                     <x-ionicon-sync class="w-6 h-6 animate-spin"/>
                                 </div>
 
-
+                                <!-- Recording Tooltip -->
+                                <div x-show="isRecording" x-transition style="display: none;" class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md whitespace-nowrap">
+                                    Grabando...
+                                </div>
                             </div>
-                        </form>
-                    </div>
+
+
+                        </div>
+                    </form>
                 </div>
             @else
                 <div class="flex-1 flex items-center justify-center text-gray-500 dark:text-gray-400">
@@ -352,6 +357,27 @@
 
                     this.$wire.on('scroll-chat-to-bottom', () => {
                         this.scrollToBottom();
+                    });
+
+                    this.$wire.on('scroll-to-message', (event) => {
+                        const messageId = event.messageId;
+                        if (!messageId) return;
+
+                        this.$nextTick(() => {
+                            const targetEl = document.getElementById(`message-${messageId}`);
+                            if (targetEl) {
+                                targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                                targetEl.classList.add('bg-blue-100', 'dark:bg-blue-900', 'rounded-lg');
+                                setTimeout(() => {
+                                    targetEl.classList.add('transition-colors', 'duration-1000');
+                                    targetEl.classList.remove('bg-blue-100', 'dark:bg-blue-900');
+                                }, 1500);
+                                setTimeout(() => {
+                                    targetEl.classList.remove('transition-colors', 'duration-1000', 'rounded-lg');
+                                }, 2500);
+                            }
+                        });
                     });
 
                     this.$wire.on('more-messages-loaded', () => {
