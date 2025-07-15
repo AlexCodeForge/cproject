@@ -17,6 +17,20 @@ class Feed extends Component
     #[Url(except: 'all')]
     public string $activeCategory = 'all';
 
+    public int $perPage = 9;
+
+    public function loadMore()
+    {
+        $this->perPage += 9;
+    }
+
+    public function updated($propertyName)
+    {
+        if (in_array($propertyName, ['searchTerm', 'activeCategory'])) {
+            $this->perPage = 9;
+        }
+    }
+
     public function filterByCategory(string $categoryName)
     {
         $this->activeCategory = $categoryName;
@@ -24,7 +38,7 @@ class Feed extends Component
 
     public function render()
     {
-        $posts = Post::published()
+        $postsQuery = Post::published()
             ->with('category')
             ->when($this->searchTerm, function ($query) {
                 $query->where(function ($q) {
@@ -42,8 +56,10 @@ class Feed extends Component
                     });
                 }
             })
-            ->orderBy('published_at', 'desc')
-            ->get();
+            ->orderBy('published_at', 'desc');
+
+        $totalPosts = $postsQuery->clone()->count();
+        $posts = $postsQuery->take($this->perPage)->get();
 
         $categories = PostCategory::whereHas('posts', function($query) {
             $query->published();
@@ -51,7 +67,8 @@ class Feed extends Component
 
         return view('user_panel.feed', [
             'posts' => $posts,
-            'categories' => $categories
+            'categories' => $categories,
+            'totalPosts' => $totalPosts
         ]);
     }
 }

@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 [x-cloak] {
     display: none !important;
@@ -98,16 +98,48 @@ body {
 
 /* Summernote modal z-index fix */
 .note-modal-backdrop {
-    z-index: 1040 !important;
+    display: none !important;
 }
 .note-modal {
-    z-index: 1050 !important;
+    position: fixed;
+    z-index: 9999 !important;
 }
 
 .note-modal .modal-dialog {
-    z-index: 1051 !important;
+    z-index: 10000 !important;
 }
 
 .note-modal .modal-content {
-    z-index: 1052 !important;
+    z-index: 10001 !important;
+}
+
+/* Summernote Editor Style Overrides for Headings */
+.note-editor .note-editing-area .note-editable h1 {
+    font-size: 2.5rem !important; /* Adjust these values as needed for your desired sizes */
+    font-weight: bold !important;
+}
+
+.note-editor .note-editing-area .note-editable h2 {
+    font-size: 2rem !important;
+    font-weight: bold !important;
+}
+
+.note-editor .note-editing-area .note-editable h3 {
+    font-size: 1.75rem !important;
+    font-weight: bold !important;
+}
+
+.note-editor .note-editing-area .note-editable h4 {
+    font-size: 1.5rem !important;
+    font-weight: bold !important;
+}
+
+.note-editor .note-editing-area .note-editable h5 {
+    font-size: 1.25rem !important;
+    font-weight: bold !important;
+}
+
+.note-editor .note-editing-area .note-editable h6 {
+    font-size: 1rem !important;
+    font-weight: bold !important;
 }

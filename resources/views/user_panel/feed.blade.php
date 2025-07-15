@@ -5,7 +5,7 @@
         toggleView(mode) {
             this.viewMode = mode;
         }
-    }">
+    }" x-cloak>
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">Feed de Noticias</h1>
             <div class="flex items-center gap-4">
@@ -132,5 +132,19 @@
                 </div>
             @endforelse
         </div>
+
+        @if (isset($totalPosts) && $posts->count() < $totalPosts)
+        <div class="text-center mt-8">
+            <button wire:click="loadMore" wire:loading.attr="disabled" wire:loading.remove
+                    class="inline-flex items-center justify-center px-6 py-2 rounded-full text-sm font-semibold whitespace-nowrap
+                           bg-white text-slate-600 border border-stone-200 shadow-sm hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50
+                           dark:bg-gradient-to-r dark:from-amber-400 dark:to-orange-400 dark:text-amber-900 dark:border-2 dark:border-amber-300 dark:shadow-md dark:hover:shadow-lg">
+                Cargar más
+            </button>
+            <div wire:loading wire:target="loadMore" class="py-3">
+                <x-ionicon-sync class="w-6 h-6 text-blue-500 animate-spin mx-auto dark:text-amber-400"/>
+            </div>
+        </div>
+        @endif
     </section>
 </div>

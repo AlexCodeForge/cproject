@@ -64,48 +64,74 @@
                              class="mt-1"
                              x-data
                              x-init="
-                                $('#summernote').summernote({
-                                    placeholder: 'Escribe tu contenido aquí...',
-                                    tabsize: 2,
-                                    height: 300,
-                                    toolbar: [
-                                        ['style', ['style']],
-                                        ['font', ['bold', 'underline', 'clear']],
-                                        ['color', ['color']],
-                                        ['para', ['ul', 'ol', 'paragraph']],
-                                        ['table', ['table']],
-                                        ['insert', ['link', 'picture', 'video']],
-                                        ['view', ['fullscreen', 'codeview', 'help']]
-                                    ],
-                                    callbacks: {
-                                        onChange: function(contents, $editable) {
-                                            @this.set('content', contents);
-                                        },
-                                        onImageUpload: function(files) {
-                                            let file = files[0];
-                                            let reader = new FileReader();
-                                            reader.onloadend = function() {
-                                                let formData = new FormData();
-                                                formData.append('file', file);
-                                                formData.append('_token', '{{ csrf_token() }}');
-                                                fetch('{{ route('admin.summernote.upload') }}', {
-                                                    method: 'POST',
-                                                    body: formData,
-                                                })
-                                                .then(response => response.json())
-                                                .then(result => {
-                                                    $('#summernote').summernote('insertImage', result.url);
-                                                })
-                                                .catch(error => {
-                                                    console.error('Summernote upload error:', error);
-                                                });
+                                if (!document.querySelector('#summernote-create').classList.contains('summernote-initialized')) {
+                                    $('#summernote-create').summernote({
+                                        placeholder: 'Escribe tu contenido aquí...',
+                                        tabsize: 2,
+                                        height: 300,
+                                        contentsCss: '{{ asset('css/app.css') }}', // Add this line
+                                        toolbar: [
+                                            ['style', ['style']],
+                                            ['font', ['bold', 'underline', 'clear']],
+                                            ['color', ['color']],
+                                            ['para', ['ul', 'ol', 'paragraph']],
+                                            ['table', ['table']],
+                                            ['insert', ['link', 'picture', 'video']],
+                                            ['view', ['codeview']]
+                                        ],
+                                        callbacks: {
+                                            onChange: function(contents, $editable) {
+                                                @this.set('content', contents);
+                                            },
+                                            onImageUpload: function(files) {
+                                                let file = files[0];
+                                                let reader = new FileReader();
+                                                reader.onloadend = function() {
+                                                    let formData = new FormData();
+                                                    formData.append('file', file);
+                                                    formData.append('_token', '{{ csrf_token() }}');
+                                                    fetch('{{ route('admin.summernote.upload') }}', {
+                                                        method: 'POST',
+                                                        body: formData,
+                                                    })
+                                                    .then(response => response.json())
+                                                    .then(result => {
+                                                        $('#summernote-create').summernote('insertImage', result.url);
+                                                    })
+                                                    .catch(error => {
+                                                        console.error('Summernote upload error:', error);
+                                                    });
+                                                }
+                                                reader.readAsDataURL(file);
                                             }
-                                            reader.readAsDataURL(file);
+                                        }
+                                    });
+                                    document.querySelector('#summernote-create').classList.add('summernote-initialized');
+                                }
+
+                                // Use a MutationObserver to aggressively remove any Summernote modal backdrops
+                                const observer = new MutationObserver((mutationsList, observer) => {
+                                    for (const mutation of mutationsList) {
+                                        if (mutation.type === 'childList') {
+                                            mutation.addedNodes.forEach(node => {
+                                                if (node.nodeType === 1 && node.classList.contains('note-modal-backdrop')) {
+                                                    node.remove();
+                                                }
+                                            });
                                         }
                                     }
                                 });
-                             ">
-                            <textarea id="summernote" wire:model.defer="content" class="hidden"></textarea>
+
+                                observer.observe(document.body, { childList: true, subtree: true });
+
+                                // Disconnect the observer when the component is removed
+                                $el.closest('[wire:id]').addEventListener('livewire:navigating', () => {
+                                    observer.disconnect();
+                                });
+
+                             "
+                             x-on:livewire:navigating.window="if(window.jQuery && $('#summernote-create').summernote){ $('#summernote-create').summernote('destroy'); }">
+                            <textarea id="summernote-create" wire:model.defer="content" class="hidden"></textarea>
                         </div>
                         <x-input-error :messages="$errors->get('content')" class="mt-2" />
                     </div>
