@@ -36,37 +36,53 @@
                 </div>
             </div>
         </div>
-        <div id="feed-filters" class="flex items-center gap-2 mb-8 overflow-x-auto pb-2">
-             <button wire:click="filterByCategory('all')"
-                     :class="{'bg-slate-700 text-white': @js($activeCategory) === 'all', 'bg-white dark:bg-gray-700 text-slate-600 dark:text-gray-300 border border-stone-200 dark:border-gray-600': @js($activeCategory) !== 'all'}"
-                     class="feed-filter-btn px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap">Todos</button>
-             <button wire:click="filterByCategory('premium')"
-                     :class="{
-                         'bg-gradient-to-r from-amber-400 to-orange-400 text-amber-900 border-2 border-amber-300 shadow-md hover:shadow-lg transition-all duration-200': @js($activeCategory) === 'premium',
-                         'bg-white dark:bg-gray-700 text-slate-600 dark:text-gray-300 border border-stone-200 dark:border-gray-600': @js($activeCategory) !== 'premium'
-                     }"
-                     class="feed-filter-btn px-4 py-2 rounded-full text-sm whitespace-nowrap flex items-center gap-1">
-                 <x-ionicon-rocket-outline class="w-4 h-4" />
-                 Premium
-             </button>
-             @foreach ($categories as $category)
-                @php
-                    $isPremiumCategory = in_array($category->name, ['Premium', 'Análisis Premium']);
-                @endphp
-                <button wire:click="filterByCategory('{{ $category->name }}')"
-                        :class="{
-                            'bg-slate-700 text-white': @js($activeCategory) === '{{ $category->name }}' && !{{ $isPremiumCategory ? 'true' : 'false' }},
-                            'bg-white dark:bg-gray-700 text-slate-600 dark:text-gray-300 border border-stone-200 dark:border-gray-600': @js($activeCategory) !== '{{ $category->name }}' && !{{ $isPremiumCategory ? 'true' : 'false' }},
-                            'bg-gradient-to-r from-amber-400 to-orange-400 text-amber-900 border-2 border-amber-300 shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-1': {{ $isPremiumCategory ? 'true' : 'false' }},
-                            'font-bold': @js($activeCategory) === '{{ $category->name }}' && {{ $isPremiumCategory ? 'true' : 'false' }}
-                        }"
-                        class="feed-filter-btn px-4 py-2 rounded-full text-sm whitespace-nowrap">
-                    <template x-if="{{ $isPremiumCategory ? 'true' : 'false' }}">
-                        <x-ionicon-rocket-outline class="w-4 h-4" />
-                    </template>
-                    {{ $category->name }}
-                </button>
-             @endforeach
+        <div class="relative mb-8">
+            <button
+                @click="$refs.feedFilters.scrollBy({ left: -200, behavior: 'smooth' })"
+                class="absolute left-0 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md z-10 hidden md:block"
+                aria-label="Scroll left"
+            >
+                <x-ionicon-chevron-back-outline class="w-5 h-5 text-slate-600 dark:text-gray-300" />
+            </button>
+            <div id="feed-filters" x-ref="feedFilters" class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide px-12">
+                 <button wire:click="filterByCategory('all')"
+                         :class="{'bg-slate-700 text-white dark:bg-blue-600': @js($activeCategory) === 'all', 'bg-white dark:bg-gray-700 text-slate-600 dark:text-gray-300 border border-stone-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600': @js($activeCategory) !== 'all'}"
+                         class="feed-filter-btn px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap min-h-[40px] flex items-center justify-center transition-all duration-200 ease-in-out">Todos</button>
+                 <button wire:click="filterByCategory('premium')"
+                         :class="{
+                             'bg-gradient-to-r from-amber-400 to-orange-400 text-amber-900 border-2 border-amber-300 shadow-md hover:shadow-lg transition-all duration-200': @js($activeCategory) === 'premium',
+                             'bg-white dark:bg-gray-700 text-slate-600 dark:text-gray-300 border border-stone-200 dark:border-gray-600': @js($activeCategory) !== 'premium'
+                         }"
+                         class="feed-filter-btn px-4 py-2 rounded-full text-sm whitespace-nowrap flex items-center gap-1 min-h-[40px] justify-center transition-all duration-200 ease-in-out">
+                     <x-ionicon-rocket-outline class="w-4 h-4" />
+                     Premium
+                 </button>
+                 @foreach ($categories as $category)
+                    @php
+                        $isPremiumCategory = in_array($category->name, ['Premium', 'Análisis Premium']);
+                    @endphp
+                    <button wire:click="filterByCategory('{{ $category->name }}')"
+                            :class="{
+                                'bg-slate-700 text-white dark:bg-blue-600': @js($activeCategory) === '{{ $category->name }}' && !{{ $isPremiumCategory ? 'true' : 'false' }},
+                                'bg-white dark:bg-gray-700 text-slate-600 dark:text-gray-300 border border-stone-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600': @js($activeCategory) !== '{{ $category->name }}' && !{{ $isPremiumCategory ? 'true' : 'false' }},
+                                'bg-gradient-to-r from-amber-400 to-orange-400 text-amber-900 border-2 border-amber-300 shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-1': {{ $isPremiumCategory ? 'true' : 'false' }},
+                                'font-bold': @js($activeCategory) === '{{ $category->name }}' && {{ $isPremiumCategory ? 'true' : 'false' }}
+                            }"
+                            class="feed-filter-btn px-4 py-2 rounded-full text-sm whitespace-nowrap min-h-[40px] flex items-center justify-center transition-all duration-200 ease-in-out">
+                        <template x-if="{{ $isPremiumCategory ? 'true' : 'false' }}">
+                            <x-ionicon-rocket-outline class="w-4 h-4" />
+                        </template>
+                        {{ $category->name }}
+                    </button>
+                 @endforeach
+            </div>
+            <button
+                @click="$refs.feedFilters.scrollBy({ left: 200, behavior: 'smooth' })"
+                class="absolute right-0 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md z-10 hidden md:block"
+                aria-label="Scroll right"
+            >
+                <x-ionicon-chevron-forward-outline class="w-5 h-5 text-slate-600 dark:text-gray-300" />
+            </button>
         </div>
 
         <div id="feed-container"
