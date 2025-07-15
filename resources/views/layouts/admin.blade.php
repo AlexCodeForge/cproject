@@ -145,6 +145,23 @@
             padding: 2rem;
         }
 
+        /* Hover and active animation for nav icons */
+        .nav-item:hover .w-6.h-6.flex-shrink-0,
+        .mobile-nav-item:hover .w-6.h-6 {
+            transform: scale(1.1) translateY(-2px);
+            color: #f97316 !important; /* orange-500 */
+        }
+
+        .nav-item.active .w-6.h-6.flex-shrink-0,
+        .mobile-nav-item.active .w-6.h-6 {
+            color: #f97316 !important; /* orange-500 */
+        }
+
+        .nav-item .w-6.h-6.flex-shrink-0,
+        .mobile-nav-item .w-6.h-6 {
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
         /* Footer - fixed height, never scrolls */
         footer {
             flex-shrink: 0; /* Never shrink */
