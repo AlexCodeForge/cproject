@@ -6,7 +6,7 @@
                      x-on:livewire-upload-finish="isUploading = false; console.log('Livewire upload finished.')"
                      x-on:livewire-upload-error="isUploading = false; console.log('Livewire upload error.')"
                      x-on:livewire-upload-progress="progress = $event.detail.progress; console.log('Livewire upload progress: ' + progress + '%')">
-                    <img src="{{ auth()->user()->profile?->avatar_url ?? auth()->user()->avatar_url }}" class="w-32 h-32 rounded-full border-4 border-slate-200 dark:border-gray-600" alt="Avatar de Usuario">
+                    <img src="{{ auth()->user()->profile?->avatar_url ?? auth()->user()->avatar_url }}" class="w-32 h-32 rounded-full border-4 border-slate-200 dark:border-gray-600 object-cover" alt="Avatar de Usuario">
                     <input type="file" wire:model="avatar" x-ref="avatarInput" class="hidden" x-on:change="console.log('File input changed. File selected:', $event.target.files[0])">
                     <button @click="$refs.avatarInput.click()" class="absolute bottom-2 right-2 bg-slate-700 dark:bg-gray-600 text-white p-2 rounded-full hover:bg-slate-800 dark:hover:bg-gray-500 transition-colors">
                         <x-ionicon-camera class="w-6 h-6"></x-ionicon-camera>

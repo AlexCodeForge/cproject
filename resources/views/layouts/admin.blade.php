@@ -158,6 +158,17 @@
                 padding-bottom: 5rem; /* Space for mobile nav */
             }
         }
+        .main-content-bg {
+            --bg-pattern-color-light: #e7e5e4; /* stone-200 */
+            --bg-pattern-color-dark: #374151;  /* gray-700 */
+            --bg-pattern-size: 2.5rem;
+            background-image: radial-gradient(var(--bg-pattern-color-light) 1px, transparent 1px);
+            background-size: var(--bg-pattern-size) var(--bg-pattern-size);
+            background-position: 0 0;
+        }
+        .dark .main-content-bg {
+            background-image: none;
+        }
     </style>
 </head>
 <body class="bg-stone-100 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300">
@@ -246,8 +257,11 @@
         </aside>
 
         <!-- Main Content Wrapper -->
-        <div class="flex-1 main-content-wrapper">
-            <main class="flex-1 p-4 sm:p-8 main-content-scrollable">
+        <div class="flex-1 main-content-wrapper relative">
+            <div class="absolute inset-0 main-content-bg -z-20"></div>
+            <div class="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-r from-sky-200/20 to-blue-200/20 dark:from-sky-900/20 dark:to-blue-900/20 rounded-full blur-3xl -z-10"></div>
+            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-r from-purple-200/20 to-indigo-200/20 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-full blur-3xl -z-10"></div>
+            <main class="flex-1 p-4 sm:p-8 main-content-scrollable isolate">
                 {{ $slot }}
             </main>
 

@@ -19,7 +19,7 @@ new #[Layout('layouts.app')] class extends Component
         <div class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-8 mb-8">
             <div class="flex flex-col sm:flex-row items-center gap-8">
                 <div class="flex-shrink-0 relative">
-                    <img src="{{ auth()->user()->profile?->avatar_url ?? auth()->user()->avatar_url }}" class="w-32 h-32 rounded-full border-4 border-slate-200 dark:border-gray-600" alt="Avatar de Usuario">
+                    <img src="{{ auth()->user()->profile?->avatar_url ?? auth()->user()->avatar_url }}" class="w-32 h-32 rounded-full border-4 border-slate-200 dark:border-gray-600 object-cover" alt="Avatar de Usuario">
                 </div>
                 <div class="flex-grow text-center sm:text-left">
                     <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">{{ auth()->user()->name }}</h1>
