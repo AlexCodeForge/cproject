@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class VoiceNote extends Model
 {
@@ -36,6 +37,8 @@ class VoiceNote extends Model
 
     public function getUrlAttribute()
     {
-        return Storage::disk('public')->url($this->file_path);
+        $url = asset('storage/' . $this->file_path);
+        Log::info("VoiceNote URL generated: ", ['id' => $this->id, 'path' => $this->file_path, 'url' => $url]);
+        return $url;
     }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OptionRocket - Próximamente</title>
+    <title>OptionRocket.org</title>
 
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -62,67 +62,13 @@
             opacity: 1;
             transform: translateY(0);
         }
-
-        @keyframes rocketLaunch {
-            0% {
-                opacity: 1;
-                transform: translateY(0) rotate(-25deg);
-            }
-            30% {
-                opacity: 1;
-                transform: translateY(-30px) rotate(-45deg);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100vh) rotate(-45deg  );
-            }
-        }
-
-        .launch-animation {
-            animation: rocketLaunch 1.8s ease-in-out forwards;
-        }
-
-        @keyframes rocketWobble {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-
-        .rocket-wobble-animate {
-            animation: rocketWobble 3s ease-in-out infinite;
-        }
-
-        .rocket-tooltip {
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%) translateY(0);
-            background-color: #1f2937; /* Corresponds to dark:bg-gray-800 */
-            color: #f9fafb;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            pointer-events: none;
-        }
-
-        #rocket-container:hover .rocket-tooltip {
-            opacity: 1;
-            visibility: visible;
-        }
     </style>
 </head>
 <body class="bg-stone-100 dark:bg-gray-900 text-slate-800 dark:text-gray-100 transition-colors duration-300 font-sans">
 
     <!-- Scrolling Rocket -->
-    <div id="rocket-container" class="fixed bottom-10 right-10 z-50" style="transform: translateY(200px); opacity: 0; pointer-events: none;">
-        <span class="rocket-tooltip">¡Llévame arriba!</span>
-        <div id="rocket-wobble-wrapper">
-            <ion-icon id="rocket-svg" name="rocket-outline" class="text-5xl sm:text-6xl text-amber-500 drop-shadow-lg transition-transform duration-500 ease-out"></ion-icon>
-        </div>
+    <div id="rocket-container" class="fixed bottom-10 right-10 z-50 transition-transform duration-500 ease-out" style="transform: translateY(200px);">
+        <ion-icon id="rocket-svg" name="rocket-outline" class="text-5xl sm:text-6xl text-amber-500 drop-shadow-lg"></ion-icon>
     </div>
 
     <!-- Navbar -->
@@ -136,13 +82,13 @@
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#features" class="text-slate-600 dark:text-gray-300 hover:text-amber-500 dark:hover:text-amber-400 transition-colors font-medium">Herramientas</a>
-                    <a href="#faq" class="text-slate-600 dark:text-gray-300 hover:text-amber-500 dark:hover:text-amber-400 transition-colors font-medium">Preguntas Frecuentes</a>
+                    <a href="#features" class="text-slate-600 dark:text-gray-300 hover:text-amber-500 dark:hover:text-amber-400 transition-colors font-medium">El Arsenal</a>
+                    <a href="#founder" class="text-slate-600 dark:text-gray-300 hover:text-amber-500 dark:hover:text-amber-400 transition-colors font-medium">Fundador</a>
                 </div>
 
                 <div class="flex items-center space-x-4">
                      <!-- CTA -->
-                    <a href="https://discord.com/invite/ZtPN7Ack" class="hidden sm:inline-block bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                    <a href="https://discord.gg/ZtPN7Ack" class="hidden sm:inline-block bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
                         Únete al Discord
                     </a>
                     <!-- Theme Toggle -->
@@ -163,7 +109,7 @@
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a href="#features" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-gray-300 hover:text-white hover:bg-amber-500 dark:hover:bg-amber-600">El Arsenal</a>
                 <a href="#founder" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-gray-300 hover:text-white hover:bg-amber-500 dark:hover:bg-amber-600">Fundador</a>
-                <a href="https://discord.com/invite/ZtPN7Ack" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-gray-300 hover:text-white hover:bg-amber-500 dark:hover:bg-amber-600">Únete al Discord</a>
+                <a href="https://discord.gg/ZtPN7Ack" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-gray-300 hover:text-white hover:bg-amber-500 dark:hover:bg-amber-600">Únete al Discord</a>
             </div>
         </div>
     </nav>
@@ -191,8 +137,8 @@
                 </p>
 
                 <div id="waitlist" class="max-w-lg mx-auto animate-on-scroll is-visible" style="animation-delay: 0.4s; transition-delay: 0.4s;">
-                     <a href="https://discord.com/invite/ZtPN7Ack" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-3 px-5 sm:py-5 sm:px-10 rounded-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 text-base sm:text-xl">
-                        <ion-icon name="logo-discord" class="text-3xl"></ion-icon>
+                     <a href="https://discord.gg/ZtPN7Ack" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-5 px-10 rounded-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 text-xl">
+                        <ion-icon name="logo-discord" class="text-2xl"></ion-icon>
                         <span>ENTRAR AL DISCORD</span>
                     </a>
                     <p class="text-sm text-gray-400 dark:text-gray-500 mt-4">Plazas limitadas para los miembros fundadores.</p>
@@ -268,7 +214,7 @@
                                 </div>
                             </div>
                             <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">Absorbe el Conocimiento</h3>
-                            <p class="text-slate-600 dark:text-gray-400">Sumérgete en nuestra plataforma educativa, participa en los eventos en vivo y aprende de los análisis compartidos por traders rentables.</p>
+                            <p class="text-slate-600 dark:text-gray-400">Sumérgete en el LMS, participa en los eventos en vivo y aprende de los análisis compartidos por traders rentables.</p>
                         </div>
                         <!-- Step 3 -->
                         <div class="text-center animate-on-scroll is-visible" style="animation-delay: 0.4s; transition-delay: 0.4s;">
@@ -310,50 +256,25 @@
                     </div>
                 </div>
                  <div class="mt-12 animate-on-scroll is-visible" style="animation-delay: 0.5s; transition-delay: 0.5s;">
-                     <a href="https://discord.com/invite/ZtPN7Ack" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-3 px-5 sm:py-5 sm:px-10 rounded-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 text-base sm:text-xl">
-                        <ion-icon name="logo-discord" class="text-3xl"></ion-icon>
-                        <span>ÚNETE AL DISCORD (PLAZAS LIMITADAS)</span>
+                     <a href="#" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-5 px-10 rounded-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 text-xl">
+                        <ion-icon name="logo-discord" class="text-2xl"></ion-icon>
+                        <span>ÚNETE AL DISCORD (Role Fundador)</span>
                     </a>
                 </div>
             </div>
         </section>
 
-        <!-- FAQ Section -->
-        <section id="faq" class="py-20 sm:py-24 bg-stone-100 dark:bg-gray-900">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16 animate-on-scroll">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">Preguntas Frecuentes</h2>
-                    <p class="mt-4 text-lg text-slate-600 dark:text-gray-400">¿Tienes dudas? Aquí resolvemos las más comunes.</p>
-                </div>
-                <div class="space-y-8">
-                    <!-- FAQ Item 1 -->
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm animate-on-scroll">
-                        <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2">¿Qué es OptionRocket?</h3>
-                        <p class="text-slate-600 dark:text-gray-400">
-                            OptionRocket es una comunidad y futura plataforma de herramientas para traders de opciones. Nuestro objetivo es proporcionar análisis, educación y una comunidad de apoyo para ayudarte a operar con una ventaja competitiva.
-                        </p>
-                    </div>
-                    <!-- FAQ Item 2 -->
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm animate-on-scroll" style="transition-delay: 0.1s;">
-                        <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2">¿Tengo que pagar para unirme a Discord?</h3>
-                        <p class="text-slate-600 dark:text-gray-400">
-                            Durante nuestra fase de pre-lanzamiento, el acceso a la comunidad de Discord es completamente gratuito. Las plazas para miembros fundadores son limitadas, ¡así que únete pronto!
-                        </p>
-                    </div>
-                    <!-- FAQ Item 3 -->
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm animate-on-scroll" style="transition-delay: 0.2s;">
-                        <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2">¿Cuándo se lanzará la aplicación web?</h3>
-                        <p class="text-slate-600 dark:text-gray-400">
-                            Estamos trabajando intensamente para lanzar la plataforma lo antes posible. Los miembros de nuestra comunidad de Discord serán los primeros en recibir noticias y tendrán acceso prioritario y beneficios exclusivos.
-                        </p>
-                    </div>
-                    <!-- FAQ Item 4 -->
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm animate-on-scroll" style="transition-delay: 0.3s;">
-                        <h3 class="font-semibold text-lg text-slate-900 dark:text-white mb-2">¿Necesito ser un trader experimentado para unirme?</h3>
-                        <p class="text-slate-600 dark:text-gray-400">
-                            Damos la bienvenida a traders de todos los niveles. Sin embargo, nuestra comunidad está enfocada en el trading serio y el desarrollo profesional. Si estás comprometido a mejorar tu operativa, encontrarás un valor inmenso.
-                        </p>
-                    </div>
+        <!-- Founder Section -->
+        <section id="founder" class="py-20 sm:py-24 animate-on-scroll is-visible">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <img class="w-28 h-28 rounded-full mx-auto mb-6 border-4 border-amber-400/50 shadow-lg" src="https://scontent.fsju2-1.fna.fbcdn.net/v/t39.30808-6/483527142_9349458331807469_2688539649841612440_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=KRLrAjDRE70Q7kNvwG8N3IZ&_nc_oc=AdmBzGYt8zkFQSfWgXN1rLTMmjvK7QkiRWO1DL9bgpRSYdMe_KcSNCY2stB9dXC2x7urnLu6WPhF6fK-fVPWiOS9&_nc_zt=23&_nc_ht=scontent.fsju2-1.fna&_nc_gid=Mz85MtFA-4C4olF6gI1NJg&oh=00_AfTpPz3k9ZFs9FuHWgjuPUESm9spd9BkCMIuWkH_jwJtrA&oe=687BCD97" alt="Christian Aviles">
+                <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Una Nota del Fundador</h2>
+                <blockquote class="text-lg lg:text-xl text-slate-700 dark:text-gray-300 italic mb-6">
+                    "Mi objetivo siempre ha sido nivelar el campo de juego para el trader particular. OptionRocket nace de esa visión: crear un espacio donde el conocimiento y la comunidad nos den una ventaja competitiva. Únete mientras construimos juntos la próxima plataforma para traders."
+                </blockquote>
+                <div>
+                    <p class="font-bold text-slate-800 dark:text-white">Christian Avilés</p>
+                    <p class="text-sm text-slate-500 dark:text-gray-400">Fundador &amp; CEO de OptionRocket</p>
                 </div>
             </div>
         </section>
@@ -366,24 +287,16 @@
             <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
                 <p class="text-sm text-slate-500 dark:text-gray-400">© 2025 OptionRocket. Todos los derechos reservados.</p>
                 <div class="flex space-x-5">
-                    <a href="https://facebook.com/optionrocket" class="text-slate-500 hover:text-amber-500 dark:text-gray-400 dark:hover:text-amber-400 transition-colors"><ion-icon name="logo-facebook" class="text-2xl"></ion-icon></a>
+		    <a href="https://facebook.com/optionrocket" class="text-slate-500 hover:text-amber-500 dark:text-gray-400 dark:hover:text-amber-400 transition-colors"><ion-icon name="logo-facebook" class="text-2xl"></ion-icon></a>
                     <a href="https://x.com/optionrocketofi" class="text-slate-500 hover:text-amber-500 dark:text-gray-400 dark:hover:text-amber-400 transition-colors"><ion-icon name="logo-twitter" class="text-2xl"></ion-icon></a>
                     <a href="https://www.youtube.com/@optionrocketoficial" class="text-slate-500 hover:text-amber-500 dark:text-gray-400 dark:hover:text-amber-400 transition-colors"><ion-icon name="logo-youtube" class="text-2xl"></ion-icon></a>
-                    <a href="https://www.pinterest.com/optionrocketoficial/" class="text-slate-500 hover:text-amber-500 dark:text-gray-400 dark:hover:text-amber-400 transition-colors"><ion-icon name="logo-pinterest" class="text-2xl"></ion-icon></a>
+		    <a href="https://www.pinterest.com/optionrocketoficial/" class="text-slate-500 hover:text-amber-500 dark:text-gray-400 dark:hover:text-amber-400 transition-colors"><ion-icon name="logo-pinterest" class="text-2xl"></ion-icon></a>
                     <a href="https://discord.gg/ZtPN7Ack" class="text-slate-500 hover:text-amber-500 dark:text-gray-400 dark:hover:text-amber-400 transition-colors"><ion-icon name="logo-discord" class="text-2xl"></ion-icon></a>
                 </div>
             </div>
         </div>
     </footer>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FM3F6KQ81H"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
-    gtag('config', 'G-FM3F6KQ81H');
-    </script>
 
     <script>
         // Theme Toggle
@@ -417,10 +330,6 @@
         const scrollElements = document.querySelectorAll('.animate-on-scroll');
         const rocketContainer = document.getElementById('rocket-container');
         const rocketSvg = document.getElementById('rocket-svg');
-        const rocketWobbleWrapper = document.getElementById('rocket-wobble-wrapper'); // Get the new wrapper
-
-        let isAnimatingRocket = false; // Renamed from isLaunching
-        let launchedAndAtTop = false; // Flag to keep rocket hidden after launch at top
 
         const elementInView = (el, dividend = 1) => {
             const elementTop = el.getBoundingClientRect().top;
@@ -444,93 +353,22 @@
                 }
             });
 
-            // If the rocket is currently being animated (launched or transitioning to hidden), bypass scroll logic.
-            if (isAnimatingRocket) {
-                return; // Absolutely block scroll handling during rocket animation
-            }
-
+            // Rocket animation
             const scrollPercentage = (window.scrollY) / (document.body.offsetHeight - window.innerHeight);
-
-            // Logic to hide/show rocket based on scroll and launch state
-            if (window.scrollY === 0) {
-                // When at the very top, always hide it, and assume it's "launched and at top"
-                rocketContainer.style.transform = 'translateY(200px)';
-                rocketSvg.style.transform = 'rotate(-45deg)';
-                rocketContainer.style.opacity = '0';
-                rocketContainer.style.pointerEvents = 'none';
-                rocketWobbleWrapper.classList.remove('rocket-wobble-animate'); // Stop wobble
-                launchedAndAtTop = true; // Mark as hidden at top
-            } else if (scrollPercentage > 0.05) { // If scrolled down enough, show it
-                // If user scrolls down, reset launchedAndAtTop so rocket can appear normally
-                launchedAndAtTop = false; // Reset if user scrolls down
-
-                rocketContainer.style.opacity = '1';
+            if (scrollPercentage > 0.05) {
                 rocketContainer.style.transform = 'translateY(0px)';
-                rocketContainer.style.pointerEvents = 'auto';
                 const rotation = -45 + (scrollPercentage * 20);
-
                 rocketSvg.style.transform = `rotate(${Math.min(rotation, -5)}deg)`;
-                rocketWobbleWrapper.classList.add('rocket-wobble-animate'); // Start wobble
-            } else { // If between 0 scroll and 0.05 scrollPercentage, keep it hidden
+            } else {
                 rocketContainer.style.transform = 'translateY(200px)';
-                rocketSvg.style.transform = 'rotate(-45deg)';
-                rocketContainer.style.opacity = '0';
-                rocketContainer.style.pointerEvents = 'none';
-                rocketWobbleWrapper.classList.remove('rocket-wobble-animate'); // Stop wobble
             }
         };
-
-        // Click listener for rocket
-        rocketContainer.addEventListener('click', () => {
-            isAnimatingRocket = true; // Set flag to true when rocket animation starts
-            launchedAndAtTop = false; // Reset this flag at the start of a new launch
-            rocketWobbleWrapper.classList.remove('rocket-wobble-animate'); // Stop wobble on click
-
-            // Prepare rocket for launch animation
-            rocketContainer.style.transition = 'none'; // Disable scroll transition for immediate animation
-            rocketContainer.style.transform = 'translateY(0px)'; // Set to visible position for launch
-            rocketContainer.style.opacity = '1'; // Ensure it's visible to animate
-            rocketContainer.style.pointerEvents = 'none'; // Disable clicks during launch
-            void rocketContainer.offsetWidth; // Force reflow to apply instant changes
-
-            // Clear any inline transform from the SVG so the CSS animation can take over.
-            rocketSvg.style.transform = '';
-
-            // Apply the launch animation to the SVG
-            rocketSvg.classList.add('launch-animation');
-            rocketSvg.style.transition = 'none'; // Ensure CSS animation takes precedence over any JS transforms
-
-            // Scroll to the top of the page smoothly
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            // After animation completes, reset and hide
-            setTimeout(() => {
-                rocketSvg.classList.remove('launch-animation');
-                rocketSvg.style.transform = 'rotate(-45deg)'; // Reset SVG transform
-                rocketSvg.style.opacity = '1'; // Reset SVG opacity for next time it becomes visible
-
-                // Instant hide rocketContainer before restoring transitions
-                rocketContainer.style.transition = 'none'; // Temporarily disable transition for instant hide
-                rocketContainer.style.transform = 'translateY(200px)'; // Move off-screen bottom instantly
-                rocketContainer.style.opacity = '0'; // Explicitly hide it via opacity instantly
-                rocketContainer.style.pointerEvents = 'none'; // Ensure no clicks after launch instantly
-
-                launchedAndAtTop = true; // Mark that it was launched and we're at the top.
-
-                // Crucial timing adjustment: Reset isAnimatingRocket only after the page is confirmed at the top.
-                setTimeout(() => {
-                    rocketContainer.style.transition = 'transform 0.5s ease-out, opacity 0.5s ease-out'; // Restore original transition
-                    isAnimatingRocket = false; // Reset flag after scroll settled and rocket is hidden
-                }, 100); // Small buffer to ensure scroll is done.
-
-            }, 1800); // Matches the animation duration
-        });
 
         window.addEventListener('scroll', () => {
             handleScrollAnimation();
         });
         // Trigger on load
-        handleScrollAnimation(); // Initial call to set correct state on page load
+        handleScrollAnimation();
 
     </script>
 </body>

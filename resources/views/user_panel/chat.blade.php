@@ -115,15 +115,18 @@
                 <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-100 dark:bg-gray-900">
                     @if($hasMoreMessages)
                         <div class="text-center">
-                            <button wire:click="loadMoreMessages" wire:loading.attr="disabled" class="text-sm font-medium text-blue-600 hover:underline">
+                            <button wire:click="loadMoreMessages" wire:loading.attr="disabled" wire:loading.remove class="text-sm font-medium text-blue-600 hover:underline">
                                 Cargar mensajes anteriores
                             </button>
+                            <div wire:loading wire:target="loadMoreMessages" class="py-3">
+                                <x-ionicon-sync class="w-6 h-6 text-blue-500 animate-spin mx-auto"/>
+                            </div>
                         </div>
                     @endif
 
                     @forelse($chatMessages as $message)
                         {{-- Message item --}}
-                        <div class="flex items-start gap-4 group @if($message->user_id == auth()->id()) flex-row-reverse @endif">
+                        <div wire:key="message-{{ $message->id }}" class="flex items-start gap-4 group @if($message->user_id == auth()->id()) flex-row-reverse @endif">
                              {{-- Avatar --}}
                             <img src="{{ $message->user->profile->avatar_url ?? 'https://ui-avatars.com/api/?name='.urlencode($message->user->name) }}" alt="{{ $message->user->name }}" class="w-10 h-10 rounded-full shadow-md object-cover">
 
@@ -145,9 +148,21 @@
                                 {{-- Message Bubble --}}
                                 <div class="relative bg-white dark:bg-gray-700 p-3 rounded-lg shadow-sm @if($message->user_id == auth()->id()) rounded-tr-none @else rounded-tl-none @endif @if($message->voiceNote) w-72 @else max-w-xl @endif">
                                     @if ($message->voiceNote)
-                                        <audio controls src="{{ $message->voiceNote->url }}" class="w-full"></audio>
+                                        <div x-data="{ src: '{{ $message->voiceNote->url }}', isLoaded: false }" wire:ignore>
+                                            <!-- Visible Player -->
+                                            <div x-show="isLoaded">
+                                                <audio controls :src="src" class="w-full"></audio>
+                                            </div>
+                                            <!-- Loading Indicator -->
+                                            <div x-show="!isLoaded" class="flex items-center justify-center h-10 bg-gray-200 dark:bg-gray-600 rounded-lg">
+                                                <x-ionicon-sync class="w-5 h-5 text-blue-500 animate-spin mr-2"/>
+                                                <span class="text-gray-600 dark:text-gray-400 text-sm">Cargando audio...</span>
+                                            </div>
+                                            <!-- Pre-loader audio element (hidden) -->
+                                            <audio :src="src" preload="auto" x-on:canplaythrough="isLoaded = true" class="hidden"></audio>
+                                        </div>
                                     @else
-                                        <p class="text-base text-gray-800 dark:text-gray-200" style="white-space: pre-wrap;">{!! nl2br(e($message->message)) !!}</p>
+                                        <p class="text-base text-gray-800 dark:text-gray-200 break-words" style="white-space: pre-wrap;">{!! nl2br(e($message->message)) !!}</p>
                                     @endif
                                 </div>
 
@@ -225,7 +240,7 @@
                                 <p class="text-gray-600 dark:text-gray-400 truncate">{{ $replyingTo->message }}</p>
                             </div>
                         @endif
-                        <form wire:submit.prevent="sendMessage" @submit.prevent="if($wire.messageText.trim() !== '') { $wire.sendMessage() }" class="flex items-end gap-3">
+                        <form wire:submit.prevent="sendMessage" class="flex items-end gap-3">
                             <div class="relative flex-grow">
                                 <div wire:loading.flex wire:target="sendMessage" class="absolute inset-0 bg-white/50 dark:bg-black/50 items-center justify-center rounded-lg z-10">
                                     <x-ionicon-sync class="w-8 h-8 text-blue-500 animate-spin"/>
@@ -234,9 +249,10 @@
                                     wire:model="messageText"
                                     id="message-input"
                                     rows="1"
-                                    class="block w-full resize-none border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-lg shadow-sm scrollbar-hide p-3"
+                                    class="block w-full resize-none border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-lg shadow-sm scrollbar-hide p-3 disabled:opacity-75"
                                     placeholder="Escribe tu mensaje..."
                                     @keydown.enter.prevent="if (!$event.shiftKey && $wire.messageText.trim() !== '') { $wire.sendMessage() }"
+                                    wire:loading.attr="disabled"
                                     x-data="{}"
                                     x-init="
                                         $el.style.height = 'auto';
@@ -251,6 +267,13 @@
                             </div>
 
                             <div class="flex-shrink-0 flex items-center gap-2">
+                                                                <!-- Send Button -->
+                                <button type="submit"
+                                        :disabled="$wire.messageText.trim() === '' || isUploading"
+                                        wire:loading.attr="disabled"
+                                        class="p-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors">
+                                     <x-ionicon-rocket-outline class="w-6 h-6"/>
+                                </button>
                                 <!-- Record Button Container -->
                                 <div class="relative">
                                     <!-- Record Button -->
@@ -260,6 +283,7 @@
                                             @mouseup.prevent="stopRecording()"
                                             @touchstart.passive.prevent="startRecording()"
                                             @touchend.passive.prevent="stopRecording()"
+                                            wire:loading.attr="disabled"
                                             :class="{ 'bg-red-500 text-white animate-pulse': isRecording }"
                                             class="p-3 rounded-full bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors disabled:opacity-50">
                                         <x-ionicon-mic-outline class="w-6 h-6"/>
@@ -276,12 +300,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Send Button -->
-                                <button type="submit"
-                                        :disabled="$wire.messageText.trim() === ''"
-                                        class="p-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors">
-                                     <x-ionicon-rocket-outline class="w-6 h-6"/>
-                                </button>
+
                             </div>
                         </form>
                     </div>
@@ -302,7 +321,6 @@
     <script>
         function chatComponent() {
             return {
-                wire: null,
                 activeChannelId: null,
                 isRecording: false,
                 mediaRecorder: null,
@@ -310,15 +328,19 @@
                 isUploading: false,
 
                 init(wire, activeChannelId) {
+                    console.log('Chat component initializing...');
                     this.wire = wire;
                     this.activeChannelId = activeChannelId;
                     this.initEcho();
                     this.setupScroll();
+                    this.$nextTick(() => this.setupAudioPlayers());
 
                     document.addEventListener('livewire:navigated', () => {
+                         console.log('Livewire navigation event caught.');
                          this.leaveEchoChannel();
                          this.initEcho();
                          this.setupScroll();
+                         this.$nextTick(() => this.setupAudioPlayers());
                     });
 
                     this.$wire.on('channel-changed', (event) => {
@@ -350,11 +372,11 @@
                         window.Echo.private(`chat.${this.activeChannelId}`)
                             .listen('NewChatMessage', (e) => {
                                 console.log('Received NewChatMessage:', e);
-                                this.wire.call('handleNewMessage', e);
+                                this.$wire.call('handleNewMessage', e);
                             })
                             .listen('ChatMessageDeleted', (e) => {
                                 console.log('Received ChatMessageDeleted:', e);
-                                this.wire.call('handleMessageDeleted', e);
+                                this.$wire.call('handleMessageDeleted', e);
                             });
                     }
                 },
@@ -379,8 +401,42 @@
                     }
                 },
 
+                setupAudioPlayers() {
+                    const chatContainer = document.getElementById('chat-messages');
+                    console.log('Setting up audio players. Container:', chatContainer);
+                    if (chatContainer) {
+                        // Check if listener is already added to prevent duplicates
+                        if (chatContainer.dataset.audioListenerAttached) {
+                            console.log('Audio listener already attached.');
+                            return;
+                        }
+                        chatContainer.dataset.audioListenerAttached = 'true';
+
+                        chatContainer.addEventListener('play', (event) => {
+                            console.log('Play event detected on:', event.target);
+                            if (event.target.tagName === 'AUDIO') {
+                                // Find all audio elements within the chat container
+                                chatContainer.querySelectorAll('audio').forEach(audioEl => {
+                                    // Pause all other audio elements
+                                    if (audioEl !== event.target) {
+                                        console.log('Pausing other audio element:', audioEl);
+                                        audioEl.pause();
+                                    }
+                                });
+                            }
+                        }, true); // Using capture phase
+                        console.log('Audio "play" event listener attached.');
+                    }
+                },
+
                 startRecording() {
                     if (this.isRecording) return; // Prevent multiple recordings
+
+                    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                        alert('La grabación de audio no está disponible en tu navegador o la página no se sirve en un contexto seguro (HTTPS).');
+                        console.error('MediaDevices API not available. This is common on non-HTTPS pages.');
+                        return;
+                    }
 
                     navigator.mediaDevices.getUserMedia({ audio: true })
                         .then(stream => {

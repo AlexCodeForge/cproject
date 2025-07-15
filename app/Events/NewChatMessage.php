@@ -61,14 +61,14 @@ class NewChatMessage implements ShouldBroadcastNow
      */
     public function broadcastWith(): array
     {
-        // Ensure user and profile are loaded
-        $this->message->load(['user.profile']);
-
+        // We only need to send the ID. The client component will fetch the full message.
+        // This ensures data consistency and avoids serialization issues with complex models.
         $data = [
-            'message' => $this->message->toArray()
+            'message' => [
+                'id' => $this->message->id
+            ]
         ];
 
-        // Add debugging
         Log::info('🎯 Broadcasting data:', $data);
 
         return $data;

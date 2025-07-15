@@ -29,7 +29,7 @@ class Chat extends Component
     public ?ChatMessage $replyingTo = null;
     public ?int $reactingTo = null;
     public array $availableReactions = ['👍', '❤️', '😂', '😮', '😢', '😡'];
-    public int $messagesPerPage = 50;
+    public int $messagesPerPage = 10;
     public int $messagesLoadedCount = 0;
     public bool $hasMoreMessages = false;
     public string $search = '';
@@ -88,7 +88,7 @@ class Chat extends Component
             return;
         }
 
-        $query = $this->activeChannel->messages()->with(['user.profile', 'parentMessage.user']);
+        $query = $this->activeChannel->messages()->with(['user.profile', 'parentMessage.user', 'voiceNote']);
         $totalMessages = $query->count();
 
         $this->chatMessages = $query->latest()
@@ -96,6 +96,13 @@ class Chat extends Component
             ->get()
             ->reverse()
             ->values();
+
+        Log::info('Loaded initial messages.', ['channel_id' => $this->activeChannel->id, 'count' => $this->chatMessages->count()]);
+        $this->chatMessages->each(function ($message) {
+            if ($message->voiceNote) {
+                Log::info('Message with voice note found:', ['message_id' => $message->id, 'voice_note_id' => $message->voiceNote->id, 'url' => $message->voiceNote->url]);
+            }
+        });
 
         $this->messagesLoadedCount = $this->chatMessages->count();
         $this->hasMoreMessages = $this->messagesLoadedCount < $totalMessages;
@@ -109,7 +116,7 @@ class Chat extends Component
             return;
         }
 
-        $query = $this->activeChannel->messages()->with(['user.profile', 'parentMessage.user']);
+        $query = $this->activeChannel->messages()->with(['user.profile', 'parentMessage.user', 'voiceNote']);
         $totalMessages = $query->count();
 
         $newMessages = $query->latest()
@@ -117,6 +124,13 @@ class Chat extends Component
             ->take($this->messagesPerPage)
             ->get()
             ->reverse();
+
+        Log::info('Loaded more messages.', ['channel_id' => $this->activeChannel->id, 'count' => $newMessages->count()]);
+        $newMessages->each(function ($message) {
+            if ($message->voiceNote) {
+                Log::info('More message with voice note found:', ['message_id' => $message->id, 'voice_note_id' => $message->voiceNote->id, 'url' => $message->voiceNote->url]);
+            }
+        });
 
         $this->chatMessages = $newMessages->concat($this->chatMessages)->values();
         $this->messagesLoadedCount = $this->chatMessages->count();
@@ -145,8 +159,6 @@ class Chat extends Component
             'parent_message_id' => $this->replyingTo?->id,
         ]);
 
-        $message->load(['user.profile']);
-
         // Log broadcast attempt
         Log::info('💬 Broadcasting new message', [
             'message_id' => $message->id,
@@ -169,8 +181,12 @@ class Chat extends Component
             $this->activeChannel->update(['last_message_at' => now()]);
         }
 
+        // Refetch the message to ensure it's a "clean" model instance with all relationships
+        // consistent with what the broadcast receiver will get.
+        $messageWithRelations = ChatMessage::with(['user.profile', 'parentMessage.user', 'voiceNote'])->find($message->id);
+
         // Add to local collection to show immediately
-        $this->chatMessages->push($message);
+        $this->chatMessages->push($messageWithRelations);
 
         $this->reset(['messageText', 'replyingTo']);
         $this->dispatch('scroll-chat-to-bottom');
@@ -218,8 +234,9 @@ class Chat extends Component
         // 5. Update channel's last message timestamp
         $this->activeChannel->update(['last_message_at' => now()]);
 
-        // 6. Add to local collection to show immediately
-        $this->chatMessages->push($message);
+        // 6. Refetch and add to local collection to show immediately
+        $messageWithRelations = ChatMessage::with(['user.profile', 'parentMessage.user', 'voiceNote'])->find($message->id);
+        $this->chatMessages->push($messageWithRelations);
 
         // 7. Reset state and scroll
         $this->reset('tempVoiceNoteFile');
@@ -239,31 +256,31 @@ class Chat extends Component
         public function handleNewMessage($event): void
     {
         $messageData = $event['message'];
+        $messageId = $messageData['id'];
 
-        Log::info('🎉 Received new message', [
-            'message_id' => $messageData['id'],
-            'user_id' => $messageData['user_id'],
+        Log::info('🎉 Received new message event', [
+            'message_id' => $messageId,
             'current_user' => Auth::id(),
         ]);
 
         // Prevent duplicate messages
-        if ($this->chatMessages->contains('id', $messageData['id'])) {
-            Log::info('ℹ️ Skipping duplicate message', ['id' => $messageData['id']]);
+        if (collect($this->chatMessages)->contains('id', $messageId)) {
+            Log::info('ℹ️ Skipping duplicate message', ['id' => $messageId]);
             return;
         }
 
         // Fetch the actual message from database with relationships
         $message = ChatMessage::with(['user.profile', 'parentMessage.user', 'voiceNote'])
-            ->find($messageData['id']);
+            ->find($messageId);
 
         if (!$message) {
-            Log::error('❌ Message not found in database', ['id' => $messageData['id']]);
+            Log::error('❌ Message not found in database', ['id' => $messageId]);
             return;
         }
 
         // Add new message to collection
         $this->chatMessages->push($message);
-        Log::info('✅ Added new message to collection', ['id' => $messageData['id']]);
+        Log::info('✅ Added new message to component state', ['id' => $messageId]);
 
         // Dispatch event to scroll to the new message
         $this->dispatch('scroll-chat-to-bottom');
