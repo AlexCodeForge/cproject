@@ -143,8 +143,12 @@
                                 @endif
 
                                 {{-- Message Bubble --}}
-                                <div class="relative bg-white dark:bg-gray-700 p-3 rounded-lg shadow-sm @if($message->user_id == auth()->id()) rounded-tr-none @else rounded-tl-none @endif max-w-xl">
-                                    <p class="text-base text-gray-800 dark:text-gray-200" style="white-space: pre-wrap;">{!! nl2br(e($message->message)) !!}</p>
+                                <div class="relative bg-white dark:bg-gray-700 p-3 rounded-lg shadow-sm @if($message->user_id == auth()->id()) rounded-tr-none @else rounded-tl-none @endif @if($message->voiceNote) w-72 @else max-w-xl @endif">
+                                    @if ($message->voiceNote)
+                                        <audio controls src="{{ $message->voiceNote->url }}" class="w-full"></audio>
+                                    @else
+                                        <p class="text-base text-gray-800 dark:text-gray-200" style="white-space: pre-wrap;">{!! nl2br(e($message->message)) !!}</p>
+                                    @endif
                                 </div>
 
                                 {{-- Reactions on message --}}
@@ -210,34 +214,77 @@
                             <p class="text-gray-600 dark:text-gray-400 truncate">{{ $replyingTo->message }}</p>
                         </div>
                     @endif
-                    <form wire:submit.prevent="sendMessage" class="flex items-end gap-3">
-                        <div class="relative flex-grow">
-                            <div wire:loading.flex wire:target="sendMessage" class="absolute inset-0 bg-white/50 dark:bg-black/50 items-center justify-center rounded-lg z-10">
-                                <x-ionicon-sync class="w-8 h-8 text-blue-500 animate-spin"/>
+                    <div class="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
+                        {{-- Replying to state --}}
+                        @if($replyingTo)
+                            <div class="relative bg-gray-100 dark:bg-gray-700 p-2 rounded-t-lg text-sm mb-2">
+                                <button wire:click="cancelReply" class="absolute top-1 right-1 p-1">
+                                    <x-ionicon-close class="w-4 h-4 text-gray-500"/>
+                                </button>
+                                <p class="font-semibold text-gray-800 dark:text-gray-200">Respondiendo a {{ $replyingTo->user->name }}</p>
+                                <p class="text-gray-600 dark:text-gray-400 truncate">{{ $replyingTo->message }}</p>
                             </div>
-                            <textarea
-                                wire:model="messageText"
-                                id="message-input"
-                                rows="1"
-                                class="block w-full resize-none border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-lg shadow-sm scrollbar-hide p-3"
-                                placeholder="Escribe tu mensaje..."
-                                @keydown.enter.prevent="if ($event.shiftKey) { return; } else { $wire.sendMessage(); }"
-                                x-data="{}"
-                                x-init="
-                                    $el.style.height = 'auto';
-                                    $el.style.height = $el.scrollHeight + 'px';
-                                    $watch('$wire.messageText', (value) => {
+                        @endif
+                        <form wire:submit.prevent="sendMessage" @submit.prevent="if($wire.messageText.trim() !== '') { $wire.sendMessage() }" class="flex items-end gap-3">
+                            <div class="relative flex-grow">
+                                <div wire:loading.flex wire:target="sendMessage" class="absolute inset-0 bg-white/50 dark:bg-black/50 items-center justify-center rounded-lg z-10">
+                                    <x-ionicon-sync class="w-8 h-8 text-blue-500 animate-spin"/>
+                                </div>
+                                <textarea
+                                    wire:model="messageText"
+                                    id="message-input"
+                                    rows="1"
+                                    class="block w-full resize-none border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:border-blue-500 dark:focus:border-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600 rounded-lg shadow-sm scrollbar-hide p-3"
+                                    placeholder="Escribe tu mensaje..."
+                                    @keydown.enter.prevent="if (!$event.shiftKey && $wire.messageText.trim() !== '') { $wire.sendMessage() }"
+                                    x-data="{}"
+                                    x-init="
                                         $el.style.height = 'auto';
-                                        $nextTick(() => { $el.style.height = $el.scrollHeight + 'px' });
-                                    });
-                                "
-                                @input="$el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px';"
-                            ></textarea>
-                        </div>
-                        <button type="submit" class="flex-shrink-0 p-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors" :disabled="$wire.messageText.trim() === ''">
-                             <x-ionicon-rocket-outline class="w-6 h-6"/>
-                        </button>
-                    </form>
+                                        $el.style.height = $el.scrollHeight + 'px';
+                                        $watch('$wire.messageText', (value) => {
+                                            $el.style.height = 'auto';
+                                            $nextTick(() => { $el.style.height = $el.scrollHeight + 'px' });
+                                        });
+                                    "
+                                    @input="$el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px';"
+                                ></textarea>
+                            </div>
+
+                            <div class="flex-shrink-0 flex items-center gap-2">
+                                <!-- Record Button Container -->
+                                <div class="relative">
+                                    <!-- Record Button -->
+                                    <button type="button"
+                                            x-show="!isUploading"
+                                            @mousedown.prevent="startRecording()"
+                                            @mouseup.prevent="stopRecording()"
+                                            @touchstart.passive.prevent="startRecording()"
+                                            @touchend.passive.prevent="stopRecording()"
+                                            :class="{ 'bg-red-500 text-white animate-pulse': isRecording }"
+                                            class="p-3 rounded-full bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors disabled:opacity-50">
+                                        <x-ionicon-mic-outline class="w-6 h-6"/>
+                                    </button>
+
+                                    <!-- Uploading Spinner -->
+                                    <div x-show="isUploading" style="display: none;" class="p-3 rounded-full bg-yellow-500 text-white">
+                                         <x-ionicon-sync class="w-6 h-6 animate-spin"/>
+                                    </div>
+
+                                    <!-- Recording Tooltip -->
+                                    <div x-show="isRecording" x-transition style="display: none;" class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md whitespace-nowrap">
+                                        Grabando...
+                                    </div>
+                                </div>
+
+                                <!-- Send Button -->
+                                <button type="submit"
+                                        :disabled="$wire.messageText.trim() === ''"
+                                        class="p-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors">
+                                     <x-ionicon-rocket-outline class="w-6 h-6"/>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             @else
                 <div class="flex-1 flex items-center justify-center text-gray-500 dark:text-gray-400">
@@ -257,6 +304,11 @@
             return {
                 wire: null,
                 activeChannelId: null,
+                isRecording: false,
+                mediaRecorder: null,
+                audioChunks: [],
+                isUploading: false,
+
                 init(wire, activeChannelId) {
                     this.wire = wire;
                     this.activeChannelId = activeChannelId;
@@ -325,7 +377,77 @@
                            chatMessages.scrollTop = chatMessages.scrollHeight;
                         });
                     }
-                }
+                },
+
+                startRecording() {
+                    if (this.isRecording) return; // Prevent multiple recordings
+
+                    navigator.mediaDevices.getUserMedia({ audio: true })
+                        .then(stream => {
+                            this.isRecording = true; // Set to true when recording starts
+                            this.audioChunks = [];
+
+                            this.mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+
+                            this.mediaRecorder.addEventListener("dataavailable", event => {
+                                this.audioChunks.push(event.data);
+                            });
+
+                            // This event fires when mediaRecorder.stop() is called
+                            this.mediaRecorder.addEventListener("stop", () => {
+                                // The `isRecording` state is handled immediately in `stopRecording()`
+                                this.isUploading = true;  // Now uploading
+
+                                const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+                                const audioFile = new File([audioBlob], `voice-note-${Date.now()}.webm`, { type: "audio/webm" });
+
+                                console.log('Recording stopped, uploading...');
+
+                                @this.upload('tempVoiceNoteFile', audioFile,
+                                    (uploadedFilename) => {
+                                        console.log('Upload successful. Sending message.');
+                                        @this.sendVoiceMessage().finally(() => {
+                                            this.isUploading = false; // Hide spinner after message sent
+                                        });
+                                    },
+                                    (error) => {
+                                        console.error('Upload failed.', error);
+                                        alert('La subida de la nota de voz falló. Inténtalo de nuevo.');
+                                        this.isUploading = false; // Hide spinner on error
+                                    }
+                                );
+                            });
+
+                            // This event fires when the stream is completely inactive
+                            this.mediaRecorder.onstop = () => {
+                                stream.getTracks().forEach(track => track.stop());
+                            };
+
+                            this.mediaRecorder.start();
+                            console.log('Recording started...');
+                        })
+                        .catch(err => {
+                            console.error("Error accessing microphone:", err);
+                            alert('No se pudo acceder al micrófono. Asegúrate de dar permiso en tu navegador.');
+                            this.isRecording = false; // Reset if microphone access failed
+                        });
+                },
+
+                stopRecording() {
+                    // Immediately set to false for UI feedback
+                    this.isRecording = false;
+
+                    if (!this.mediaRecorder || this.mediaRecorder.state === 'inactive') {
+                        // If not recording or already inactive, do nothing
+                        return;
+                    }
+
+                    try {
+                        this.mediaRecorder.stop(); // This will trigger the "stop" event listener
+                    } catch (e) {
+                        console.error("Error stopping media recorder:", e);
+                    }
+                },
             }
         }
     </script>

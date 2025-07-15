@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class ChatMessage extends Model
 {
@@ -29,6 +30,7 @@ class ChatMessage extends Model
         'edited_at',
         'deleted_at',
         'reactions',
+        'voice_note_id',
     ];
 
     /**
@@ -69,6 +71,11 @@ class ChatMessage extends Model
     public function parentMessage(): BelongsTo
     {
         return $this->belongsTo(ChatMessage::class, 'parent_message_id');
+    }
+
+    public function voiceNote()
+    {
+        return $this->belongsTo(VoiceNote::class);
     }
 
     /**

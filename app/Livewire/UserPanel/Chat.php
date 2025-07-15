@@ -7,16 +7,20 @@ use App\Events\ChatMessageDeleted;
 use App\Models\ChatChannel;
 use App\Models\ChatMessage;
 use App\Models\User;
+use App\Models\VoiceNote;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 #[Layout('layouts.app')]
 class Chat extends Component
 {
+    use WithFileUploads;
+
     public ?ChatChannel $activeChannel = null;
     public Collection $channels;
     public Collection $joinableChannels;
@@ -29,6 +33,7 @@ class Chat extends Component
     public int $messagesLoadedCount = 0;
     public bool $hasMoreMessages = false;
     public string $search = '';
+    public $tempVoiceNoteFile;
 
     public function mount(): void
     {
@@ -171,6 +176,56 @@ class Chat extends Component
         $this->dispatch('scroll-chat-to-bottom');
     }
 
+    public function sendVoiceMessage()
+    {
+        $this->validate([
+            'tempVoiceNoteFile' => 'required|file|mimes:mp3,wav,ogg,webm|max:10240', // 10MB Max
+        ]);
+
+        if (!$this->activeChannel) {
+            return;
+        }
+
+        // 1. Store the file
+        $path = $this->tempVoiceNoteFile->store('voicenotes', 'public');
+
+        // 2. Create the VoiceNote record
+        $voiceNote = VoiceNote::create([
+            'chat_channel_id' => $this->activeChannel->id,
+            'user_id'         => Auth::id(),
+            'file_path'       => $path,
+            'duration'        => 0, // We can calculate this on the frontend later if needed
+        ]);
+
+        // 3. Create the ChatMessage record, linking the voice note
+        $message = ChatMessage::create([
+            'chat_channel_id'   => $this->activeChannel->id,
+            'user_id'           => Auth::id(),
+            'message'           => '', // Voice notes have no text content
+            'voice_note_id'     => $voiceNote->id,
+        ]);
+
+        $message->load(['user.profile', 'voiceNote']);
+
+        // 4. Broadcast the new message event
+        try {
+            broadcast(new NewChatMessage($message));
+            Log::info('✅ Voice message broadcasted successfully');
+        } catch (\Exception $e) {
+            Log::error('❌ Voice message broadcast failed', ['error' => $e->getMessage(), 'message_id' => $message->id]);
+        }
+
+        // 5. Update channel's last message timestamp
+        $this->activeChannel->update(['last_message_at' => now()]);
+
+        // 6. Add to local collection to show immediately
+        $this->chatMessages->push($message);
+
+        // 7. Reset state and scroll
+        $this->reset('tempVoiceNoteFile');
+        $this->dispatch('scroll-chat-to-bottom');
+    }
+
     public function handleMessageDeleted($event): void
     {
         $messageId = $event['messageId'];
@@ -198,7 +253,7 @@ class Chat extends Component
         }
 
         // Fetch the actual message from database with relationships
-        $message = ChatMessage::with(['user.profile', 'parentMessage.user'])
+        $message = ChatMessage::with(['user.profile', 'parentMessage.user', 'voiceNote'])
             ->find($messageData['id']);
 
         if (!$message) {
