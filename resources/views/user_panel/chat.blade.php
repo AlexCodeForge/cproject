@@ -59,7 +59,11 @@
                     <ul class="mt-1 space-y-1">
                         @forelse($joinableChannelsForDisplay as $channel)
                             <li>
-                                <a href="#" wire:click.prevent="joinChannel({{ $channel->id }})" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-150">
+                                <a href="#"
+                                   wire:click.prevent="joinChannel({{ $channel->id }})"
+                                   wire:loading.class="opacity-50 cursor-not-allowed"
+                                   wire:target="joinChannel({{ $channel->id }})"
+                                   class="flex items-center justify-between px-3 py-2.5 rounded-lg text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-150">
                                     <div class="flex items-center">
                                         <span>{{ $channel->name }}</span>
                                         @if($channel->type === 'premium')
@@ -101,8 +105,15 @@
                              x-transition:leave="transition ease-in duration-75"
                              x-transition:leave-start="transform opacity-100 scale-100"
                              x-transition:leave-end="transform opacity-0 scale-95"
-                             class="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-10"
+                             class="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-10"
                              style="display: none;">
+                            <a href="#" @click.prevent="showUserList = true; open = false" class="flex items-center justify-between w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <span class="flex items-center">
+                                    <x-ionicon-people-outline class="w-5 h-5 mr-2"/>
+                                    Miembros
+                                </span>
+                                <span class="text-xs font-semibold bg-gray-200 dark:bg-gray-600 rounded-full px-2 py-0.5" x-text="liveUsers.length"></span>
+                            </a>
                             <a href="#" wire:click.prevent="leaveChannel({{ $activeChannel->id }})" class="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <x-ionicon-log-out-outline class="w-5 h-5 mr-2"/>
                                 Salir del Canal
@@ -319,6 +330,39 @@
                     </div>
                 </div>
             @endif
+
+            {{-- Live Users Sidebar --}}
+            <div x-show="showUserList"
+                 class="absolute top-0 right-0 bottom-0 w-80 bg-gray-50 dark:bg-gray-900/95 border-l border-gray-200 dark:border-gray-800 z-30 transform transition-transform backdrop-blur-sm"
+                 x-transition:enter="ease-out duration-300"
+                 x-transition:enter-start="translate-x-full"
+                 x-transition:enter-end="translate-x-0"
+                 x-transition:leave="ease-in duration-300"
+                 x-transition:leave-start="translate-x-0"
+                 x-transition:leave-end="translate-x-full"
+                 style="display: none;">
+
+                {{-- Sidebar Header --}}
+                <div class="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between sticky top-0 bg-gray-50/80 dark:bg-gray-900/80 backdrop-blur-sm z-10">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">Miembros (<span x-text="liveUsers.length"></span>)</h3>
+                    <button @click="showUserList = false" class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <x-ionicon-close class="w-6 h-6 text-gray-500 dark:text-gray-400"/>
+                    </button>
+                </div>
+
+                {{-- User List --}}
+                <ul class="flex-grow overflow-y-auto p-2 space-y-2">
+                    <template x-for="user in liveUsers.sort((a, b) => a.name.localeCompare(b.name))" :key="user.id">
+                        <li class="flex items-center gap-3 px-2 py-1.5 rounded-lg">
+                            <div class="relative">
+                                <img :src="user.avatar" :alt="user.name" class="w-10 h-10 rounded-full object-cover shadow-md">
+                                <span class="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-green-500 ring-2 ring-white dark:ring-gray-800"></span>
+                            </div>
+                            <span class="font-medium text-gray-800 dark:text-gray-200" x-text="user.name"></span>
+                        </li>
+                    </template>
+                </ul>
+            </div>
         </main>
     </div>
 
@@ -331,6 +375,8 @@
                 mediaRecorder: null,
                 audioChunks: [],
                 isUploading: false,
+                liveUsers: [],
+                showUserList: false,
 
                 init(wire, activeChannelId) {
                     console.log('Chat component initializing...');
@@ -343,6 +389,7 @@
                     document.addEventListener('livewire:navigated', () => {
                          console.log('Livewire navigation event caught.');
                          this.leaveEchoChannel();
+                         this.liveUsers = [];
                          this.initEcho();
                          this.setupScroll();
                          this.$nextTick(() => this.setupAudioPlayers());
@@ -351,6 +398,7 @@
                     this.$wire.on('channel-changed', (event) => {
                         this.leaveEchoChannel();
                         this.activeChannelId = event.channelId;
+                        this.liveUsers = [];
                         this.initEcho();
                         this.scrollToBottom();
                     });
@@ -391,11 +439,32 @@
                         }
                     });
 
+                    this.$wire.on('message-sent', (event) => {
+                        this.$nextTick(() => this.scrollToBottom());
+                    });
+
+                    this.$wire.on('new-message-received', () => {
+                        this.$nextTick(() => this.scrollToBottom());
+                    });
                 },
                 initEcho() {
                     if (window.Echo && this.activeChannelId) {
-                        console.log(`Joining channel: chat.${this.activeChannelId}`);
-                        window.Echo.private(`chat.${this.activeChannelId}`)
+                        console.log(`Joining channel: presence-chat.${this.activeChannelId}`);
+                        window.Echo.join(`chat.${this.activeChannelId}`)
+                            .here((users) => {
+                                console.log('Successfully joined channel. Users here:', users);
+                                this.liveUsers = users;
+                            })
+                            .joining((user) => {
+                                console.log('User joining:', user);
+                                if (!this.liveUsers.find(u => u.id === user.id)) {
+                                    this.liveUsers.push(user);
+                                }
+                            })
+                            .leaving((user) => {
+                                console.log('User leaving:', user);
+                                this.liveUsers = this.liveUsers.filter(u => u.id !== user.id);
+                            })
                             .listen('NewChatMessage', (e) => {
                                 console.log('Received NewChatMessage:', e);
                                 this.$wire.call('handleNewMessage', e);
@@ -403,6 +472,9 @@
                             .listen('ChatMessageDeleted', (e) => {
                                 console.log('Received ChatMessageDeleted:', e);
                                 this.$wire.call('handleMessageDeleted', e);
+                            })
+                            .error((error) => {
+                                console.error('Echo channel error:', error);
                             });
                     }
                 },

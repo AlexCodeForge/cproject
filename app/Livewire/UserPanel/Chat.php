@@ -254,10 +254,9 @@ class Chat extends Component
         }
     }
 
-        public function handleNewMessage($event): void
+    public function handleNewMessage($event): void
     {
-        $messageData = $event['message'];
-        $messageId = $messageData['id'];
+        $messageId = $event['message']['id'];
 
         Log::info('🎉 Received new message event', [
             'message_id' => $messageId,
@@ -265,26 +264,27 @@ class Chat extends Component
         ]);
 
         // Prevent duplicate messages
-        if (collect($this->chatMessages)->contains('id', $messageId)) {
+        if ($this->chatMessages->contains('id', $messageId)) {
             Log::info('ℹ️ Skipping duplicate message', ['id' => $messageId]);
             return;
         }
 
-        // Fetch the actual message from database with relationships
-        $message = ChatMessage::with(['user.profile', 'parentMessage.user', 'voiceNote'])
-            ->find($messageId);
+        // Fetch the full message from the database to ensure it's a proper Eloquent model
+        // with the correct connection and relations loaded.
+        $message = ChatMessage::with(['user.profile', 'parentMessage.user', 'voiceNote'])->find($messageId);
 
         if (!$message) {
-            Log::error('❌ Message not found in database', ['id' => $messageId]);
+            Log::warning('Received broadcast for a message that could not be found.', ['id' => $messageId]);
             return;
         }
 
-        // Add new message to collection
         $this->chatMessages->push($message);
+
         Log::info('✅ Added new message to component state', ['id' => $messageId]);
 
-        // Dispatch event to scroll to the new message
-        $this->dispatch('scroll-chat-to-bottom');
+        if (Auth::id() !== $message->user_id) {
+            $this->dispatch('new-message-received', $messageId);
+        }
     }
 
     public function toggleReaction(int $messageId, string $reaction): void
@@ -386,13 +386,17 @@ class Chat extends Component
                 }
             }
 
-            // Corrected: Create a new ChatParticipant record instead of using attach()
-            \App\Models\ChatParticipant::create([
-                'chat_channel_id' => $channel->id,
-                'user_id' => Auth::id(),
-                'joined_at' => now(), // Set joined_at timestamp
-                'role' => 'member', // Default role
-            ]);
+            // Use firstOrCreate to prevent duplicate entries from rapid clicks.
+            \App\Models\ChatParticipant::firstOrCreate(
+                [
+                    'chat_channel_id' => $channel->id,
+                    'user_id' => Auth::id(),
+                ],
+                [
+                    'joined_at' => now(),
+                    'role' => 'member',
+                ]
+            );
 
             $this->loadChannels();
             $this->changeChannel($channelId);

@@ -39,7 +39,7 @@ class NewChatMessage implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('chat.'.$this->message->chat_channel_id),
+            new PresenceChannel('chat.'.$this->message->chat_channel_id),
         ];
     }
 
@@ -61,15 +61,14 @@ class NewChatMessage implements ShouldBroadcastNow
      */
     public function broadcastWith(): array
     {
-        // We only need to send the ID. The client component will fetch the full message.
-        // This ensures data consistency and avoids serialization issues with complex models.
+        // Broadcast the full message with necessary relationships
+        $this->message->load(['user.profile', 'parentMessage.user', 'voiceNote']);
+
         $data = [
-            'message' => [
-                'id' => $this->message->id
-            ]
+            'message' => $this->message->toArray(),
         ];
 
-        Log::info('🎯 Broadcasting data:', $data);
+        Log::info('🎯 Broadcasting full message data:', $data);
 
         return $data;
     }
