@@ -247,14 +247,16 @@
 
             <!-- Sidebar bottom controls -->
             <div class="flex flex-col space-y-2 px-4 flex-shrink-0 pt-4 border-t border-stone-200 dark:border-gray-700">
-                <livewire:components.theme-toggle />
-                <a href="{{ route('dashboard') }}" title="Modo Usuario" class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden" wire:navigate>
+                <div class="nav-item">
+                    <livewire:components.theme-toggle />
+                </div>
+                <a href="{{ route('dashboard') }}" title="Modo Usuario" class="nav-item w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden" wire:navigate>
                     <x-ionicon-home-outline class="w-6 h-6 flex-shrink-0" />
                     <span class="nav-text ml-4 text-sm font-semibold whitespace-nowrap transition-opacity">Usuario</span>
                 </a>
                 <button id="notifications-toggle"
                         title="Notificaciones"
-                        class="w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden"
+                        class="nav-item w-full flex items-center p-3 rounded-xl text-slate-500 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700 hover:text-slate-800 dark:hover:text-gray-200 transition-all overflow-hidden"
                         x-data="{ unreadCount: {{ auth()->check() ? auth()->user()->unreadNotifications()->count() : 0 }} }"
                         @unread-notifications-count-updated.window="unreadCount = $event.detail.count"
                         x-on:click="$dispatch('open-notifications-sidebar')">

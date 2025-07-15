@@ -85,7 +85,7 @@
                 @forelse ($users as $user)
                     <tr class="border-b border-stone-200 dark:border-gray-700 hover:bg-stone-50 dark:hover:bg-gray-700/50">
                         <td class="p-4 flex items-center gap-3">
-                            <img class="w-10 h-10 rounded-full" src="{{ $user->avatar_url }}" alt="">
+                            <img class="w-10 h-10 rounded-full object-cover" src="{{ $user->avatar_url }}" alt="">
                             <div>
                                 <p class="font-semibold text-slate-900 dark:text-white">{{ $user->name }}</p>
                                 <p class="text-slate-500 dark:text-gray-400 text-xs">{{ $user->email }}</p>
