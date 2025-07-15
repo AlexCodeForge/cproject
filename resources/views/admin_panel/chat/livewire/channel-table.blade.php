@@ -80,7 +80,7 @@
                             </span>
                         </td>
                         <td class="p-4">
-                            <span class="bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 text-xs font-semibold px-2 py-1 rounded-full">{{ $channel->participants_count }}</span>
+                            <span class="bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 text-xs font-semibold px-2 py-1 rounded-full">{{ $channel->chat_participants_count }}</span>
                         </td>
                         <td class="p-4">
                             <span class="text-slate-500 dark:text-gray-400">{{ $channel->created_at->format('d M, Y') }}</span>
@@ -132,8 +132,8 @@
 
                         <!-- Modal Body -->
                         <div class="flex-grow p-6 overflow-y-auto">
-                            <h3 class="font-semibold text-slate-600 dark:text-gray-300 mb-4">Participantes ({{ $selectedChannel->participants->count() }})</h3>
-                            @if ($selectedChannel->participants->count() > 0)
+                            <h3 class="font-semibold text-slate-600 dark:text-gray-300 mb-4">Participantes ({{ $selectedChannel->chatParticipants->count() }})</h3>
+                            @if ($selectedChannel->chatParticipants->count() > 0)
                                 <div class="bg-white dark:bg-gray-700/50 rounded-lg shadow-sm overflow-x-auto">
                                     <table class="w-full text-sm text-left">
                                         <thead class="bg-stone-50 dark:bg-gray-700/50 text-xs text-slate-600 dark:text-gray-400 uppercase">
@@ -141,14 +141,15 @@
                                                 <th class="p-4">Usuario</th>
                                                 <th class="p-4">Rol</th>
                                                 <th class="p-4">Miembro Desde</th>
+                                                <th class="p-4">Mensajes Enviados</th> {{-- New column header --}}
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($selectedChannel->participants as $participant)
+                                            @foreach ($selectedChannel->chatParticipants as $participant)
                                                 @if($participant->user)
                                                 <tr wire:key="participant-{{ $participant->id }}" class="border-b border-stone-200 dark:border-gray-700 hover:bg-stone-50 dark:hover:bg-gray-700/50">
                                                     <td class="p-4 flex items-center gap-3">
-                                                        <img class="w-10 h-10 rounded-full" src="{{ $participant->user->profile_photo_url }}" alt="">
+                                                        <img class="w-10 h-10 rounded-full object-cover" src="{{ $participant->user->profile_photo_url }}" alt="">
                                                         <div>
                                                             <p class="font-semibold text-slate-900 dark:text-white">{{ $participant->user->name }}</p>
                                                             <p class="text-slate-500 dark:text-gray-400 text-xs">{{ $participant->user->email }}</p>
@@ -162,6 +163,15 @@
                                                         @endif
                                                     </td>
                                                     <td class="p-4 text-slate-500 dark:text-gray-400">{{ $participant->joined_at?->format('d M, Y') ?? 'N/A' }}</td>
+                                                    <td class="p-4"> {{-- New cell for messages sent --}}
+                                                        <span class="bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 text-xs font-semibold px-2 py-1 rounded-full">{{ $userMessageCounts[$participant->user->id] ?? 0 }}</span>
+                                                    </td>
+                                                </tr>
+                                                @else
+                                                <tr wire:key="participant-missing-{{ $participant->id }}" class="border-b border-stone-200 dark:border-700 bg-red-100 dark:bg-red-900/20">
+                                                    <td colspan="4" class="p-4 text-red-700 dark:text-red-300"> {{-- colspan increased to 4 --}}
+                                                        Error: Participante (ID: {{ $participant->id }}, User ID: {{ $participant->user_id ?? 'NULL' }}) no tiene un usuario asociado válido.
+                                                    </td>
                                                 </tr>
                                                 @endif
                                             @endforeach

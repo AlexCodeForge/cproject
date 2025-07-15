@@ -17,6 +17,7 @@ class ChannelTable extends Component
     public $typeFilter = '';
     public $selectedChannel;
     public $showModal = false;
+    public array $userMessageCounts = []; // New property for message counts
 
     // Properties for Create/Edit Modal
     public $showChannelModal = false;
@@ -116,7 +117,7 @@ class ChannelTable extends Component
 
     public function render()
     {
-        $channels = ChatChannel::withCount('participants')
+        $channels = ChatChannel::withCount('chatParticipants') // Changed from 'participants'
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
@@ -126,9 +127,9 @@ class ChannelTable extends Component
             ->paginate(10);
 
         $totalChannels = ChatChannel::count();
-        $activeChannels = ChatChannel::whereHas('participants')->count(); // Example: channels with at least one participant
+        $activeChannels = ChatChannel::whereHas('chatParticipants')->count(); // Changed from 'participants'
         $newChannelsToday = ChatChannel::whereDate('created_at', today())->count();
-        $emptyChannels = ChatChannel::doesntHave('participants')->count();
+        $emptyChannels = ChatChannel::doesntHave('chatParticipants')->count(); // Changed from 'participants'
 
         return view('admin_panel.chat.livewire.channel-table', [
             'channels' => $channels,
@@ -151,7 +152,26 @@ class ChannelTable extends Component
 
     public function viewChannel($channelId)
     {
-        $this->selectedChannel = ChatChannel::with('participants')->find($channelId);
+        // Eager load chatParticipants and messages for the selected channel
+        $this->selectedChannel = ChatChannel::with(['chatParticipants.user', 'messages'])->find($channelId);
+        $this->userMessageCounts = []; // Reset counts for the new channel
+
+        if ($this->selectedChannel) {
+            \Illuminate\Support\Facades\Log::info("Viewing channel: {$this->selectedChannel->name} (ID: {$this->selectedChannel->id})");
+
+            // Calculate message counts for each user in this channel
+            $this->userMessageCounts = $this->selectedChannel->messages
+                                          ->groupBy('user_id')
+                                          ->map->count()
+                                          ->toArray();
+
+            foreach ($this->selectedChannel->chatParticipants as $participant) {
+                \Illuminate\Support\Facades\Log::info("  Participant ID: {$participant->id}, User ID: " . ($participant->user_id ?? 'NULL') . ", User Exists: " . ($participant->user ? 'Yes' : 'No') . ", Messages: " . ($this->userMessageCounts[$participant->user_id] ?? 0));
+            }
+        } else {
+            \Illuminate\Support\Facades\Log::warning("Attempted to view non-existent channel: {$channelId}");
+        }
+
         $this->showModal = true;
     }
 
@@ -159,6 +179,7 @@ class ChannelTable extends Component
     {
         $this->selectedChannel = null;
         $this->showModal = false;
+        $this->userMessageCounts = []; // Clear counts when modal closes
     }
 
     public function confirmChannelDeletion($channelId)

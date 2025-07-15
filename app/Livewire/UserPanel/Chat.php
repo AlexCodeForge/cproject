@@ -386,7 +386,14 @@ class Chat extends Component
                 }
             }
 
-            $channel->participants()->attach(Auth::id());
+            // Corrected: Create a new ChatParticipant record instead of using attach()
+            \App\Models\ChatParticipant::create([
+                'chat_channel_id' => $channel->id,
+                'user_id' => Auth::id(),
+                'joined_at' => now(), // Set joined_at timestamp
+                'role' => 'member', // Default role
+            ]);
+
             $this->loadChannels();
             $this->changeChannel($channelId);
         }
@@ -396,12 +403,33 @@ class Chat extends Component
     {
         $channel = ChatChannel::find($channelId);
         if ($channel) {
-            $channel->participants()->detach(Auth::id());
+            $userId = Auth::id();
+            \Illuminate\Support\Facades\Log::info("Attempting to detach user {$userId} from channel {$channelId}");
+
+            // Corrected: Find and delete the specific ChatParticipant record
+            $participant = \App\Models\ChatParticipant::where('chat_channel_id', $channelId)
+                                                      ->where('user_id', $userId)
+                                                      ->first();
+            $deleted = 0;
+            if ($participant) {
+                $deleted = $participant->delete();
+                if ($deleted) {
+                    \Illuminate\Support\Facades\Log::info("User {$userId} successfully detached from channel {$channelId}. Detached count: 1");
+                } else {
+                    \Illuminate\Support\Facades\Log::warning("User {$userId} was not detached from channel {$channelId}. Delete operation failed.");
+                }
+            } else {
+                \Illuminate\Support\Facades\Log::warning("User {$userId} was not detached from channel {$channelId}. Participant record not found.");
+            }
+
+
             $this->activeChannel = null;
             $this->chatMessages = collect();
             $this->replyingTo = null;
             $this->reactingTo = null;
             $this->loadChannels();
+        } else {
+            \Illuminate\Support\Facades\Log::warning("Attempted to leave non-existent channel: {$channelId}");
         }
     }
 

@@ -95,7 +95,11 @@
                         <td class="p-4">
                             <button wire:click="viewCategory({{ $category->id }})" class="text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white">Ver</button>
                             <button wire:click="edit({{ $category->id }})" class="ml-4 text-slate-500 dark:text-gray-400 hover:text-slate-800 dark:hover:text-white">Editar</button>
-                            <button wire:click="confirmCategoryDeletion({{ $category->id }})" class="ml-4 text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300">Eliminar</button>
+                            @if ($category->posts_count > 0)
+                                <button disabled class="ml-4 text-gray-400 dark:text-gray-600 cursor-not-allowed" title="No se puede eliminar categorías con posts">Eliminar</button>
+                            @else
+                                <button wire:click="confirmCategoryDeletion({{ $category->id }})" class="ml-4 text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300">Eliminar</button>
+                            @endif
                         </td>
                     </tr>
                 @empty

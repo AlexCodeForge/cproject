@@ -152,6 +152,12 @@ class CategoryTable extends Component
 
     public function confirmCategoryDeletion($categoryId)
     {
+        $category = PostCategory::find($categoryId);
+        if ($category && $category->posts()->count() > 0) {
+            $this->dispatch('showErrorModal', message: 'No puedes eliminar una categoría que contiene posts.', title: 'Error de Eliminación');
+            return;
+        }
+
         $this->dispatch('showConfirmationModal',
             title: 'Eliminar Categoría',
             message: '¿Estás seguro de que quieres eliminar esta categoría? Esta acción no se puede deshacer.',
@@ -165,6 +171,10 @@ class CategoryTable extends Component
     {
         $category = PostCategory::find($categoryId);
         if ($category) {
+            if ($category->posts()->count() > 0) {
+                $this->dispatch('showErrorModal', message: 'No puedes eliminar una categoría que contiene posts.', title: 'Error de Eliminación');
+                return;
+            }
             $category->delete();
         }
 
