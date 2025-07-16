@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PostCategoriesSeeder::class);
         $this->call(ChatChannelsSeeder::class);
         $this->call(PostSeeder::class);
+        $this->call(CourseSeeder::class);
 
         // Create or retrieve a test admin user
         $admin = User::firstOrCreate(

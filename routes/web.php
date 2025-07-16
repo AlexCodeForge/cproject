@@ -19,7 +19,10 @@ use App\Livewire\AdminPanel\Categories\CategoryManagement;
 use App\Livewire\AdminPanel\Posts\PostManagement;
 use App\Livewire\AdminPanel\Posts\CreatePost;
 use App\Livewire\AdminPanel\Posts\EditPost;
+use App\Livewire\AdminPanel\Lms\CourseManagement;
+use App\Livewire\AdminPanel\Lms\EditCourse;
 use App\Livewire\UserPanel\Posts\ShowPost;
+use App\Livewire\UserPanel\ShowCourse;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WebhookController;
@@ -61,6 +64,11 @@ Volt::route('courses', Courses::class)
     ->middleware(['auth'])
     ->name('courses');
 
+// New User Course Detail Route
+Volt::route('/courses/{course:slug}', ShowCourse::class)
+    ->middleware(['auth'])
+    ->name('user.courses.show');
+
 Volt::route('events', Events::class)
     ->middleware(['auth'])
     ->name('events');
@@ -90,6 +98,10 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     Route::get('/chat', ChannelManagement::class)->name('chat.channels');
     Route::get('/categories', CategoryManagement::class)->name('categories.index');
     Route::get('/pagos', \App\Livewire\AdminPanel\Pagos\PaymentManagement::class)->name('pagos.index');
+
+    // LMS Routes
+    Route::get('/lms/courses', CourseManagement::class)->name('lms.courses.index');
+    Route::get('/lms/courses/{course}/edit', EditCourse::class)->name('lms.courses.edit');
 
     // Route for creating a post
     Route::get('/posts/create', \App\Livewire\AdminPanel\Posts\CreatePost::class)->name('posts.create');

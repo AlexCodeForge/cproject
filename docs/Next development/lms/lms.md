@@ -126,6 +126,7 @@ This will consist of two main pages: the course catalog and the course detail/pl
     -   It will fetch all `published` courses from the database.
     -   It will render the grid of course cards as seen in the design.
     -   The component will handle logic for what the "Empezar Curso" / "Acceder al Curso" buttons do (e.g., redirect to the course page if enrolled, or to a premium purchase page if required).
+    -   **It must also correctly display premium course indicators (e.g., "Premium" badge, rocket icon, and "Acceso Premium" button with distinct styling) as per the `courses.blade.php` template.**
     -   View: `user_panel.courses` (will be converted into a Livewire view).
 
 -   **`app/Livewire/UserPanel/ShowCourse.php`**

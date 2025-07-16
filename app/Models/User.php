@@ -16,6 +16,8 @@ use App\Models\ChatChannel;
 use Laravel\Sanctum\HasApiTokens;
 use Carbon\Carbon;
 use App\Models\ChatMessage;
+use App\Models\Course;
+use App\Models\Lesson;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -183,6 +185,24 @@ class User extends Authenticatable implements MustVerifyEmail
     public function chatMessages()
     {
         return $this->hasMany(ChatMessage::class);
+    }
+
+    /**
+     * Get the courses the user is enrolled in.
+     */
+    public function enrolledCourses()
+    {
+        return $this->belongsToMany(Course::class, 'course_enrollments');
+    }
+
+    /**
+     * Get the lessons the user has completed.
+     */
+    public function completedLessons()
+    {
+        return $this->belongsToMany(Lesson::class, 'lesson_user')
+            ->withTimestamps()
+            ->withPivot('completed_at');
     }
 
     /**
