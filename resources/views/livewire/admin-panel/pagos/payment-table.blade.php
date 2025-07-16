@@ -56,11 +56,11 @@
         <div class="bg-white dark:bg-gray-800 rounded-xl border border-stone-200 dark:border-gray-700 shadow-sm p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-slate-600 dark:text-gray-400">Nuevas Hoy</p>
-                    <p class="text-2xl font-bold text-slate-900 dark:text-white">{{ $newSubscriptionsToday }}</p>
+                    <p class="text-sm text-slate-600 dark:text-gray-400">Total Recaudado este Mes</p>
+                    <p class="text-2xl font-bold text-slate-900 dark:text-white">${{ number_format($totalRevenueThisMonth, 2) }}</p>
                 </div>
-                <div class="bg-purple-100 dark:bg-purple-900/50 p-3 rounded-full">
-                    <x-ionicon-sparkles-outline class="text-purple-600 dark:text-purple-400 text-xl h-6 w-6" />
+                <div class="bg-emerald-100 dark:bg-emerald-900/50 p-3 rounded-full">
+                    <x-ionicon-cash-outline class="text-emerald-600 dark:text-emerald-400 text-xl h-6 w-6" />
                 </div>
             </div>
         </div>
@@ -81,6 +81,7 @@
                     <th class="p-4">Estado (Stripe)</th>
                     <th class="p-4">Fecha de Creación</th>
                     <th class="p-4">Finaliza en</th>
+                    <th class="p-4">Monto Recibido</th>
                     <th class="p-4">Acciones</th>
                 </tr>
             </thead>
@@ -114,6 +115,9 @@
                         <td class="p-4 text-slate-800 dark:text-gray-300">
                             {{ $subscription->dynamic_ends_at ? $subscription->dynamic_ends_at->format('d/m/Y') : 'N/A' }}
                         </td>
+                        <td class="p-4 text-slate-800 dark:text-gray-300 font-semibold">
+                            ${{ number_format($subscription->amount_paid, 2) }}
+                        </td>
                         <td class="p-4">
                             @if ($subscription->active() && !$subscription->canceled())
                                 <button wire:click="$dispatch('showConfirmationModal', {
@@ -129,7 +133,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="p-4 text-center text-gray-500 dark:text-gray-400">
+                        <td colspan="6" class="p-4 text-center text-gray-500 dark:text-gray-400">
                             No se encontraron suscripciones.
                         </td>
                     </tr>
