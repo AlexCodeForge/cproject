@@ -44,8 +44,6 @@ class EditCourse extends Component
     public $editingLessonContent;
     public $editingLessonCurrentVideoPath;
 
-    protected $listeners = ['trix-attachment-add' => 'handleTrixAttachment'];
-
     public function mount(Course $course)
     {
         $this->course = $course;
@@ -159,6 +157,7 @@ class EditCourse extends Component
     {
         $this->reset(['newLessonTitle', 'newLessonVideoFile', 'newLessonContent']);
         $this->newLessonSectionId = $sectionId;
+        $this->dispatch('show-new-lesson-form', $sectionId);
     }
 
     public function saveNewLesson()
@@ -196,6 +195,7 @@ class EditCourse extends Component
         $this->editingLessonContent = $lesson->content;
         $this->editingLessonCurrentVideoPath = $lesson->video_path;
         $this->reset('editingLessonVideoFile'); // Clear any previously selected file
+        $this->dispatch('show-edit-lesson-form', $lesson->id);
     }
 
     public function updateLesson()
@@ -271,11 +271,6 @@ class EditCourse extends Component
 
         $updatedSection = collect($this->sections)->firstWhere('id', $sectionId);
         $this->dispatch('lessons-updated', ['lessons' => $updatedSection ? $updatedSection['lessons'] : [], 'sectionId' => $sectionId]);
-    }
-
-    public function handleTrixAttachment($event)
-    {
-        // Not implemented for now
     }
 
     public function render()

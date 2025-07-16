@@ -13,10 +13,7 @@
 
             <div>
                 <label for="courseDescription" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Descripción</label>
-                <div wire:ignore>
-                    <input id="courseDescription" type="hidden" name="courseDescription" wire:model.defer="courseDescription">
-                    <trix-editor input="courseDescription" class="trix-content mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"></trix-editor>
-                </div>
+                <textarea id="courseDescription" wire:model.defer="courseDescription" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" rows="4"></textarea>
                 @error('courseDescription') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
             </div>
 
@@ -115,12 +112,14 @@
                             <div>
                                 <label for="newLessonVideoFile-{{ $section['id'] }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Archivo de Video (MP4, MOV, etc.)</label>
                                 <input type="file" id="newLessonVideoFile-{{ $section['id'] }}" wire:model="newLessonVideoFile" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-300 dark:hover:file:bg-blue-800">
-                                @error('newLessonVideoFile') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                @error('newLessonVideoFile') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
                                 <div wire:loading wire:target="newLessonVideoFile" class="text-blue-500 text-xs mt-1">Cargando archivo...</div>
                             </div>
                             <div>
                                 <label for="newLessonContent-{{ $section['id'] }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contenido (Opcional)</label>
-                                <textarea id="newLessonContent-{{ $section['id'] }}" wire:model.defer="newLessonContent" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"></textarea>
+                                <div wire:ignore>
+                                    <textarea id="newLessonContent-{{ $section['id'] }}" wire:model.defer="newLessonContent" class="hidden"></textarea>
+                                </div>
                                 @error('newLessonContent') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
                             <div class="flex justify-end">
@@ -178,7 +177,9 @@
                                         <form wire:submit.prevent="updateLesson" class="space-y-3">
                                             <div>
                                                 <label :for="`editingLessonContent-${lesson.id}`" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contenido (Opcional)</label>
-                                                <textarea :id="`editingLessonContent-${lesson.id}`" wire:model.defer="editingLessonContent" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"></textarea>
+                                                <div wire:ignore>
+                                                    <textarea :id="`editingLessonContent-${lesson.id}`" wire:model.defer="editingLessonContent" class="hidden"></textarea>
+                                                </div>
                                                 @error('editingLessonContent') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                                             </div>
                                             <div>
@@ -230,17 +231,158 @@
 
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-    <script src="https://unpkg.com/trix@1.3.1/dist/trix.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@1.3.1/dist/trix.css">
+    <!-- Summernote CSS and JS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
     <script>
         document.addEventListener('livewire:initialized', () => {
-            // Trix Editor for Course Description
-            const trixEditor = document.querySelector('trix-editor');
-            if (trixEditor) {
-                trixEditor.addEventListener('trix-change', (event) => {
-                    @this.set('courseDescription', event.target.value);
+            // Summernote Editor for Course Description
+            // No global summernote-init needed, as it's now per-textarea init
+            Livewire.on('show-new-lesson-form', (sectionId) => {
+                const summernoteId = `newLessonContent-${sectionId}`;
+                if (!document.querySelector(`#${summernoteId}`).classList.contains('summernote-initialized')) {
+                    $(`#${summernoteId}`).summernote({
+                        placeholder: 'Escribe el contenido de la lección aquí...',
+                        tabsize: 2,
+                        height: 150,
+                        contentsCss: '{{ asset('css/app.css') }}',
+                        toolbar: [
+                            ['style', ['style']],
+                            ['font', ['bold', 'underline', 'clear']],
+                            ['color', ['color']],
+                            ['para', ['ul', 'ol', 'paragraph']],
+                            ['table', ['table']],
+                            ['insert', ['link', 'picture', 'video']],
+                            ['view', ['codeview']]
+                        ],
+                        callbacks: {
+                            onChange: function(contents, $editable) {
+                                @this.set('newLessonContent', contents);
+                            },
+                            onImageUpload: function(files) {
+                                let file = files[0];
+                                let reader = new FileReader();
+                                reader.onloadend = function() {
+                                    let formData = new FormData();
+                                    formData.append('file', file);
+                                    formData.append('_token', '{{ csrf_token() }}');
+                                    fetch('{{ route('admin.summernote.upload') }}', {
+                                        method: 'POST',
+                                        body: formData,
+                                    })
+                                    .then(response => response.json())
+                                    .then(result => {
+                                        $(`#${summernoteId}`).summernote('insertImage', result.url);
+                                    })
+                                    .catch(error => {
+                                        console.error('Summernote upload error:', error);
+                                    });
+                                }
+                                reader.readAsDataURL(file);
+                            }
+                        }
+                    });
+                    document.querySelector(`#${summernoteId}`).classList.add('summernote-initialized');
+                }
+                // MutationObserver for modal backdrops
+                const observer = new MutationObserver((mutationsList, observer) => {
+                    for (const mutation of mutationsList) {
+                        if (mutation.type === 'childList') {
+                            mutation.addedNodes.forEach(node => {
+                                if (node.nodeType === 1 && node.classList.contains('note-modal-backdrop')) {
+                                    node.remove();
+                                }
+                            });
+                        }
+                    }
                 });
-            }
-        });
+                observer.observe(document.body, { childList: true, subtree: true });
+
+                // Ensure summernote is destroyed when component navigates away
+                const livewireId = $(`#${summernoteId}`).closest('[wire\\:id]').attr('wire:id');
+                if(livewireId) {
+                    document.querySelector(`[wire\\:id="${livewireId}"]`).addEventListener('livewire:navigating', () => {
+                        observer.disconnect();
+                        if (window.jQuery && $(`#${summernoteId}`).summernote) {
+                            $(`#${summernoteId}`).summernote('destroy');
+                        }
+                    });
+                }
+            });
+            Livewire.on('show-edit-lesson-form', (lessonId, lessonContent) => {
+                const summernoteId = `editingLessonContent-${lessonId}`;
+                if (!document.querySelector(`#${summernoteId}`).classList.contains('summernote-initialized')) {
+                    $(`#${summernoteId}`).summernote({
+                        placeholder: 'Escribe el contenido de la lección aquí...',
+                        tabsize: 2,
+                        height: 150,
+                        contentsCss: '{{ asset('css/app.css') }}',
+                        toolbar: [
+                            ['style', ['style']],
+                            ['font', ['bold', 'underline', 'clear']],
+                            ['color', ['color']],
+                            ['para', ['ul', 'ol', 'paragraph']],
+                            ['table', ['table']],
+                            ['insert', ['link', 'picture', 'video']],
+                            ['view', ['codeview']]
+                        ],
+                        callbacks: {
+                            onChange: function(contents, $editable) {
+                                @this.set('editingLessonContent', contents);
+                            },
+                            onImageUpload: function(files) {
+                                let file = files[0];
+                                let reader = new FileReader();
+                                reader.onloadend = function() {
+                                    let formData = new FormData();
+                                    formData.append('file', file);
+                                    formData.append('_token', '{{ csrf_token() }}');
+                                    fetch('{{ route('admin.summernote.upload') }}', {
+                                        method: 'POST',
+                                        body: formData,
+                                    })
+                                    .then(response => response.json())
+                                    .then(result => {
+                                        $(`#${summernoteId}`).summernote('insertImage', result.url);
+                                    })
+                                    .catch(error => {
+                                        console.error('Summernote upload error:', error);
+                                    });
+                                }
+                                reader.readAsDataURL(file);
+                            }
+                        }
+                    });
+                    document.querySelector(`#${summernoteId}`).classList.add('summernote-initialized');
+                }
+                // Set initial content
+
+                // MutationObserver for modal backdrops
+                const observer = new MutationObserver((mutationsList, observer) => {
+                    for (const mutation of mutationsList) {
+                        if (mutation.type === 'childList') {
+                            mutation.addedNodes.forEach(node => {
+                                if (node.nodeType === 1 && node.classList.contains('note-modal-backdrop')) {
+                                    node.remove();
+                                }
+                            });
+                        }
+                    }
+                });
+                observer.observe(document.body, { childList: true, subtree: true });
+
+                // Ensure summernote is destroyed when component navigates away
+                const livewireId = $(`#${summernoteId}`).closest('[wire\\:id]').attr('wire:id');
+                if(livewireId) {
+                    document.querySelector(`[wire\\:id="${livewireId}"]`).addEventListener('livewire:navigating', () => {
+                        observer.disconnect();
+                        if (window.jQuery && $(`#${summernoteId}`).summernote) {
+                            $(`#${summernoteId}`).summernote('destroy');
+                        }
+                    });
+                }
+            });
+          });
     </script>
 @endpush
